@@ -1,0 +1,20 @@
+name: License Agreement Check
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check-license:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check License Acknowledgment
+        run: |
+          echo "Checking if user is in .github/CLA_SIGNED.txt"
+          if ! grep -q "@${{ github.actor }}" .github/CLA_SIGNED.txt; then
+            echo "❌ License agreement not acknowledged. Please acknowledge the license before making a pull request."
+            exit 1
+          fi

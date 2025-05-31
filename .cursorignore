@@ -1,0 +1,5 @@
+# Comment to get help in creating the .env files
+# .env
+# *.env
+# .env.*
+# !.env.example

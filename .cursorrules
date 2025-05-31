@@ -1,0 +1,35 @@
+{
+  "projectOverview": "An AI-powered tool that analyzes automotive logs (CAN, DoIP, DLT), detects faults, and delivers plain-language explanations and fixes—streamlining debugging for engineers.",
+  "personality": "You are a helpful software engineer who can help with tasks.",
+  "techStack": {
+    "frontend": "Tauri (desktop app), SvelteKit, React Flow (as Web Component), Monaco Editor, TailwindCSS. Monorepo structure with desktop app and web landing page.",
+    "backend": "Python FastAPI + LLMs (OpenAI / Local models), Batch Sync processing",
+    "database": "Apache Arrow (In-Memory), Apache Parquet (batch processing), PostgreSQL (configurations), Vector DB FAISS (similarity searches)",
+    "aiApiHandling": "Python FastAPI integration with LLMs for natural language explanations and fault analysis",
+    "queueAsync": "Batch Sync for lighter data handling and processing",
+    "hosting": "Desktop: Tauri native app, Web: Static hosting (Vercel/Netlify), Backend: Cloud deployment (Render/Railway/Fly.io)",
+    "observability": "Development logging, performance monitoring for large log file processing",
+    "parserEngine": "Rust with socketcan, pcap libraries, custom DoIP parser for high-speed protocol decoding (CAN, LIN, DoIP, PCAP)",
+    "simulation": "Rust or Go + vcan, Docker for topology runner with REST-only communication"
+  },
+  "errorFixingProcess": "1. Read error carefully and identify root cause. 2. Check file paths and dependencies. 3. Clear caches if needed (cargo clean, remove node_modules). 4. Verify environment setup. 5. Test incrementally.",
+  "buildingProcess": "1. Use pnpm for package management in monorepo. 2. Desktop app: pnpm run tauri for development. 3. Web app: pnpm dev for landing page. 4. Backend: Python virtual environment with FastAPI. 5. Test each component independently.",
+  "envVariables": {
+    "backend": "backend/.env",
+    "frontend_desktop": "frontend/desktop/.env",
+    "frontend_web": "frontend/web/.env",
+    "shared": "frontend/shared/ for common configurations"
+  },
+  "currentFileStructure": "Monorepo: /backend (FastAPI), /frontend/desktop (Tauri+SvelteKit), /frontend/web (landing page and web app), /frontend/shared (utilities), /docs, /infrastructure. Uses pnpm workspaces.",
+  "terminalInfo": "User runs Windows PowerShell. Use PowerShell syntax for commands (semicolons, Remove-Item, etc.). Be aware of Windows path separators and PowerShell-specific commands.",
+  "githubPushProcess": "Standard git workflow with monorepo structure. Each frontend app can be deployed independently.",
+  "important": "1. Always use PowerShell syntax for terminal commands. 2. Respect monorepo structure with pnpm workspaces. 3. Desktop app uses Tauri+SvelteKit, web uses vanilla HTML/CSS/JS. 4. Shared utilities in frontend/shared/. 5. Clean caches when path issues occur.",
+  "protocolSupport": "CAN bus, DoIP (Diagnostics over IP), DLT (Diagnostic Log and Trace), PCAP, LIN - focus on automotive diagnostics and log analysis",
+  "keyFeatures": "AI-powered fault detection, plain-language explanations, real-time log processing, multi-protocol support, interactive visualizations, secure enterprise deployment",
+  "comments": [
+    "Make sure to ALWAYS include comments in your code.",
+    "Do not delete comments unless they are no longer needed.",
+    "Document the reasoning behind technical decisions.",
+    "Use clear variable names and explain complex automotive protocol logic."
+  ]
+}

@@ -1,0 +1,114 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Testing
+coverage/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+cover/
+
+# Next.js
+.next/
+out/
+
+# Production
+build/
+dist/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.*.local
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+.env
+.venv
+env.bak/
+venv.bak/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Project specific
+frontend/.next/
+frontend/out/
+frontend/.env
+backend/.env
+backend/venv/
+infrastructure/terraform/.terraform/
+infrastructure/terraform/*.tfstate
+infrastructure/terraform/*.tfstate.*
+infrastructure/terraform/*.tfvars
+
+# Electron specific
+electron-builder.yml
+release/
+dist/
+out/
+*.exe
+*.dmg
+*.app
+*.AppImage
+*.deb
+*.rpm
+*.snap
+*.pkg
+*.msi
+*.msix
+frontend/dist/
+frontend/release/
+frontend/out-electron/
+
+# Keep these directories with .gitkeep
+!frontend/public/.gitkeep
+!frontend/src/app/.gitkeep
+!frontend/src/components/.gitkeep
+!frontend/src/lib/.gitkeep
+!frontend/src/styles/.gitkeep
+!frontend/src/types/.gitkeep
+!backend/src/api/.gitkeep
+!backend/src/models/.gitkeep
+!backend/src/services/.gitkeep
+!backend/src/utils/.gitkeep
+!backend/src/ai/.gitkeep
+!backend/tests/.gitkeep
+!shared/types/.gitkeep
+!shared/constants/.gitkeep
+!infrastructure/terraform/.gitkeep
+!infrastructure/docker/.gitkeep
+!docs/.gitkeep
+!scripts/.gitkeep
