@@ -2144,8 +2144,21 @@ section {
   }
 }
 
-/* Medium tablets (portrait) */
+/* Medium tablets (portrait) - complete tablet optimization with desktop navigation */
 @media (max-width: 1024px) and (min-width: 769px) {
+  /* Ensure desktop navigation stays visible on tablets - NO hamburger menu */
+  .desktop-nav {
+    display: flex;
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+
   /* Adjust CSS custom properties for tablets */
   :root {
     --nav-height: 60px; /* Slightly smaller nav on tablets */
@@ -2775,3 +2788,262 @@ section {
     padding-top: 8px;
   }
 }
+
+/* Mobile devices only - show hamburger menu */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  .mobile-nav {
+    display: block;
+  }
+
+  /* Optimize footer spacing for mobile only */
+  .footer-content {
+    margin-top: 24px; /* Consistent mobile spacing */
+  }
+}
+
+/* Mobile Footer Accordion Styles - Only active on mobile screens */
+@media (max-width: 768px) {
+  /* Footer accordion dimmed overlay - appears when a section is open */
+  .footer-accordion-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .footer-accordion-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* Footer accordion specific styles for mobile */
+  .footer-accordion-section {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1000; /* Above the overlay */
+  }
+
+  .footer-accordion-section:last-child {
+    border-bottom: none;
+  }
+
+  .footer-accordion-section.open {
+    z-index: 1001; /* Even higher when open */
+    background: rgba(
+      45,
+      27,
+      14,
+      0.9
+    ); /* Slightly different background when open */
+    border-radius: 8px;
+    margin: 8px 0;
+    padding: 0 8px;
+  }
+
+  .footer-accordion-toggle {
+    display: flex;
+    justify-content: center; /* Center the content */
+    align-items: center;
+    cursor: pointer;
+    padding: 16px 0;
+    margin-bottom: 0 !important;
+    transition: all 0.2s ease;
+    position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    text-align: center;
+    width: 100%;
+  }
+
+  .footer-accordion-toggle:hover {
+    color: rgba(255, 255, 255, 0.9);
+    /* Remove the transform since we're centering */
+  }
+
+  .footer-accordion-toggle:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Updated footer title styling - lighter and centered */
+  .footer-title {
+    color: rgba(
+      255,
+      255,
+      255,
+      0.85
+    ) !important; /* Lighter, less bold appearance */
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 400 !important; /* Much lighter weight - not bold */
+    text-align: center;
+    flex: 1;
+    margin-right: 24px; /* Space for the arrow */
+    letter-spacing: 0.5px; /* Slight letter spacing for elegance */
+  }
+
+  .footer-arrow {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 0; /* Positioned at the right edge */
+    top: 50%;
+    transform: translateY(-50%);
+    flex-shrink: 0;
+  }
+
+  /* Arrow rotation for open state */
+  .footer-accordion-section.open .footer-arrow {
+    transform: translateY(-50%) rotate(90deg);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .footer-accordion-content {
+    padding-left: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    text-align: left; /* Keep content left-aligned for readability */
+    /* Smooth transition styles are set via JavaScript */
+  }
+
+  .footer-accordion-content li {
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+  }
+
+  .footer-accordion-content[aria-hidden="false"] li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger animation for accordion content items */
+  .footer-accordion-content[aria-hidden="false"] li:nth-child(1) {
+    transition-delay: 0.05s;
+  }
+  .footer-accordion-content[aria-hidden="false"] li:nth-child(2) {
+    transition-delay: 0.1s;
+  }
+  .footer-accordion-content[aria-hidden="false"] li:nth-child(3) {
+    transition-delay: 0.15s;
+  }
+  .footer-accordion-content[aria-hidden="false"] li:nth-child(4) {
+    transition-delay: 0.2s;
+  }
+  .footer-accordion-content[aria-hidden="false"] li:nth-child(5) {
+    transition-delay: 0.25s;
+  }
+  .footer-accordion-content[aria-hidden="false"] li:nth-child(6) {
+    transition-delay: 0.3s;
+  }
+
+  /* Improved footer link styles for mobile accordion */
+  .footer-accordion-content a {
+    display: block;
+    padding: 8px 0;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+  }
+
+  .footer-accordion-content a:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    padding-left: 8px;
+    transform: translateX(4px);
+  }
+
+  /* Ensure footer main uses vertical layout on mobile with accordion */
+  .footer-main {
+    display: block !important;
+    grid-template-columns: none !important;
+    gap: 0 !important;
+    margin-bottom: 32px !important;
+  }
+
+  .footer-section {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  /* Enhanced mobile footer styling */
+  .footer-content {
+    margin-top: 32px !important;
+  }
+
+  /* Improved footer bottom spacing for mobile accordion */
+  .footer-bottom {
+    padding-top: 24px !important;
+    margin-top: 24px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Add subtle animations for better UX */
+  .footer-accordion-section {
+    transition: all 0.3s ease;
+  }
+
+  .footer-accordion-section:hover:not(.open) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* Enhanced open state styling */
+  .footer-accordion-section.open {
+    background: rgba(45, 27, 14, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .footer-accordion-section.open .footer-title {
+    color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 500 !important; /* Slightly bolder when open */
+  }
+
+  /* Focus and accessibility improvements */
+  .footer-accordion-toggle:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Loading state for smoother experience */
+  .footer-accordion-content {
+    will-change: max-height, opacity;
+  }
+
+  /* Ensure arrow transforms smoothly */
+  .footer-arrow {
+    will-change: transform;
+  }
+}
+
+/* Height-based optimizations for shorter mobile screens */

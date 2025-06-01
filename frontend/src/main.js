@@ -108,6 +108,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Setup mobile hamburger menu
   setupMobileMenu();
 
+  // Mobile footer accordion functionality - Collapsible sections for small screens
+  setupMobileFooterAccordion();
+
   console.log("Logity TikTok-style landing page loaded successfully! 🚀");
 });
 
@@ -203,232 +206,110 @@ function initializeTikTokScrolling() {
       });
     },
     {
-      threshold: 0.6, // Trigger when 60% of section is visible
-      rootMargin: "0px 0px -10% 0px",
+      threshold: 0.5,
     }
   );
 
-  sections.forEach((section) => {
-    sectionObserver.observe(section);
-  });
+  sections.forEach((section) => sectionObserver.observe(section));
 
-  // Enhanced keyboard navigation for TikTok-style experience
-  document.addEventListener("keydown", function (e) {
-    if (isScrolling) return;
+  // Enhanced mobile scroll handling for TikTok-like experience
+  let scrollTimer = null;
+  let lastScrollY = 0;
 
+  window.addEventListener(
+    "scroll",
+    (e) => {
+      // Clear any existing timer
+      if (scrollTimer) {
+        clearTimeout(scrollTimer);
+      }
+
+      const currentScrollY = window.scrollY;
+
+      // Add slight delay to prevent excessive snapping during user scrolling
+      scrollTimer = setTimeout(() => {
+        // Only snap if user has stopped scrolling and we're on mobile
+        if (window.innerWidth <= 768) {
+          // TikTok-style section snapping logic
+          let closestSection = 0;
+          let closestDistance = Infinity;
+
+          sections.forEach((section, index) => {
+            const rect = section.getBoundingClientRect();
+            const distance = Math.abs(rect.top);
+
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              closestSection = index;
+            }
+          });
+
+          // Snap to the closest section if we're not already there
+          if (closestSection !== currentSection && closestDistance > 100) {
+            scrollToSection(closestSection);
+          }
+        }
+      }, 100); // Small delay to allow natural scrolling
+
+      lastScrollY = currentScrollY;
+    },
+    { passive: true }
+  );
+
+  // Allow keyboard navigation (arrow keys)
+  document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowDown" && currentSection < sections.length - 1) {
       e.preventDefault();
       scrollToSection(currentSection + 1);
     } else if (e.key === "ArrowUp" && currentSection > 0) {
       e.preventDefault();
       scrollToSection(currentSection - 1);
-    } else if (e.key === "Home") {
-      e.preventDefault();
-      scrollToSection(0);
-    } else if (e.key === "End") {
-      e.preventDefault();
-      scrollToSection(sections.length - 1);
     }
   });
 
-  // Mouse wheel navigation - desktop only for aggressive snapping
-  let wheelTimeout;
+  // Improved scroll protection for internal scrollable areas
+  function handleScrollableContent() {
+    const scrollableElements = document.querySelectorAll(
+      ".updates-grid, .featured-grid, .modal-container"
+    );
 
-  // Only apply aggressive wheel scrolling on desktop (>768px)
-  if (window.innerWidth > 768) {
-    main.addEventListener("wheel", function (e) {
-      // Check if mouse is over a scrollable grid - if so, be less aggressive
-      if (window.mouseOverScrollableGrid) {
-        // When over a grid, only trigger TikTok scrolling if we're at the edge
-        const activeGrid = document.querySelector(
-          ".updates-grid:hover, .featured-grid:hover"
-        );
-        if (activeGrid) {
-          const atTop = activeGrid.scrollTop <= 2;
-          const atBottom =
-            activeGrid.scrollTop + activeGrid.clientHeight >=
-            activeGrid.scrollHeight - 2;
+    scrollableElements.forEach((element) => {
+      let isScrollingInside = false;
 
-          // Only allow TikTok scrolling if at edges
-          if (!((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0))) {
-            return; // Let the grid handle the scroll naturally
-          }
+      element.addEventListener("scroll", () => {
+        isScrollingInside = true;
+        clearTimeout(scrollTimer);
+
+        // Disable main scroll snapping while scrolling inside
+        main.classList.add("scroll-snap-disabled");
+
+        setTimeout(() => {
+          isScrollingInside = false;
+          main.classList.remove("scroll-snap-disabled");
+        }, 500);
+      });
+
+      element.addEventListener("mouseenter", () => {
+        main.classList.add("scroll-snap-disabled");
+      });
+
+      element.addEventListener("mouseleave", () => {
+        if (!isScrollingInside) {
+          main.classList.remove("scroll-snap-disabled");
         }
-      }
-
-      if (isScrolling) {
-        e.preventDefault();
-        return;
-      }
-
-      clearTimeout(wheelTimeout);
-      wheelTimeout = setTimeout(
-        () => {
-          if (e.deltaY > 0 && currentSection < sections.length - 1) {
-            // Scrolling down
-            scrollToSection(currentSection + 1);
-          } else if (e.deltaY < 0 && currentSection > 0) {
-            // Scrolling up
-            scrollToSection(currentSection - 1);
-          }
-        },
-        window.mouseOverScrollableGrid ? 150 : 50
-      ); // Longer delay when over grid for more natural feel
+      });
     });
   }
 
-  // For mobile/tablet, rely on CSS scroll-snap and touch gestures only
+  // Initialize scroll protection
+  handleScrollableContent();
 
-  // Enhanced TikTok-style touch navigation with smart scrollable area detection
-  let touchStartY = 0;
-  let touchEndY = 0;
-  let touchStartTime = 0;
-  let isTouchScrolling = false;
-  let touchStartElement = null;
-
-  // Only apply TikTok touch behavior on touch devices
-  if ("ontouchstart" in window) {
-    main.addEventListener(
-      "touchstart",
-      function (e) {
-        touchStartY = e.changedTouches[0].screenY;
-        touchStartTime = Date.now();
-        isTouchScrolling = false;
-        touchStartElement = e.target;
-      },
-      { passive: true }
-    );
-
-    main.addEventListener(
-      "touchmove",
-      function (e) {
-        // Check if touch is within a scrollable area
-        const scrollableArea = findScrollableParent(touchStartElement);
-
-        if (scrollableArea) {
-          // Allow normal scrolling within scrollable areas
-          isTouchScrolling = true;
-          return;
-        }
-
-        // Prevent default scrolling for TikTok-style navigation
-        if (!isTouchScrolling) {
-          e.preventDefault();
-        }
-      },
-      { passive: false }
-    );
-
-    main.addEventListener(
-      "touchend",
-      function (e) {
-        if (isScrolling) return;
-
-        touchEndY = e.changedTouches[0].screenY;
-        const touchDiff = touchStartY - touchEndY;
-        const touchDuration = Date.now() - touchStartTime;
-
-        // Check if touch started in a scrollable area
-        const scrollableArea = findScrollableParent(touchStartElement);
-
-        if (scrollableArea && !isTouchScrolling) {
-          // Check if we're at the edge of the scrollable area
-          const atTop = scrollableArea.scrollTop <= 5;
-          const atBottom =
-            scrollableArea.scrollTop + scrollableArea.clientHeight >=
-            scrollableArea.scrollHeight - 5;
-
-          // Only allow TikTok navigation if at edges and swipe is significant
-          if (Math.abs(touchDiff) > 50 && touchDuration < 800) {
-            if (
-              (touchDiff > 0 &&
-                atBottom &&
-                currentSection < sections.length - 1) ||
-              (touchDiff < 0 && atTop && currentSection > 0)
-            ) {
-              e.preventDefault();
-
-              if (touchDiff > 0) {
-                scrollToSection(currentSection + 1);
-              } else {
-                scrollToSection(currentSection - 1);
-              }
-            }
-          }
-          return;
-        }
-
-        // TikTok-style navigation for non-scrollable areas
-        if (
-          !isTouchScrolling &&
-          Math.abs(touchDiff) > 30 &&
-          touchDuration < 800
-        ) {
-          e.preventDefault();
-
-          if (touchDiff > 0 && currentSection < sections.length - 1) {
-            // Swiped up - go to next section
-            scrollToSection(currentSection + 1);
-          } else if (touchDiff < 0 && currentSection > 0) {
-            // Swiped down - go to previous section
-            scrollToSection(currentSection - 1);
-          }
-        }
-
-        // Reset touch scrolling flag
-        isTouchScrolling = false;
-      },
-      { passive: false }
-    );
-
-    // Disable native scroll momentum on main container only
-    main.style.overscrollBehavior = "none";
-  }
-
-  // Helper function to find scrollable parent elements
-  function findScrollableParent(element) {
-    const scrollableSelectors = [
-      ".updates-grid",
-      ".featured-grid",
-      ".modal-container",
-      ".mission-section .container",
-      ".cta-section .container",
-    ];
-
-    let current = element;
-    while (current && current !== document.body) {
-      // Check if current element matches any scrollable selector
-      for (const selector of scrollableSelectors) {
-        if (current.matches && current.matches(selector)) {
-          // Verify it's actually scrollable
-          if (current.scrollHeight > current.clientHeight) {
-            return current;
-          }
-        }
-      }
-      current = current.parentElement;
-    }
-    return null;
-  }
-
-  function scrollToSection(index) {
-    if (index >= 0 && index < sections.length && !isScrolling) {
-      isScrolling = true;
-      currentSection = index;
-
-      sections[index].scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-
-      // Reset scrolling flag after animation
-      setTimeout(() => {
-        isScrolling = false;
-      }, 800);
-
-      updateTikTokScrollIndicators(index);
-    }
-  }
+  // Re-initialize on dynamic content changes
+  const contentObserver = new MutationObserver(handleScrollableContent);
+  contentObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 }
 
 // Setup TikTok-style scroll indicators
@@ -842,6 +723,265 @@ function setupMobileMenu() {
   });
 
   console.log("Mobile hamburger menu initialized! 📱");
+}
+
+// Mobile footer accordion functionality - Collapsible sections for small screens
+function setupMobileFooterAccordion() {
+  // Create overlay element for dimmed background effect
+  function createFooterOverlay() {
+    let overlay = document.querySelector(".footer-accordion-overlay");
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.className = "footer-accordion-overlay";
+      document.body.appendChild(overlay);
+
+      // Add click listener to close accordion when clicking overlay
+      overlay.addEventListener("click", function () {
+        closeAllFooterSections();
+      });
+    }
+    return overlay;
+  }
+
+  // Function to close all open footer sections
+  function closeAllFooterSections() {
+    const footerSections = document.querySelectorAll(".footer-section");
+    const overlay = document.querySelector(".footer-accordion-overlay");
+
+    footerSections.forEach((section) => {
+      const title = section.querySelector(".footer-title");
+      const content = section.querySelector(".footer-links");
+      const arrow = title?.querySelector(".footer-arrow");
+
+      if (title?.getAttribute("aria-expanded") === "true") {
+        // Close the section
+        section.classList.remove("open");
+        title.setAttribute("aria-expanded", "false");
+        content.setAttribute("aria-hidden", "true");
+        content.style.maxHeight = "0";
+        content.style.opacity = "0";
+
+        if (arrow) {
+          arrow.innerHTML = "▶"; // Right arrow
+          arrow.style.transform = "translateY(-50%) rotate(0deg)";
+        }
+      }
+    });
+
+    // Hide overlay
+    if (overlay) {
+      overlay.classList.remove("active");
+    }
+  }
+
+  // Only initialize on mobile screens (768px and below)
+  function initializeFooterAccordion() {
+    if (window.innerWidth > 768) {
+      // Remove accordion functionality on larger screens
+      removeFooterAccordion();
+      return;
+    }
+
+    // Create overlay element
+    const overlay = createFooterOverlay();
+
+    const footerSections = document.querySelectorAll(".footer-section");
+
+    footerSections.forEach((section, index) => {
+      const title = section.querySelector(".footer-title");
+      const links = section.querySelector(".footer-links");
+
+      if (!title || !links) return;
+
+      // Add accordion classes and attributes
+      section.classList.add("footer-accordion-section");
+      title.classList.add("footer-accordion-toggle");
+      links.classList.add("footer-accordion-content");
+
+      // Add ARIA attributes for accessibility
+      title.setAttribute("role", "button");
+      title.setAttribute("aria-expanded", "false");
+      title.setAttribute("aria-controls", `footer-content-${index}`);
+      title.setAttribute("tabindex", "0");
+
+      links.setAttribute("id", `footer-content-${index}`);
+      links.setAttribute("aria-hidden", "true");
+
+      // Add arrow icon
+      if (!title.querySelector(".footer-arrow")) {
+        const arrow = document.createElement("span");
+        arrow.className = "footer-arrow";
+        arrow.innerHTML = "▶"; // Right arrow (closed state)
+        title.appendChild(arrow);
+      }
+
+      // Set initial state (all closed)
+      links.style.maxHeight = "0";
+      links.style.overflow = "hidden";
+      links.style.transition = "max-height 0.3s ease, opacity 0.3s ease";
+      links.style.opacity = "0";
+
+      // Click event listener
+      title.addEventListener("click", function () {
+        toggleFooterSection(section, index);
+      });
+
+      // Keyboard accessibility
+      title.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleFooterSection(section, index);
+        }
+      });
+    });
+
+    console.log("Mobile footer accordion initialized! 📱");
+  }
+
+  function toggleFooterSection(clickedSection, clickedIndex) {
+    const footerSections = document.querySelectorAll(".footer-section");
+    const clickedTitle = clickedSection.querySelector(".footer-title");
+    const clickedContent = clickedSection.querySelector(".footer-links");
+    const clickedArrow = clickedTitle.querySelector(".footer-arrow");
+    const overlay = document.querySelector(".footer-accordion-overlay");
+
+    const isCurrentlyOpen =
+      clickedTitle.getAttribute("aria-expanded") === "true";
+
+    // Close all other sections first (accordion behavior - only one open at a time)
+    footerSections.forEach((section, index) => {
+      if (index !== clickedIndex) {
+        const title = section.querySelector(".footer-title");
+        const content = section.querySelector(".footer-links");
+        const arrow = title.querySelector(".footer-arrow");
+
+        // Close other sections
+        section.classList.remove("open");
+        title.setAttribute("aria-expanded", "false");
+        content.setAttribute("aria-hidden", "true");
+        content.style.maxHeight = "0";
+        content.style.opacity = "0";
+
+        if (arrow) {
+          arrow.innerHTML = "▶"; // Right arrow (closed)
+          arrow.style.transform = "translateY(-50%) rotate(0deg)";
+        }
+      }
+    });
+
+    // Toggle the clicked section
+    if (isCurrentlyOpen) {
+      // Close the clicked section
+      clickedSection.classList.remove("open");
+      clickedTitle.setAttribute("aria-expanded", "false");
+      clickedContent.setAttribute("aria-hidden", "true");
+      clickedContent.style.maxHeight = "0";
+      clickedContent.style.opacity = "0";
+
+      if (clickedArrow) {
+        clickedArrow.innerHTML = "▶"; // Right arrow
+        clickedArrow.style.transform = "translateY(-50%) rotate(0deg)";
+      }
+
+      // Hide overlay
+      if (overlay) {
+        overlay.classList.remove("active");
+      }
+    } else {
+      // Open the clicked section
+      clickedSection.classList.add("open");
+      clickedTitle.setAttribute("aria-expanded", "true");
+      clickedContent.setAttribute("aria-hidden", "false");
+
+      // Calculate the natural height of the content
+      const scrollHeight = clickedContent.scrollHeight;
+      clickedContent.style.maxHeight = scrollHeight + "px";
+      clickedContent.style.opacity = "1";
+
+      if (clickedArrow) {
+        clickedArrow.innerHTML = "▼"; // Down arrow
+        clickedArrow.style.transform = "translateY(-50%) rotate(90deg)";
+      }
+
+      // Show overlay with dimmed background
+      if (overlay) {
+        overlay.classList.add("active");
+      }
+    }
+  }
+
+  function removeFooterAccordion() {
+    const footerSections = document.querySelectorAll(".footer-section");
+    const overlay = document.querySelector(".footer-accordion-overlay");
+
+    // Remove overlay
+    if (overlay) {
+      overlay.remove();
+    }
+
+    footerSections.forEach((section) => {
+      const title = section.querySelector(".footer-title");
+      const links = section.querySelector(".footer-links");
+      const arrow = title?.querySelector(".footer-arrow");
+
+      // Remove accordion classes and styles
+      section.classList.remove("footer-accordion-section", "open");
+      title?.classList.remove("footer-accordion-toggle");
+      links?.classList.remove("footer-accordion-content");
+
+      // Remove ARIA attributes
+      title?.removeAttribute("role");
+      title?.removeAttribute("aria-expanded");
+      title?.removeAttribute("aria-controls");
+      title?.removeAttribute("tabindex");
+      links?.removeAttribute("aria-hidden");
+
+      // Reset styles
+      if (links) {
+        links.style.maxHeight = "";
+        links.style.overflow = "";
+        links.style.transition = "";
+        links.style.opacity = "";
+      }
+
+      // Remove arrow
+      if (arrow) {
+        arrow.remove();
+      }
+
+      // Remove event listeners by cloning and replacing elements
+      if (title) {
+        const newTitle = title.cloneNode(true);
+        title.parentNode.replaceChild(newTitle, title);
+      }
+    });
+  }
+
+  // Initialize on page load
+  initializeFooterAccordion();
+
+  // Re-initialize on window resize
+  window.addEventListener("resize", () => {
+    // Debounce resize events
+    clearTimeout(window.footerResizeTimeout);
+    window.footerResizeTimeout = setTimeout(() => {
+      initializeFooterAccordion();
+    }, 250);
+  });
+
+  // Initialize on orientation change (mobile)
+  window.addEventListener("orientationchange", () => {
+    setTimeout(() => {
+      initializeFooterAccordion();
+    }, 500);
+  });
+
+  // Close accordion when pressing Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeAllFooterSections();
+    }
+  });
 }
 
 // Prevent zooming on both desktop and mobile devices
