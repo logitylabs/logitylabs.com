@@ -1,0 +1,25 @@
+name: CLA Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  cla:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check if contributor signed CLA
+        run: |
+          echo "Checking if contributor signed the CLA..."
+          USERNAME="${{ github.actor }}"
+          if grep -Fxq "@$USERNAME" .github/CLA_SIGNED.txt; then
+            echo "✅ CLA signed by @$USERNAME"
+          else
+            echo "❌ CLA not signed by @$USERNAME"
+            echo "Please add '@$USERNAME' to the .github/CLA_SIGNED.txt file."
+            exit 1
+          fi
