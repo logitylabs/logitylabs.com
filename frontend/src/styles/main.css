@@ -41,6 +41,24 @@
   --shadow-medium: rgba(45, 27, 14, 0.15); /* Deeper brown shadows */
   --card-bg: #efe2d5; /* Card backgrounds - warm tone */
   --hover-bg: #e8d7c7; /* Hover background - darker warm tone */
+
+  /* Dynamic dimension calculations for better mobile optimization */
+  --nav-height: 64px; /* Base nav height (padding + content) */
+  --nav-height-mobile: 56px; /* Slightly smaller on mobile */
+  --available-height: calc(
+    100vh - var(--nav-height)
+  ); /* Available height minus nav */
+  --available-height-mobile: calc(
+    100vh - var(--nav-height-mobile)
+  ); /* Mobile available height */
+
+  /* Safe area calculations for different mobile screen sizes */
+  --content-max-height: calc(
+    100vh - var(--nav-height) - 40px
+  ); /* Additional padding buffer */
+  --content-max-height-mobile: calc(
+    100vh - var(--nav-height-mobile) - 20px
+  ); /* Tighter mobile buffer */
 }
 
 html {
@@ -199,12 +217,15 @@ h4 {
   background: linear-gradient(135deg, var(--text-primary) 0%, #1f0f08 100%);
   border-bottom: 1px solid rgba(245, 230, 211, 0.2);
   z-index: 1000;
-  padding: 16px 0;
+  height: var(--nav-height); /* Use CSS custom property for consistent height */
   /* Ensure it's always visible and never hidden */
   transform: translateY(0) !important;
   transition: none !important;
   visibility: visible !important;
   opacity: 1 !important;
+  /* Flexbox for consistent vertical centering */
+  display: flex;
+  align-items: center;
 }
 
 .nav-content {
@@ -214,6 +235,8 @@ h4 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  height: 100%; /* Take full height of nav container */
 }
 
 .logo {
@@ -433,8 +456,8 @@ main::-webkit-scrollbar {
 
 /* Additional scrollbar hiding for mobile devices */
 main {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none !important; /* Internet Explorer 10+ */
+  scrollbar-width: none !important; /* Firefox */
 }
 
 /* Force hide scrollbar on all browsers and devices */
@@ -455,7 +478,7 @@ main.scroll-snap-disabled {
   scroll-snap-stop: normal;
 }
 
-/* Full-screen scroll snap sections */
+/* Full-screen scroll snap sections - Updated for better mobile optimization */
 section {
   scroll-snap-align: start;
   height: 100vh; /* Each section takes full viewport */
@@ -463,7 +486,11 @@ section {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 100px 20px 60px; /* Increased top padding to account for fixed nav bar */
+  /* Updated padding to use CSS custom properties for better consistency */
+  padding-top: calc(var(--nav-height) + 20px); /* Nav height + buffer */
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   box-sizing: border-box;
   overflow-y: auto; /* Allow content to scroll within section if needed */
   scroll-snap-stop: always; /* Force stop at each section */
@@ -475,6 +502,8 @@ section {
   padding: 0 24px;
   width: 100%;
   box-sizing: border-box;
+  /* Ensure container respects available height */
+  max-height: var(--content-max-height);
 }
 
 /* Better centering for main content areas */
@@ -906,9 +935,11 @@ section {
   opacity: 0;
 }
 
-/* Mission Section - TikTok scroll optimized */
+/* Mission Section - TikTok scroll optimized with better mobile handling */
 .mission-section {
   background: var(--bg-secondary);
+  /* Ensure proper height management */
+  min-height: 100vh;
 }
 
 .mission-section .container {
@@ -917,6 +948,8 @@ section {
   align-items: center;
   justify-content: center;
   overflow-y: auto; /* Allow scrolling within section */
+  /* Use the new CSS custom property for max height */
+  max-height: var(--content-max-height);
 }
 
 .mission-content {
@@ -928,7 +961,11 @@ section {
   flex-direction: column;
   justify-content: center; /* Center content like hero page */
   align-items: center; /* Center horizontally */
-  min-height: calc(100vh - 160px); /* More compact height calculation */
+  /* Updated to use CSS custom properties for better mobile fit */
+  min-height: var(--available-height);
+  max-height: var(--content-max-height);
+  /* Ensure content can scroll if needed */
+  overflow-y: auto;
 }
 
 .mission-mascot {
@@ -1214,9 +1251,9 @@ section {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-between; /* Keep space-between to maintain footer at bottom */
   align-items: center;
-  padding-top: 120px;
+  padding-top: 80px; /* Reduced from 120px to prevent excessive spacing */
   padding-bottom: 40px;
 }
 
@@ -1265,7 +1302,7 @@ section {
 .footer-content {
   width: 100%;
   max-width: 1200px;
-  margin-top: 80px;
+  margin-top: 20px; /* Much smaller margin to reduce gap with CTA content */
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
@@ -1401,6 +1438,14 @@ section {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  /* Update CSS custom properties for mobile */
+  :root {
+    --nav-height: var(--nav-height-mobile); /* Use mobile nav height */
+    --content-max-height: var(
+      --content-max-height-mobile
+    ); /* Use mobile content height */
+  }
+
   /* Hide main scrollbar completely on mobile - we have scroll dots */
   main::-webkit-scrollbar {
     display: none !important;
@@ -1441,7 +1486,7 @@ section {
   }
 
   .nav-header {
-    padding: 10px 0; /* Reduced from 12px to save space */
+    height: var(--nav-height-mobile); /* Use mobile nav height */
     position: fixed !important; /* Ensure it stays fixed on mobile */
     top: 0 !important;
     left: 0;
@@ -1463,7 +1508,13 @@ section {
 
   section {
     height: 100vh;
-    padding: 90px 20px 40px 16px; /* Increased top padding for nav bar on mobile */
+    /* Updated mobile padding using CSS custom properties */
+    padding-top: calc(
+      var(--nav-height-mobile) + 16px
+    ); /* Mobile nav + buffer */
+    padding-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 20px; /* Extra right padding to avoid scroll dots */
     scroll-snap-align: start;
     scroll-snap-stop: always;
     display: flex;
@@ -1472,9 +1523,18 @@ section {
     box-sizing: border-box;
   }
 
+  .container {
+    /* Use mobile-specific max height */
+    max-height: var(--content-max-height-mobile);
+  }
+
   /* Hero section specific mobile optimization */
   .hero {
-    padding: 90px 20px 40px 16px; /* Match section padding with nav bar consideration */
+    /* Updated to use CSS custom properties */
+    padding-top: calc(var(--nav-height-mobile) + 20px);
+    padding-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 20px;
   }
 
   .hero-content {
@@ -1483,7 +1543,9 @@ section {
     justify-content: space-between; /* Distribute content evenly */
     align-items: center;
     height: 100%;
-    max-height: calc(100vh - 130px); /* Account for nav bar and padding */
+    /* Updated to use CSS custom properties */
+    max-height: var(--content-max-height-mobile);
+    min-height: var(--available-height-mobile);
   }
 
   /* Compact announcement */
@@ -1632,9 +1694,15 @@ section {
 
   .mission-content {
     padding: 15px;
-    min-height: calc(
-      100vh - 150px
-    ); /* Account for nav bar and increased padding */
+    /* Updated to use CSS custom properties for better mobile optimization */
+    min-height: var(--available-height-mobile);
+    max-height: var(--content-max-height-mobile);
+    /* Ensure proper scrolling and layout */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; /* Distribute content evenly for better mobile fit */
+    align-items: center;
   }
 
   .mission-stats {
@@ -1846,6 +1914,14 @@ section {
 }
 
 @media (max-width: 480px) {
+  /* Further optimize CSS custom properties for very small screens */
+  :root {
+    --nav-height-mobile: 52px; /* Even smaller nav on very small screens */
+    --content-max-height-mobile: calc(
+      100vh - var(--nav-height-mobile) - 16px
+    ); /* Tighter constraints */
+  }
+
   /* Ensure main scrollbar is hidden on small mobile devices */
   main::-webkit-scrollbar {
     display: none !important;
@@ -1859,11 +1935,19 @@ section {
 
   section {
     height: 100vh;
-    padding: 55px 12px 15px; /* Adjusted for small screens */
+    /* Updated padding for very small screens using CSS custom properties */
+    padding-top: calc(var(--nav-height-mobile) + 12px);
+    padding-bottom: 12px;
+    padding-left: 12px;
+    padding-right: 16px;
   }
 
   .hero {
-    padding: 45px 12px 10px; /* More compact for small screens */
+    /* Updated for very small screens */
+    padding-top: calc(var(--nav-height-mobile) + 16px);
+    padding-bottom: 12px;
+    padding-left: 12px;
+    padding-right: 16px;
   }
 
   h1 {
@@ -2053,22 +2137,43 @@ section {
   .mobile-nav {
     display: block;
   }
+
+  /* Optimize footer spacing for all tablet sizes */
+  .footer-content {
+    margin-top: 24px; /* Consistent tablet spacing */
+  }
 }
 
 /* Medium tablets (portrait) */
 @media (max-width: 1024px) and (min-width: 769px) {
+  /* Adjust CSS custom properties for tablets */
+  :root {
+    --nav-height: 60px; /* Slightly smaller nav on tablets */
+    --content-max-height: calc(
+      100vh - var(--nav-height) - 32px
+    ); /* Tablet content height */
+  }
+
   /* Adjust section padding for tablets to account for nav bar */
   section {
-    padding: 120px 24px 80px; /* More top padding for tablets */
+    /* Updated to use CSS custom properties */
+    padding-top: calc(var(--nav-height) + 24px);
+    padding-bottom: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
   .container {
     padding: 0 24px;
+    /* Use tablet-specific max height */
+    max-height: var(--content-max-height);
   }
 
   /* Mission section specific adjustments for tablets - COMPACT VERSION LIKE HERO */
   .mission-content {
-    min-height: calc(100vh - 180px); /* More compact height calculation */
+    /* Updated to use CSS custom properties for better tablet fit */
+    min-height: calc(var(--content-max-height) - 40px);
+    max-height: var(--content-max-height);
     padding: 24px; /* Reduced padding like hero page */
     justify-content: center; /* Center content vertically like hero */
     align-items: center; /* Center horizontally */
@@ -2590,5 +2695,83 @@ section {
 
   .modal-feature-icon {
     font-size: 24px;
+  }
+}
+
+/* Tablet portrait mode - specific optimization for typical tablet dimensions */
+@media (max-width: 1024px) and (max-height: 1366px) {
+  .footer-content {
+    margin-top: 20px; /* Normal margin */
+    flex: 0 0 auto; /* CRITICAL: Prevent footer from expanding and creating huge gaps */
+  }
+
+  .cta-section .container {
+    padding-top: 30px; /* Further reduced to center content better */
+    padding-bottom: 15px;
+    justify-content: space-between; /* Keep footer at bottom */
+  }
+
+  .cta-content {
+    margin-top: 100px; /* Push CTA content down closer to footer */
+    margin-bottom: 0; /* Remove margin since we're controlling with margin-top */
+  }
+
+  /* Single-line footer layout for vertical tablets (enough horizontal space) */
+  .footer-main {
+    grid-template-columns: repeat(
+      5,
+      1fr
+    ); /* Single line layout with all 5 columns */
+    gap: 16px; /* Tighter gap for single line */
+    margin-bottom: 24px; /* Reduced margin */
+  }
+
+  .footer-title {
+    font-size: 14px; /* Smaller to fit in single line */
+    margin-bottom: 8px;
+  }
+
+  .footer-links a {
+    font-size: 12px; /* Smaller text for compact layout */
+  }
+
+  .footer-bottom {
+    padding-top: 12px; /* Reduced padding */
+    margin-top: 16px; /* Reduced margin */
+  }
+}
+
+/* Specific optimization for iPad and similar tablet portrait dimensions */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .footer-content {
+    margin-top: 20px; /* Normal margin */
+    flex: 0 0 auto; /* CRITICAL: Prevent footer from expanding and creating huge gaps */
+  }
+
+  .cta-section .container {
+    padding-top: 25px; /* Minimal top padding for better balance */
+    padding-bottom: 12px;
+    justify-content: space-between; /* Keep footer at bottom */
+  }
+
+  .cta-content {
+    margin-top: 250px; /* Push CTA content down closer to footer */
+    margin-bottom: 0; /* Remove margin since we're controlling with margin-top */
+    flex: 0 0 auto; /* Prevent expansion */
+  }
+
+  /* Optimized single-line footer for portrait tablets */
+  .footer-main {
+    grid-template-columns: repeat(
+      5,
+      minmax(120px, 1fr)
+    ); /* Responsive single line */
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .footer-bottom {
+    margin-top: 12px;
+    padding-top: 8px;
   }
 }
