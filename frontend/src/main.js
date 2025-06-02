@@ -111,6 +111,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Mobile footer accordion functionality - Collapsible sections for small screens
   setupMobileFooterAccordion();
 
+  // Mobile landscape orientation prevention - JavaScript solution for real devices
+  setupMobileLandscapeProtection();
+
   console.log("Logity TikTok-style landing page loaded successfully! 🚀");
 });
 
@@ -1046,6 +1049,146 @@ function preventZooming() {
 
   console.log("Zoom prevention enabled for desktop and mobile! 🔒");
 }
+
+// Mobile landscape orientation prevention - JavaScript solution for real devices
+function setupMobileLandscapeProtection() {
+  // Only apply to mobile devices (not tablets or desktops)
+  function isMobileDevice() {
+    return (
+      window.innerWidth <= 768 &&
+      /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
+  }
+
+  function checkOrientation() {
+    if (!isMobileDevice()) return;
+
+    const isLandscape =
+      window.innerWidth > window.innerHeight ||
+      (screen.orientation && Math.abs(screen.orientation.angle) === 90) ||
+      window.orientation === 90 ||
+      window.orientation === -90;
+
+    if (isLandscape) {
+      // Add class to trigger CSS-based hiding
+      document.body.classList.add("mobile-landscape-blocked");
+
+      // Create overlay if it doesn't exist
+      if (!document.querySelector(".orientation-overlay")) {
+        createOrientationOverlay();
+      }
+    } else {
+      // Remove class to show content
+      document.body.classList.remove("mobile-landscape-blocked");
+
+      // Remove overlay if it exists
+      const overlay = document.querySelector(".orientation-overlay");
+      if (overlay) {
+        overlay.remove();
+      }
+    }
+  }
+
+  function createOrientationOverlay() {
+    const overlay = document.createElement("div");
+    overlay.className = "orientation-overlay";
+    overlay.innerHTML = `
+      <div class="orientation-message">
+        <div class="orientation-icon">📱</div>
+        <h2>Please rotate your device</h2>
+        <p>to portrait mode</p>
+        <p class="orientation-subtitle">for the best experience</p>
+      </div>
+    `;
+
+    // Apply styles directly
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #2d1b0e 0%, #1f0f08 100%);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    `;
+
+    const message = overlay.querySelector(".orientation-message");
+    message.style.cssText = `
+      text-align: center;
+      color: #f5e6d3;
+      padding: 40px 20px;
+      background: rgba(245, 230, 211, 0.1);
+      border: 2px solid rgba(245, 230, 211, 0.3);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      max-width: 80vw;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    `;
+
+    const icon = overlay.querySelector(".orientation-icon");
+    icon.style.cssText = `
+      font-size: 48px;
+      margin-bottom: 20px;
+      display: block;
+    `;
+
+    const title = overlay.querySelector("h2");
+    title.style.cssText = `
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 10px 0;
+      line-height: 1.3;
+    `;
+
+    const paragraphs = overlay.querySelectorAll("p");
+    paragraphs.forEach((p) => {
+      p.style.cssText = `
+        font-size: 16px;
+        margin: 0 0 8px 0;
+        line-height: 1.4;
+      `;
+    });
+
+    const subtitle = overlay.querySelector(".orientation-subtitle");
+    subtitle.style.cssText = `
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 10px !important;
+    `;
+
+    document.body.appendChild(overlay);
+  }
+
+  // Check orientation on load and orientation changes
+  checkOrientation();
+
+  // Listen for orientation changes
+  window.addEventListener("orientationchange", () => {
+    // Small delay to ensure the orientation change is complete
+    setTimeout(checkOrientation, 100);
+  });
+
+  // Also listen for resize as a fallback
+  window.addEventListener("resize", checkOrientation);
+
+  // Listen for screen orientation API if available
+  if (screen.orientation) {
+    screen.orientation.addEventListener("change", checkOrientation);
+  }
+
+  console.log("📱 Mobile landscape protection enabled for real devices");
+}
+
+// Initialize mobile landscape protection
+setupMobileLandscapeProtection();
 
 // Export functions for potential external use
 window.logityScrolling = {

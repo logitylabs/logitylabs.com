@@ -1024,11 +1024,11 @@ section {
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
-    minmax(160px, 1fr)
-  ); /* Fixed minimum width for consistent dimensions */
-  gap: 16px; /* Much reduced gap like hero page */
-  margin-bottom: 16px; /* Reduced bottom margin */
-  max-width: 700px; /* Smaller max width for more compact layout */
+    minmax(180px, 1fr)
+  ); /* Increased minimum width from 160px to 180px for bigger cards */
+  gap: 20px; /* Increased gap from 16px for better spacing */
+  margin-bottom: 20px; /* Increased bottom margin for visual balance */
+  max-width: 750px; /* Increased max width from 700px */
   margin-left: auto;
   margin-right: auto;
 }
@@ -1037,18 +1037,19 @@ section {
   background: var(--card-bg);
   border: 1px solid var(--border-light);
   border-radius: 12px;
-  padding: 18px 12px; /* More compact padding */
+  padding: 24px 16px; /* Increased padding from 18px 12px for more space */
   text-align: center;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px var(--shadow-soft);
 
-  /* Add flexbox for vertical centering of content */
+  /* Enhanced flexbox for perfect vertical and horizontal centering */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 110px; /* Reduced height for more compact layout */
+  justify-content: center; /* Perfect vertical centering */
+  align-items: center; /* Perfect horizontal centering */
+  height: 140px; /* Increased height from 110px for bigger cards */
   width: 100%; /* Ensure consistent width */
+  gap: 8px; /* Add gap between elements for consistent spacing */
 }
 
 .stat-card:hover {
@@ -1058,28 +1059,31 @@ section {
 }
 
 .stat-card .stat-number {
-  font-size: 28px; /* Smaller numbers for compact layout */
+  font-size: 32px; /* Increased from 28px for bigger cards */
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
-  margin-bottom: 6px; /* Reduced spacing */
+  margin-bottom: 0; /* Remove margin, using gap instead */
+  text-align: center; /* Ensure perfect centering */
 }
 
 .stat-card .stat-label {
-  font-size: 15px; /* Smaller text */
+  font-size: 16px; /* Increased from 15px for better readability */
   color: var(--text-secondary);
   font-weight: 600;
   line-height: 1.2;
-  margin-bottom: 4px; /* Reduced spacing */
+  margin-bottom: 0; /* Remove margin, using gap instead */
+  text-align: center; /* Ensure perfect centering */
 }
 
 .stat-detail {
-  font-size: 14px; /* Smaller detail text */
+  font-size: 15px; /* Increased from 14px for better readability */
   color: var(--text-muted);
   font-weight: 400;
   line-height: 1.4;
-  text-align: center;
-  max-width: 95%;
+  text-align: center; /* Ensure perfect centering */
+  max-width: 100%; /* Allow full width for better centering */
+  margin: 0; /* Remove any margins */
 }
 
 .mission-links {
@@ -1564,11 +1568,14 @@ section {
     max-height: var(--content-max-height);
   }
 
-  /* Hero section specific mobile optimization */
+  /* Hero section specific mobile optimization - Perfectly centered */
   .hero {
-    /* Updated to use mobile variables */
-    padding-top: calc(var(--nav-height) + 20px);
-    padding-bottom: max(16px, var(--safe-area-inset-bottom));
+    /* Updated to use mobile variables with better padding */
+    padding-top: calc(var(--nav-height) + 16px); /* Reduced from 20px */
+    padding-bottom: max(
+      12px,
+      var(--safe-area-inset-bottom)
+    ); /* Reduced from 16px */
     padding-left: max(16px, var(--safe-area-inset-left));
     padding-right: max(20px, var(--safe-area-inset-right));
   }
@@ -1576,19 +1583,24 @@ section {
   .hero-content {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distribute content evenly */
-    align-items: center;
+    justify-content: center; /* Center all content vertically */
+    align-items: center; /* Center all content horizontally */
     height: 100%;
     /* Updated to use mobile variables */
     max-height: var(--content-max-height);
     min-height: var(--available-height);
+    gap: 14px; /* Slightly increased gap for better visual balance */
+    text-align: center; /* Ensure all text is centered */
+    width: 100%; /* Full width container */
   }
 
-  /* Compact announcement */
+  /* Compact announcement - perfectly centered */
   .hero-announcement {
-    margin-bottom: 20px; /* Reduced from 32px */
+    margin-bottom: 0; /* Remove margin, using gap instead */
     font-size: 13px; /* Slightly smaller */
     padding: 6px 14px; /* More compact */
+    flex-shrink: 0; /* Prevent shrinking */
+    align-self: center; /* Ensure centered alignment */
   }
 
   .announcement-badge {
@@ -1596,11 +1608,12 @@ section {
     font-size: 11px;
   }
 
-  /* Responsive typography with better spacing */
+  /* Responsive typography with perfect centering */
   h1 {
-    font-size: 1.9rem; /* Reduced from 2.2rem */
+    font-size: 1.8rem; /* Further reduced from 1.9rem for mobile */
     line-height: 1.1; /* Tighter line height */
-    margin-bottom: 16px; /* Reduced from 24px */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
   }
 
   h2 {
@@ -1609,46 +1622,68 @@ section {
   }
 
   .hero-title {
-    margin-bottom: 16px; /* Reduced from 24px */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
+    flex-shrink: 0; /* Prevent shrinking */
+    width: 100%; /* Full width for proper centering */
+    align-self: center; /* Ensure centered alignment */
   }
 
   .hero-description {
     font-size: 15px; /* Reduced from 17px */
     line-height: 1.4; /* Tighter line height */
-    margin-bottom: 20px; /* Reduced from 32px */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
+    flex-shrink: 0; /* Prevent shrinking */
+    max-width: 90%; /* Limit width for better readability */
+    align-self: center; /* Ensure centered alignment */
   }
 
   .hero-actions {
     flex-direction: column;
-    gap: 10px; /* Reduced from 12px */
-    margin-bottom: 20px; /* Reduced from 32px */
+    gap: 10px; /* Slightly increased from 8px for better spacing */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    flex-shrink: 0; /* Prevent shrinking */
+    width: 100%; /* Full width for proper centering */
+    align-items: center; /* Center buttons horizontally */
+    align-self: center; /* Ensure centered alignment */
   }
 
-  /* Compact buttons */
+  /* Perfectly centered buttons */
   .btn-large {
     padding: 12px 24px; /* Reduced from 16px 32px */
     font-size: 14px; /* Reduced from 16px */
+    width: 100%; /* Full width buttons for better mobile UX */
+    max-width: 280px; /* Limit maximum width */
+    text-align: center; /* Center button text */
+    align-self: center; /* Ensure button itself is centered */
   }
 
-  /* Optimized mascot section */
+  /* Optimized mascot section - perfectly centered */
   .hero-mascot {
-    margin-top: 16px; /* Reduced from 32px */
+    margin-top: 0; /* Remove margin, using gap instead */
     flex-shrink: 0; /* Prevent mascot from shrinking */
+    align-self: center; /* Ensure centered alignment */
+    text-align: center; /* Center mascot content */
   }
 
   .mascot-container {
-    margin-top: 8px; /* Reduced from 16px */
+    margin-top: 0; /* Remove margin for tighter spacing */
+    text-align: center; /* Center mascot within container */
   }
 
   .mascot-character-logo {
-    width: 70px; /* Further reduced for better mobile fit */
-    height: 70px;
+    width: 60px; /* Further reduced for mobile compactness */
+    height: 60px;
+    display: block; /* Ensure block display for centering */
+    margin: 0 auto; /* Center the image */
   }
 
   .mascot-speech {
-    font-size: 12px; /* Reduced from 13px */
-    padding: 5px 8px; /* More compact */
-    top: -35px; /* Adjusted for smaller mascot */
+    font-size: 11px; /* Further reduced from 12px */
+    padding: 4px 7px; /* More compact */
+    top: -30px; /* Adjusted for smaller mascot */
+    text-align: center; /* Center speech bubble text */
   }
 
   .container {
@@ -1682,33 +1717,44 @@ section {
     max-width: 500px;
   }
 
-  /* Stats grid responsive on mobile - 2x2 layout */
+  /* Stats grid responsive on mobile - 2x2 layout with bigger cards */
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 16px; /* Increased from 12px for better spacing */
     max-width: 100%;
-    margin-bottom: 12px; /* Bring closer to text on mobile */
+    margin-bottom: 16px; /* Bring closer to text on mobile */
   }
 
   .stat-card {
-    padding: 14px 10px; /* Consistent padding */
-    height: 95px; /* Fixed height for consistency */
+    padding: 18px 12px; /* Increased from 14px 10px for bigger mobile cards */
+    height: 120px; /* Increased from 95px for bigger mobile cards */
     width: 100%; /* Ensure consistent width */
+    /* Enhanced mobile centering */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Perfect vertical centering */
+    align-items: center; /* Perfect horizontal centering */
+    gap: 6px; /* Add gap between elements for mobile */
   }
 
   .stat-card .stat-number {
-    font-size: 24px; /* Smaller to fit better in 2x2 */
+    font-size: 26px; /* Increased from 24px for bigger mobile cards */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
   }
 
   .stat-card .stat-label {
-    font-size: 14px;
-    margin-bottom: 4px;
+    font-size: 15px; /* Increased from 14px for better mobile readability */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
   }
 
   .stat-detail {
-    font-size: 12px;
-    max-width: 95%;
+    font-size: 13px; /* Increased from 12px for better mobile readability */
+    max-width: 100%; /* Allow full width for better centering */
     line-height: 1.3;
+    text-align: center; /* Ensure perfect centering */
+    margin: 0; /* Remove any margins */
   }
 
   .celebration-text {
@@ -2074,36 +2120,47 @@ section {
     margin-bottom: 20px;
   }
 
-  /* Stats grid on very small screens - keep 2x2 but more compact */
+  /* Stats grid on very small screens - keep 2x2 but bigger and centered */
   .stats-grid {
     grid-template-columns: repeat(
       2,
       1fr
     ); /* Keep 2x2 even on very small screens */
-    gap: 8px;
+    gap: 12px; /* Increased from 8px for better spacing */
     max-width: 100%;
-    margin-bottom: 10px; /* Bring closer to text */
+    margin-bottom: 12px; /* Bring closer to text */
   }
 
   .stat-card {
-    padding: 12px 8px; /* Consistent compact padding */
-    height: 85px; /* Fixed height for consistency */
+    padding: 16px 10px; /* Increased from 12px 8px for bigger very small mobile cards */
+    height: 110px; /* Increased from 85px for bigger very small mobile cards */
     width: 100%; /* Ensure consistent width */
+    /* Enhanced very small mobile centering */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Perfect vertical centering */
+    align-items: center; /* Perfect horizontal centering */
+    gap: 5px; /* Add gap between elements for very small mobile */
   }
 
   .stat-card .stat-number {
-    font-size: 22px; /* Smaller number for very small screens */
+    font-size: 24px; /* Increased from 22px for bigger very small mobile cards */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
   }
 
   .stat-card .stat-label {
-    font-size: 13px;
-    margin-bottom: 3px;
+    font-size: 14px; /* Increased from 13px for better very small mobile readability */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
   }
 
   .stat-detail {
-    font-size: 11px;
-    max-width: 100%;
+    font-size: 12px; /* Increased from 11px for better very small mobile readability */
+    max-width: 100%; /* Allow full width for better centering */
     line-height: 1.2;
+    text-align: center; /* Ensure perfect centering */
+    margin: 0; /* Remove any margins */
   }
 
   /* Additional footer optimizations for very small screens */
@@ -2282,29 +2339,41 @@ section {
 
   .stats-grid {
     grid-template-columns: repeat(2, 1fr); /* 2x2 layout for tablets */
-    gap: 16px; /* Moderate gap for tablets */
-    margin-bottom: 12px; /* Reduced margin like hero */
-    max-width: 500px; /* More compact max width */
+    gap: 18px; /* Increased from 16px for better tablet spacing */
+    margin-bottom: 16px; /* Reduced margin like hero */
+    max-width: 550px; /* Increased from 500px for bigger tablet cards */
   }
 
   .stat-card {
-    height: 115px; /* More compact height for tablets */
-    padding: 18px 14px; /* More compact padding */
+    height: 130px; /* Increased from 115px for bigger tablet cards */
+    padding: 20px 16px; /* Increased from 18px 14px for more tablet space */
     width: 100%; /* Ensure consistent width */
+    /* Enhanced tablet centering */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Perfect vertical centering */
+    align-items: center; /* Perfect horizontal centering */
+    gap: 7px; /* Add gap between elements for tablet */
   }
 
   .stat-card .stat-number {
-    font-size: 28px; /* Smaller numbers for tablets */
+    font-size: 30px; /* Increased from 28px for bigger tablet cards */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
   }
 
   .stat-card .stat-label {
-    font-size: 15px; /* Smaller labels */
-    margin-bottom: 2px; /* Reduced spacing */
+    font-size: 16px; /* Increased from 15px for better tablet readability */
+    margin-bottom: 0; /* Remove margin, using gap instead */
+    text-align: center; /* Ensure perfect centering */
   }
 
   .stat-detail {
-    font-size: 13px; /* Smaller detail text */
-    line-height: 1.2; /* Tighter line height */
+    font-size: 14px; /* Increased from 13px for better tablet readability */
+    line-height: 1.2;
+    text-align: center; /* Ensure perfect centering */
+    max-width: 100%; /* Allow full width for better centering */
+    margin: 0; /* Remove any margins */
   }
 
   .update-card {
@@ -3100,3 +3169,180 @@ section {
 }
 
 /* Height-based optimizations for shorter mobile screens */
+
+/* Mobile-only landscape orientation prevention */
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Hide all main content when mobile is in landscape */
+  body > *:not(.orientation-message) {
+    display: none !important;
+  }
+
+  /* Show orientation message */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--text-primary) 0%, #1f0f08 100%);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body::after {
+    content: "📱\A\A Please rotate your device\A to portrait mode\A\A for the best experience";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10001;
+    color: var(--bg-primary);
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.6;
+    white-space: pre-line;
+    padding: 40px 20px;
+    background: rgba(245, 230, 211, 0.05);
+    border: 2px solid rgba(245, 230, 211, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    max-width: 90vw;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Ensure the message is always visible */
+  html,
+  body {
+    overflow: hidden !important;
+    height: 100vh !important;
+  }
+}
+
+/* Mobile-only landscape orientation prevention - Enhanced for real devices */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  /* Hide all main content when mobile is in landscape */
+  body > *:not(.orientation-message) {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Create full-screen overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--text-primary) 0%, #1f0f08 100%);
+    z-index: 99999;
+    display: block;
+  }
+
+  /* Show orientation message */
+  body::after {
+    content: "📱\A\A Please rotate your device\A to portrait mode\A\A for the best experience";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100000;
+    color: var(--bg-primary);
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.6;
+    white-space: pre-line;
+    padding: 30px 20px;
+    background: rgba(245, 230, 211, 0.1);
+    border: 2px solid rgba(245, 230, 211, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    max-width: 80vw;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    display: block;
+  }
+
+  /* Ensure the message is always visible and lock viewport */
+  html {
+    overflow: hidden !important;
+    height: 100vh !important;
+    width: 100vw !important;
+  }
+
+  body {
+    overflow: hidden !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    position: fixed !important;
+  }
+
+  /* Hide navigation and other elements specifically */
+  .nav-header,
+  main,
+  .scroll-indicators,
+  .footer-content {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+/* Additional media query for devices that might not respond to standard orientation */
+@media screen and (max-device-width: 768px) and (max-device-height: 450px) {
+  /* This targets phones in landscape based on dimensions */
+  body > *:not(.orientation-message) {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--text-primary) 0%, #1f0f08 100%);
+    z-index: 99999;
+    display: block;
+  }
+
+  body::after {
+    content: "📱\A\A Please rotate your device\A to portrait mode\A\A for the best experience";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100000;
+    color: var(--bg-primary);
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.6;
+    white-space: pre-line;
+    padding: 30px 20px;
+    background: rgba(245, 230, 211, 0.1);
+    border: 2px solid rgba(245, 230, 211, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    max-width: 80vw;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    display: block;
+  }
+
+  html,
+  body {
+    overflow: hidden !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    position: fixed !important;
+  }
+}
