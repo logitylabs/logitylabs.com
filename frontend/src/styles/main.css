@@ -49,37 +49,11 @@
   --card-bg: #efe2d5; /* Card backgrounds - warm tone */
   --hover-bg: #e8d7c7; /* Hover background - darker warm tone */
 
-  /* Safe area inset support for modern mobile devices (iPhone notch, etc.) */
-  --safe-area-inset-top: env(safe-area-inset-top, 0px);
-  --safe-area-inset-right: env(safe-area-inset-right, 0px);
-  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-area-inset-left: env(safe-area-inset-left, 0px);
-
-  /* Dynamic dimension calculations for better mobile optimization with safe areas */
-  --nav-base-height: 64px; /* Base nav height without safe area */
-  --nav-base-height-mobile: 64px; /* Increased from 56px to 64px for better mobile presence */
-
-  /* Total nav height including safe area insets */
-  --nav-height: calc(var(--nav-base-height) + var(--safe-area-inset-top));
-  --nav-height-mobile: calc(
-    var(--nav-base-height-mobile) + var(--safe-area-inset-top)
-  );
-
-  /* Available height calculations accounting for safe areas */
-  --available-height: calc(
-    100vh - var(--nav-height) - var(--safe-area-inset-bottom)
-  );
-  --available-height-mobile: calc(
-    100vh - var(--nav-height-mobile) - var(--safe-area-inset-bottom)
-  );
-
-  /* Content max height calculations with safe area considerations */
-  --content-max-height: calc(
-    100vh - var(--nav-height) - var(--safe-area-inset-bottom) - 40px
-  );
-  --content-max-height-mobile: calc(
-    100vh - var(--nav-height-mobile) - var(--safe-area-inset-bottom) - 20px
-  );
+  /* DESKTOP/TABLET DEFAULTS - Simple and clean like before */
+  --nav-height: 64px; /* Fixed 64px height for desktop/tablet */
+  --nav-base-height: 64px; /* Base nav height */
+  --available-height: calc(100vh - 64px); /* Simple desktop calculation */
+  --content-max-height: calc(100vh - 64px - 40px); /* Desktop content height */
 }
 
 html {
@@ -229,7 +203,7 @@ h4 {
   font-size: 1.25rem;
 }
 
-/* Navigation - Dark footer style - Always visible with safe area support */
+/* Navigation - Dark footer style - Simple desktop styling */
 .nav-header {
   position: fixed !important;
   top: 0 !important;
@@ -238,14 +212,7 @@ h4 {
   background: linear-gradient(135deg, var(--text-primary) 0%, #1f0f08 100%);
   border-bottom: 1px solid rgba(245, 230, 211, 0.2);
   z-index: 1000;
-
-  /* Safe area inset support for modern mobile devices */
-  padding-top: var(--safe-area-inset-top);
-  padding-left: var(--safe-area-inset-left);
-  padding-right: var(--safe-area-inset-right);
-
-  /* Total height including safe area insets */
-  height: var(--nav-height);
+  height: var(--nav-height); /* Simple 64px height for desktop */
 
   /* Ensure it's always visible and never hidden */
   transform: translateY(0) !important;
@@ -266,11 +233,7 @@ h4 {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  /* Use base height for content, safe area padding is handled by parent */
-  height: var(--nav-base-height);
-  /* Additional safe area consideration for content positioning */
-  padding-left: max(24px, var(--safe-area-inset-left));
-  padding-right: max(24px, var(--safe-area-inset-right));
+  height: var(--nav-base-height); /* Simple 64px height */
 }
 
 .logo {
@@ -529,8 +492,10 @@ section {
   align-items: center;
   justify-content: center;
   position: relative;
-  /* Updated padding to use CSS custom properties for better consistency */
-  padding-top: calc(var(--nav-height) + 20px); /* Nav height + buffer */
+  /* Simple desktop/tablet padding calculation - no safe area */
+  padding-top: calc(
+    var(--nav-height) + 20px
+  ); /* 64px nav + 20px buffer = 84px */
   padding-bottom: 20px;
   padding-left: 20px;
   padding-right: 20px;
@@ -1481,14 +1446,27 @@ section {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  /* Update CSS custom properties for mobile with safe area support */
+  /* Mobile-only safe area support */
   :root {
-    --nav-height: var(
-      --nav-height-mobile
-    ); /* Use mobile nav height with safe areas */
-    --content-max-height: var(
-      --content-max-height-mobile
-    ); /* Use mobile content height with safe areas */
+    /* Safe area inset support for mobile devices (iPhone notch, etc.) */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+
+    /* Mobile nav height with safe area support */
+    --nav-base-height-mobile: 64px;
+    --nav-height: calc(
+      var(--nav-base-height-mobile) + var(--safe-area-inset-top)
+    );
+
+    /* Mobile height calculations with safe area support */
+    --available-height: calc(
+      100vh - var(--nav-height) - var(--safe-area-inset-bottom)
+    );
+    --content-max-height: calc(
+      100vh - var(--nav-height) - var(--safe-area-inset-bottom) - 20px
+    );
   }
 
   /* Hide main scrollbar completely on mobile - we have scroll dots */
@@ -1530,10 +1508,12 @@ section {
     display: block;
   }
 
+  /* Mobile navigation with safe area support */
   .nav-header {
-    height: var(
-      --nav-height-mobile
-    ); /* Use mobile nav height with safe areas */
+    height: var(--nav-height) !important; /* Include safe area on mobile */
+    padding-top: var(--safe-area-inset-top) !important;
+    padding-left: var(--safe-area-inset-left) !important;
+    padding-right: var(--safe-area-inset-right) !important;
     position: fixed !important; /* Ensure it stays fixed on mobile */
     top: 0 !important;
     left: 0;
@@ -1547,11 +1527,11 @@ section {
   }
 
   .nav-content {
-    /* Use mobile base height for content */
-    height: var(--nav-base-height-mobile);
-    /* Ensure safe area padding on mobile */
-    padding-left: max(16px, var(--safe-area-inset-left));
-    padding-right: max(16px, var(--safe-area-inset-right));
+    height: var(
+      --nav-base-height-mobile
+    ) !important; /* Keep content height at 64px */
+    padding-left: max(16px, var(--safe-area-inset-left)) !important;
+    padding-right: max(16px, var(--safe-area-inset-right)) !important;
   }
 
   /* TikTok-style mobile optimization with better height management */
@@ -1563,13 +1543,14 @@ section {
 
   section {
     height: 100vh;
-    /* Updated mobile padding using CSS custom properties */
-    padding-top: calc(
-      var(--nav-height-mobile) + 16px
-    ); /* Mobile nav + buffer */
-    padding-bottom: 16px;
-    padding-left: 16px;
-    padding-right: 20px; /* Extra right padding to avoid scroll dots */
+    /* Updated mobile padding using mobile variables */
+    padding-top: calc(var(--nav-height) + 16px); /* Mobile nav + buffer */
+    padding-bottom: max(16px, var(--safe-area-inset-bottom));
+    padding-left: max(16px, var(--safe-area-inset-left));
+    padding-right: max(
+      20px,
+      var(--safe-area-inset-right)
+    ); /* Extra right padding to avoid scroll dots */
     scroll-snap-align: start;
     scroll-snap-stop: always;
     display: flex;
@@ -1580,16 +1561,16 @@ section {
 
   .container {
     /* Use mobile-specific max height */
-    max-height: var(--content-max-height-mobile);
+    max-height: var(--content-max-height);
   }
 
   /* Hero section specific mobile optimization */
   .hero {
-    /* Updated to use CSS custom properties */
-    padding-top: calc(var(--nav-height-mobile) + 20px);
-    padding-bottom: 16px;
-    padding-left: 16px;
-    padding-right: 20px;
+    /* Updated to use mobile variables */
+    padding-top: calc(var(--nav-height) + 20px);
+    padding-bottom: max(16px, var(--safe-area-inset-bottom));
+    padding-left: max(16px, var(--safe-area-inset-left));
+    padding-right: max(20px, var(--safe-area-inset-right));
   }
 
   .hero-content {
@@ -1598,9 +1579,9 @@ section {
     justify-content: space-between; /* Distribute content evenly */
     align-items: center;
     height: 100%;
-    /* Updated to use CSS custom properties */
-    max-height: var(--content-max-height-mobile);
-    min-height: var(--available-height-mobile);
+    /* Updated to use mobile variables */
+    max-height: var(--content-max-height);
+    min-height: var(--available-height);
   }
 
   /* Compact announcement */
@@ -1749,9 +1730,9 @@ section {
 
   .mission-content {
     padding: 15px;
-    /* Updated to use CSS custom properties for better mobile optimization */
-    min-height: var(--available-height-mobile);
-    max-height: var(--content-max-height-mobile);
+    /* Updated to use mobile variables for better mobile optimization */
+    min-height: var(--available-height);
+    max-height: var(--content-max-height);
     /* Ensure proper scrolling and layout */
     overflow-y: auto;
     display: flex;
@@ -1969,14 +1950,26 @@ section {
 }
 
 @media (max-width: 480px) {
-  /* Further optimize CSS custom properties for very small screens with safe area support */
+  /* Enhanced mobile-only safe area support for very small screens */
   :root {
+    /* Safe area inset support for mobile devices (iPhone notch, etc.) */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+
+    /* Very small mobile nav height with safe area support */
     --nav-base-height-mobile: 60px; /* Slightly smaller for very small screens, but still substantial */
-    --nav-height-mobile: calc(
+    --nav-height: calc(
       var(--nav-base-height-mobile) + var(--safe-area-inset-top)
-    ); /* Recalculate with safe area */
-    --content-max-height-mobile: calc(
-      100vh - var(--nav-height-mobile) - var(--safe-area-inset-bottom) - 16px
+    );
+
+    /* Very small mobile height calculations with safe area support */
+    --available-height: calc(
+      100vh - var(--nav-height) - var(--safe-area-inset-bottom)
+    );
+    --content-max-height: calc(
+      100vh - var(--nav-height) - var(--safe-area-inset-bottom) - 16px
     ); /* Tighter constraints with safe areas */
   }
 
@@ -1993,8 +1986,8 @@ section {
 
   section {
     height: 100vh;
-    /* Updated padding for very small screens using safe area aware CSS custom properties */
-    padding-top: calc(var(--nav-height-mobile) + 12px);
+    /* Updated padding for very small screens using safe area aware variables */
+    padding-top: calc(var(--nav-height) + 12px);
     padding-bottom: max(12px, var(--safe-area-inset-bottom));
     padding-left: max(12px, var(--safe-area-inset-left));
     padding-right: max(16px, var(--safe-area-inset-right));
@@ -2002,7 +1995,7 @@ section {
 
   .hero {
     /* Updated for very small screens with safe area support */
-    padding-top: calc(var(--nav-height-mobile) + 16px);
+    padding-top: calc(var(--nav-height) + 16px);
     padding-bottom: max(12px, var(--safe-area-inset-bottom));
     padding-left: max(12px, var(--safe-area-inset-left));
     padding-right: max(16px, var(--safe-area-inset-right));
