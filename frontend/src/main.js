@@ -215,7 +215,7 @@ function initializeTikTokScrolling() {
 
   sections.forEach((section) => sectionObserver.observe(section));
 
-  // Enhanced mobile scroll handling for TikTok-like experience
+  // Enhanced scroll handling for TikTok-like experience on both mobile and desktop
   let scrollTimer = null;
   let lastScrollY = 0;
 
@@ -230,10 +230,9 @@ function initializeTikTokScrolling() {
       const currentScrollY = window.scrollY;
 
       // Add slight delay to prevent excessive snapping during user scrolling
-      scrollTimer = setTimeout(() => {
-        // Only snap if user has stopped scrolling and we're on mobile
-        if (window.innerWidth <= 768) {
-          // TikTok-style section snapping logic
+      scrollTimer = setTimeout(
+        () => {
+          // TikTok-style section snapping logic for both mobile and desktop
           let closestSection = 0;
           let closestDistance = Infinity;
 
@@ -248,11 +247,17 @@ function initializeTikTokScrolling() {
           });
 
           // Snap to the closest section if we're not already there
-          if (closestSection !== currentSection && closestDistance > 100) {
+          // Use different thresholds for mobile vs desktop
+          const threshold = window.innerWidth <= 768 ? 100 : 150;
+          if (
+            closestSection !== currentSection &&
+            closestDistance > threshold
+          ) {
             scrollToSection(closestSection);
           }
-        }
-      }, 100); // Small delay to allow natural scrolling
+        },
+        window.innerWidth <= 768 ? 100 : 200
+      ); // Longer delay for desktop
 
       lastScrollY = currentScrollY;
     },
@@ -270,49 +275,55 @@ function initializeTikTokScrolling() {
     }
   });
 
-  // Improved scroll protection for internal scrollable areas
-  function handleScrollableContent() {
-    const scrollableElements = document.querySelectorAll(
-      ".updates-grid, .featured-grid, .modal-container"
-    );
+  // Desktop wheel navigation - ensure page navigation works even over grids
+  let wheelAccumulator = 0;
+  let wheelTimeout = null;
 
-    scrollableElements.forEach((element) => {
-      let isScrollingInside = false;
+  window.addEventListener(
+    "wheel",
+    function (e) {
+      // Only apply this logic for desktop
+      if (window.innerWidth > 768) {
+        wheelAccumulator += e.deltaY;
 
-      element.addEventListener("scroll", () => {
-        isScrollingInside = true;
-        clearTimeout(scrollTimer);
-
-        // Disable main scroll snapping while scrolling inside
-        main.classList.add("scroll-snap-disabled");
-
-        setTimeout(() => {
-          isScrollingInside = false;
-          main.classList.remove("scroll-snap-disabled");
-        }, 500);
-      });
-
-      element.addEventListener("mouseenter", () => {
-        main.classList.add("scroll-snap-disabled");
-      });
-
-      element.addEventListener("mouseleave", () => {
-        if (!isScrollingInside) {
-          main.classList.remove("scroll-snap-disabled");
+        // Clear existing timeout
+        if (wheelTimeout) {
+          clearTimeout(wheelTimeout);
         }
+
+        // Set a timeout to process accumulated wheel delta
+        wheelTimeout = setTimeout(() => {
+          const threshold = 100; // Minimum scroll amount to trigger navigation
+
+          if (Math.abs(wheelAccumulator) > threshold) {
+            if (wheelAccumulator > 0 && currentSection < sections.length - 1) {
+              // Scrolling down - go to next section
+              scrollToSection(currentSection + 1);
+            } else if (wheelAccumulator < 0 && currentSection > 0) {
+              // Scrolling up - go to previous section
+              scrollToSection(currentSection - 1);
+            }
+          }
+
+          // Reset accumulator
+          wheelAccumulator = 0;
+        }, 100);
+      }
+    },
+    { passive: true }
+  );
+
+  // Helper function to scroll to a specific section
+  function scrollToSection(index) {
+    if (index >= 0 && index < sections.length) {
+      sections[index].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
       });
-    });
+      currentSection = index;
+      updateTikTokScrollIndicators(currentSection);
+    }
   }
-
-  // Initialize scroll protection
-  handleScrollableContent();
-
-  // Re-initialize on dynamic content changes
-  const contentObserver = new MutationObserver(handleScrollableContent);
-  contentObserver.observe(document.body, {
-    childList: true,
-    subtree: true,
-  });
 }
 
 // Setup TikTok-style scroll indicators
@@ -619,32 +630,128 @@ function setupGridScrollProtection() {
   const updatesGrid = document.querySelector(".updates-grid");
   const featuredGrid = document.querySelector(".featured-grid");
 
-  // Global flag to track if mouse is over a scrollable grid
-  window.mouseOverScrollableGrid = false;
-
   function setupGridProtection(grid) {
     if (!grid) return;
 
-    // Mouse enter - mark as over scrollable grid
-    grid.addEventListener("mouseenter", function () {
-      window.mouseOverScrollableGrid = true;
-      grid.classList.add("scroll-focus");
-      console.log("Mouse over grid - TikTok scrolling will be less aggressive");
+    let isActuallyScrollingInGrid = false;
+    let gridScrollTimeout = null;
+    let boundaryScrollTimeout = null;
+    let lastWheelDirection = 0;
+    let boundaryHitTime = 0;
+
+    // Check if the grid actually has scrollable content
+    function hasScrollableContent() {
+      return grid.scrollHeight > grid.clientHeight;
+    }
+
+    // Check if we're at the top or bottom of the grid
+    function isAtScrollBoundary() {
+      const atTop = grid.scrollTop <= 1;
+      const atBottom =
+        grid.scrollTop >= grid.scrollHeight - grid.clientHeight - 1;
+      return { atTop, atBottom, isAtBoundary: atTop || atBottom };
+    }
+
+    // Enhanced wheel event handler for better scroll delegation
+    grid.addEventListener(
+      "wheel",
+      function (e) {
+        // On desktop, be less aggressive about capturing scroll events
+        const isDesktop = window.innerWidth > 768;
+
+        // If no scrollable content, always allow main page scroll
+        if (!hasScrollableContent()) {
+          return; // Let the event bubble up for main page navigation
+        }
+
+        // For desktop, implement smart boundary detection with delay
+        if (isDesktop) {
+          const boundary = isAtScrollBoundary();
+          const currentWheelDirection = e.deltaY > 0 ? 1 : -1; // 1 = down, -1 = up
+
+          // If we're not at a boundary, always allow internal scrolling
+          if (!boundary.isAtBoundary) {
+            e.stopPropagation();
+            return;
+          }
+
+          // We're at a boundary - check if user is trying to scroll out of the panel
+          const tryingToScrollUp = currentWheelDirection < 0 && boundary.atTop;
+          const tryingToScrollDown =
+            currentWheelDirection > 0 && boundary.atBottom;
+
+          if (tryingToScrollUp || tryingToScrollDown) {
+            // Check if this is a continuation of the same scroll direction
+            if (currentWheelDirection === lastWheelDirection) {
+              const timeSinceBoundaryHit = Date.now() - boundaryHitTime;
+
+              // If user has been scrolling in same direction for more than 300ms at boundary
+              // then allow page navigation
+              if (timeSinceBoundaryHit > 300) {
+                return; // Let it bubble up for page navigation
+              } else {
+                // Still within delay period - prevent page navigation
+                e.stopPropagation();
+                return;
+              }
+            } else {
+              // New scroll direction at boundary - reset timer
+              boundaryHitTime = Date.now();
+              lastWheelDirection = currentWheelDirection;
+              e.stopPropagation();
+              return;
+            }
+          } else {
+            // Scrolling in direction that would stay within panel
+            e.stopPropagation();
+            return;
+          }
+        }
+
+        // Mobile behavior - more traditional boundary checking
+        const boundary = isAtScrollBoundary();
+        if (boundary.isAtBoundary) {
+          const scrollingUp = e.deltaY < 0;
+          const scrollingDown = e.deltaY > 0;
+
+          // Allow main page scroll if:
+          // - Scrolling up while at top of grid
+          // - Scrolling down while at bottom of grid
+          if (
+            (scrollingUp && boundary.atTop) ||
+            (scrollingDown && boundary.atBottom)
+          ) {
+            return; // Let the event bubble up for main page navigation
+          }
+        }
+
+        // Only prevent default and stop propagation for internal grid scrolling
+        e.stopPropagation();
+      },
+      { passive: true }
+    );
+
+    // Track actual scroll events within the grid
+    grid.addEventListener("scroll", function () {
+      isActuallyScrollingInGrid = true;
+
+      if (gridScrollTimeout) {
+        clearTimeout(gridScrollTimeout);
+      }
+
+      gridScrollTimeout = setTimeout(() => {
+        isActuallyScrollingInGrid = false;
+      }, 150);
     });
 
-    // Mouse leave - mark as not over scrollable grid
-    grid.addEventListener("mouseleave", function () {
-      window.mouseOverScrollableGrid = false;
-      grid.classList.remove("scroll-focus");
-      console.log("Mouse left grid - TikTok scrolling restored");
-    });
+    console.log(`Grid protection setup for: ${grid.className}`);
   }
 
   // Setup protection for both grids
   setupGridProtection(updatesGrid);
   setupGridProtection(featuredGrid);
 
-  console.log("Grid scroll protection enabled");
+  console.log("Enhanced grid scroll protection enabled");
 }
 
 // Mobile hamburger menu functionality
