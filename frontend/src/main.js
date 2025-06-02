@@ -736,8 +736,12 @@ function setupMobileFooterAccordion() {
       document.body.appendChild(overlay);
 
       // Add click listener to close accordion when clicking overlay
-      overlay.addEventListener("click", function () {
-        closeAllFooterSections();
+      overlay.addEventListener("click", function (e) {
+        // Make sure we're clicking on the overlay itself, not on the footer menu
+        const footerMain = document.querySelector(".footer-main");
+        if (footerMain && !footerMain.contains(e.target)) {
+          closeAllFooterSections();
+        }
       });
     }
     return overlay;
@@ -751,7 +755,6 @@ function setupMobileFooterAccordion() {
     footerSections.forEach((section) => {
       const title = section.querySelector(".footer-title");
       const content = section.querySelector(".footer-links");
-      const arrow = title?.querySelector(".footer-arrow");
 
       if (title?.getAttribute("aria-expanded") === "true") {
         // Close the section
@@ -760,18 +763,14 @@ function setupMobileFooterAccordion() {
         content.setAttribute("aria-hidden", "true");
         content.style.maxHeight = "0";
         content.style.opacity = "0";
-
-        if (arrow) {
-          arrow.innerHTML = "▶"; // Right arrow
-          arrow.style.transform = "translateY(-50%) rotate(0deg)";
-        }
       }
     });
 
-    // Hide overlay
+    // Hide overlay and remove body blocking
     if (overlay) {
       overlay.classList.remove("active");
     }
+    document.body.classList.remove("footer-accordion-open");
   }
 
   // Only initialize on mobile screens (768px and below)
@@ -807,12 +806,10 @@ function setupMobileFooterAccordion() {
       links.setAttribute("id", `footer-content-${index}`);
       links.setAttribute("aria-hidden", "true");
 
-      // Add arrow icon
-      if (!title.querySelector(".footer-arrow")) {
-        const arrow = document.createElement("span");
-        arrow.className = "footer-arrow";
-        arrow.innerHTML = "▶"; // Right arrow (closed state)
-        title.appendChild(arrow);
+      // Remove any existing arrows (clean slate)
+      const existingArrow = title.querySelector(".footer-arrow");
+      if (existingArrow) {
+        existingArrow.remove();
       }
 
       // Set initial state (all closed)
@@ -842,7 +839,6 @@ function setupMobileFooterAccordion() {
     const footerSections = document.querySelectorAll(".footer-section");
     const clickedTitle = clickedSection.querySelector(".footer-title");
     const clickedContent = clickedSection.querySelector(".footer-links");
-    const clickedArrow = clickedTitle.querySelector(".footer-arrow");
     const overlay = document.querySelector(".footer-accordion-overlay");
 
     const isCurrentlyOpen =
@@ -853,7 +849,6 @@ function setupMobileFooterAccordion() {
       if (index !== clickedIndex) {
         const title = section.querySelector(".footer-title");
         const content = section.querySelector(".footer-links");
-        const arrow = title.querySelector(".footer-arrow");
 
         // Close other sections
         section.classList.remove("open");
@@ -861,11 +856,6 @@ function setupMobileFooterAccordion() {
         content.setAttribute("aria-hidden", "true");
         content.style.maxHeight = "0";
         content.style.opacity = "0";
-
-        if (arrow) {
-          arrow.innerHTML = "▶"; // Right arrow (closed)
-          arrow.style.transform = "translateY(-50%) rotate(0deg)";
-        }
       }
     });
 
@@ -878,35 +868,29 @@ function setupMobileFooterAccordion() {
       clickedContent.style.maxHeight = "0";
       clickedContent.style.opacity = "0";
 
-      if (clickedArrow) {
-        clickedArrow.innerHTML = "▶"; // Right arrow
-        clickedArrow.style.transform = "translateY(-50%) rotate(0deg)";
-      }
-
-      // Hide overlay
+      // Hide overlay and remove body blocking
       if (overlay) {
         overlay.classList.remove("active");
       }
+      document.body.classList.remove("footer-accordion-open");
     } else {
       // Open the clicked section
       clickedSection.classList.add("open");
       clickedTitle.setAttribute("aria-expanded", "true");
       clickedContent.setAttribute("aria-hidden", "false");
 
-      // Calculate the natural height of the content
+      // Calculate the natural height of the content and apply it
       const scrollHeight = clickedContent.scrollHeight;
       clickedContent.style.maxHeight = scrollHeight + "px";
       clickedContent.style.opacity = "1";
 
-      if (clickedArrow) {
-        clickedArrow.innerHTML = "▼"; // Down arrow
-        clickedArrow.style.transform = "translateY(-50%) rotate(90deg)";
-      }
-
-      // Show overlay with dimmed background
+      // Show overlay and add body blocking
       if (overlay) {
         overlay.classList.add("active");
       }
+      document.body.classList.add("footer-accordion-open");
+
+      // No transform animations needed - absolute positioning handles the upward expansion
     }
   }
 
@@ -944,7 +928,7 @@ function setupMobileFooterAccordion() {
         links.style.opacity = "";
       }
 
-      // Remove arrow
+      // Remove arrow if it exists
       if (arrow) {
         arrow.remove();
       }
