@@ -6,7 +6,7 @@
 
 /* Override main modal styles with higher specificity and z-index */
 #waitlist-modal.modal-overlay {
-  z-index: 9999 !important; /* Much higher than main modal (2000) */
+  z-index: 999999 !important; /* Higher than all other elements including landscape overlay (100000) */
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -40,7 +40,7 @@
 .waitlist-modal {
   max-width: 500px !important;
   width: 90vw !important;
-  z-index: 10000 !important; /* Even higher for the container */
+  z-index: 1000000 !important; /* Even higher for the container */
   position: relative !important;
   /* Override interaction locks */
   pointer-events: auto !important;
@@ -55,7 +55,7 @@
 #waitlist-modal .modal-container {
   max-width: 500px !important;
   width: 90vw !important;
-  z-index: 10001 !important;
+  z-index: 1000001 !important; /* Highest z-index for modal container */
   position: relative !important;
   background: var(--card-bg) !important;
   border: 2px solid var(--border-medium) !important;
@@ -196,6 +196,7 @@
 
 /* Close button styling */
 .modal-close {
+  z-index: 1000002 !important; /* Highest z-index for close button */
   /* CRITICAL: Override close button interaction locks */
   pointer-events: auto !important;
   -webkit-user-select: auto !important;
@@ -206,11 +207,11 @@
   -webkit-touch-callout: auto !important;
   touch-action: auto !important;
   cursor: pointer !important;
-  z-index: 10002 !important; /* Highest z-index for close button */
 }
 
 /* All modal elements should be clickable */
 #waitlist-modal * {
+  /* Ensure all elements can be interacted with */
   pointer-events: auto !important;
   -webkit-user-select: auto !important;
   -khtml-user-select: auto !important;
@@ -221,20 +222,24 @@
 
 /* Specifically for buttons inside the modal */
 #waitlist-modal button {
+  z-index: 1000002 !important;
   pointer-events: auto !important;
-  cursor: pointer !important;
-  -webkit-touch-callout: auto !important;
-  touch-action: auto !important;
-  z-index: 10002 !important;
+  -webkit-user-select: auto !important;
+  -khtml-user-select: auto !important;
+  -moz-user-select: auto !important;
+  -ms-user-select: auto !important;
+  user-select: auto !important;
 }
 
 /* Specifically for input fields */
 #waitlist-modal input {
+  z-index: 1000002 !important;
   pointer-events: auto !important;
-  cursor: text !important;
-  -webkit-touch-callout: auto !important;
-  touch-action: auto !important;
-  z-index: 10002 !important;
+  -webkit-user-select: auto !important;
+  -khtml-user-select: auto !important;
+  -moz-user-select: auto !important;
+  -ms-user-select: auto !important;
+  user-select: auto !important;
 }
 
 /* Loading spinner */
