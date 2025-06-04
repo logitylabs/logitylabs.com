@@ -114,6 +114,9 @@ document.addEventListener("DOMContentLoaded", function () {
   // Mobile landscape orientation prevention - JavaScript solution for real devices
   setupMobileLandscapeProtection();
 
+  // Setup navbar navigation with TikTok-style section scrolling
+  setupNavbarNavigation();
+
   console.log("Logity TikTok-style landing page loaded successfully! 🚀");
 });
 
@@ -386,6 +389,63 @@ function setupSmoothScrolling() {
       }
     });
   });
+}
+
+/**
+ * Setup navbar navigation with TikTok-style section scrolling
+ * Maps navigation links to specific section indices for smooth scrolling
+ */
+function setupNavbarNavigation() {
+  // Get all navigation links (both desktop and mobile) and the logo
+  const navLinks = document.querySelectorAll(
+    ".nav-link[data-section], .mobile-nav-link[data-section]"
+  );
+  const logoLink = document.querySelector(".logo-link[data-section]");
+
+  // Set up navigation link click handlers
+  navLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const sectionIndex = parseInt(this.getAttribute("data-section"));
+
+      // Navigate to the section using existing TikTok scrolling function
+      scrollToSectionByIndex(sectionIndex);
+
+      // Update scroll indicators immediately for better visual feedback
+      updateTikTokScrollIndicators(sectionIndex);
+
+      // Close mobile menu if it's open (for mobile navigation)
+      if (this.classList.contains("mobile-nav-link")) {
+        closeMobileMenu();
+      }
+
+      console.log(
+        `Navigation: Scrolling to section ${sectionIndex} (${this.textContent})`
+      );
+    });
+  });
+
+  // Set up logo click handler to go to home/hero section
+  if (logoLink) {
+    logoLink.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const sectionIndex = parseInt(this.getAttribute("data-section"));
+
+      // Navigate to the hero section (index 0)
+      scrollToSectionByIndex(sectionIndex);
+
+      // Update scroll indicators immediately for better visual feedback
+      updateTikTokScrollIndicators(sectionIndex);
+
+      console.log(`Logo clicked: Scrolling to section ${sectionIndex} (Hero)`);
+    });
+  }
+
+  console.log(
+    `✅ Setup navbar navigation for ${navLinks.length} nav links + logo`
+  );
 }
 
 // Setup fade-in animations for elements
@@ -787,25 +847,8 @@ function setupMobileMenu() {
   // Event listeners
   mobileMenuToggle.addEventListener("click", toggleMobileMenu);
 
-  // Close menu when clicking on a link
-  mobileNavLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      closeMobileMenu();
-      // Small delay to allow menu to close before scrolling
-      setTimeout(() => {
-        const targetId = link.getAttribute("href");
-        if (targetId && targetId.startsWith("#")) {
-          const targetSection = document.querySelector(targetId);
-          if (targetSection) {
-            targetSection.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-        }
-      }, 300);
-    });
-  });
+  // Note: Navigation handling is now managed by setupNavbarNavigation()
+  // No need for separate mobile nav link handlers here
 
   // Close menu when clicking outside
   document.addEventListener("click", (e) => {

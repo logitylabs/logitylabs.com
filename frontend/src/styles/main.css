@@ -238,6 +238,19 @@ h4 {
   text-decoration: none;
 }
 
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.logo-link:hover {
+  opacity: 0.9;
+}
+
 .logo-mascot {
   font-size: 24px;
   display: flex;
