@@ -68,7 +68,7 @@
             <a href="#" class="nav-link" data-section="1">Features</a>
             <a href="#" class="nav-link" data-section="2">Mission</a>
             <a href="#" class="nav-link" data-section="3">Pricing</a>
-            <a href="#" class="nav-link" data-section="4">Docs</a>
+            <a href="docs.html" class="nav-link">Docs</a>
             <button class="btn-primary">Try Logity</button>
           </div>
 
@@ -86,7 +86,7 @@
             <a href="#" class="mobile-nav-link" data-section="1">Features</a>
             <a href="#" class="mobile-nav-link" data-section="2">Mission</a>
             <a href="#" class="mobile-nav-link" data-section="3">Pricing</a>
-            <a href="#" class="mobile-nav-link" data-section="4">Docs</a>
+            <a href="docs.html" class="mobile-nav-link">Docs</a>
             <button class="btn-primary mobile-cta">Try Logity</button>
           </div>
         </div>
@@ -279,38 +279,256 @@
         </div>
       </section>
 
-      <!-- Featured Research/Blog -->
-      <section class="featured-content">
+      <!-- Pricing Section -->
+      <section class="pricing-section">
         <div class="container">
-          <h2 class="section-title">Featured Articles</h2>
-          <div class="featured-grid">
-            <article class="featured-article">
-              <div class="article-category">Product Update</div>
-              <h3 class="article-title">Introducing Smart Fault Detection</h3>
-              <time class="article-date">Dec 15, 2024</time>
-            </article>
+          <div class="pricing-header">
+            <h2 class="section-title">Pricing</h2>
+            <p class="pricing-subtitle">Choose the plan that works for you</p>
+          </div>
 
-            <article class="featured-article">
-              <div class="article-category">Research</div>
-              <h3 class="article-title">
-                Understanding CAN Bus Patterns with AI
-              </h3>
-              <time class="article-date">Dec 10, 2024</time>
-            </article>
+          <div class="pricing-grid">
+            <!-- Free Tier -->
+            <div class="pricing-card free-tier">
+              <div class="pricing-tier-label">Hobby</div>
+              <div class="pricing-price">
+                <span class="price-amount">Free</span>
+              </div>
 
-            <article class="featured-article">
-              <div class="article-category">Engineering</div>
-              <h3 class="article-title">Building Automotive Log Parsers</h3>
-              <time class="article-date">Dec 5, 2024</time>
-            </article>
+              <div class="pricing-description">
+                <h3>Includes</h3>
+              </div>
 
-            <article class="featured-article">
-              <div class="article-category">Case Study</div>
-              <h3 class="article-title">
-                How Engineers Debug Faster with Logity
-              </h3>
-              <time class="article-date">Nov 28, 2024</time>
-            </article>
+              <ul class="pricing-features">
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Basic DoIP log analysis
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Up to 100MB file uploads
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  5 analysis sessions per month
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Basic AI explanations
+                </li>
+              </ul>
+
+              <button class="pricing-cta btn-secondary">Get Started</button>
+            </div>
+
+            <!-- Premium Tier (Coming Soon) -->
+            <div class="pricing-card premium-tier coming-soon">
+              <div class="pricing-tier-label">Premium</div>
+              <div class="pricing-price">
+                <span class="price-amount">$--</span>
+                <span class="price-period">/month</span>
+              </div>
+
+              <div class="pricing-description">
+                <h3>Everything in Hobby, plus</h3>
+              </div>
+
+              <ul class="pricing-features">
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Unlimited file uploads
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Advanced CAN & DLT support
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Priority AI processing
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Export to multiple formats
+                </li>
+              </ul>
+
+              <button class="pricing-cta btn-secondary" disabled>
+                Coming Soon
+              </button>
+            </div>
+
+            <!-- Enterprise Tier (Coming Soon) -->
+            <div class="pricing-card enterprise-tier coming-soon">
+              <div class="pricing-tier-label">Enterprise</div>
+              <div class="pricing-price">
+                <span class="price-amount">$--</span>
+                <span class="price-period">/user/month</span>
+              </div>
+
+              <div class="pricing-description">
+                <h3>Everything in Premium, plus</h3>
+              </div>
+
+              <ul class="pricing-features">
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  On-premise deployment
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Team collaboration tools
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Custom AI model training
+                </li>
+                <li class="feature-included">
+                  <svg
+                    class="feature-icon"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  24/7 dedicated support
+                </li>
+              </ul>
+
+              <button class="pricing-cta btn-secondary" disabled>
+                Contact Sales
+              </button>
+            </div>
+          </div>
+
+          <!-- Contact Sales Section -->
+          <div class="pricing-contact-sales">
+            <div class="contact-sales-button-container">
+              <img
+                src="/logo-contact-sales-no-background.png"
+                alt="logity contact sales"
+                class="contact-sales-logo"
+              />
+              <button
+                class="btn-contact-sales-pricing"
+                id="contact-sales-pricing-btn"
+              >
+                Contact Sales
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -419,7 +637,6 @@
       <div class="scroll-dot" data-section="1"></div>
       <div class="scroll-dot" data-section="2"></div>
       <div class="scroll-dot" data-section="3"></div>
-      <div class="scroll-dot" data-section="4"></div>
     </div>
 
     <!-- Feature Details Modal -->
@@ -486,6 +703,90 @@
             </button>
             <button class="btn-primary" id="modal-try-feature">
               Try This Feature
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Sales Modal -->
+    <div id="contact-sales-modal" class="modal-overlay" style="display: none">
+      <div class="modal-container">
+        <div class="modal-header">
+          <div class="modal-icon-container">
+            <div class="modal-feature-icon">📞</div>
+          </div>
+          <div class="modal-title-section">
+            <h2 class="modal-title">Contact Sales</h2>
+            <div class="modal-category">Get in Touch</div>
+          </div>
+          <button
+            class="modal-close"
+            id="close-contact-modal"
+            aria-label="Close modal"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-content">
+          <div class="modal-description">
+            <p>
+              Ready to get started with logity for your team? Our sales team is
+              here to help you find the perfect solution for your automotive log
+              analysis needs.
+            </p>
+          </div>
+
+          <div class="contact-info-section">
+            <h3>Get in Touch</h3>
+            <div class="contact-methods">
+              <div class="contact-method">
+                <div class="contact-method-icon">📧</div>
+                <div class="contact-method-details">
+                  <h4>Email</h4>
+                  <p>silvio.dacol@outlook.com</p>
+                  <a href="mailto:silvio.dacol@outlook.com" class="contact-link"
+                    >Send Email →</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-placeholder">
+            <h3>What we offer</h3>
+            <ul class="contact-benefits">
+              <li>✅ Custom pricing for enterprise teams</li>
+              <li>✅ Dedicated onboarding and training</li>
+              <li>✅ Priority support and feature requests</li>
+              <li>✅ On-premise deployment options</li>
+              <li>✅ Custom integrations and workflows</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <div class="modal-mascot">
+            <img src="/logo.png" alt="logity logo" class="modal-mascot-logo" />
+            <span class="modal-mascot-text"
+              >We're here to help you succeed!</span
+            >
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" id="contact-close-btn">Close</button>
+            <button class="btn-primary" id="contact-email-btn">
+              Email Sales
             </button>
           </div>
         </div>

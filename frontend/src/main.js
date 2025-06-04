@@ -9,57 +9,100 @@ import { testConnection } from "./config/supabase.js";
 let waitlistModal = null;
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize waitlist modal
+  // Ensure navbar is always visible on page load
+  ensureNavbarVisible();
+
+  // Initialize waitlist functionality
   initializeWaitlist();
 
-  // Prevent zooming on desktop and mobile
-  preventZooming();
+  // Setup waitlist buttons
+  setupWaitlistButtons();
 
-  // Initialize TikTok-style scrolling experience
+  // Initialize TikTok-style scrolling
   initializeTikTokScrolling();
 
-  // Setup TikTok-style scroll indicators
+  // Setup scroll indicators with click functionality
   setupTikTokScrollIndicators();
 
-  // Add smooth scrolling for navigation links
+  // Setup smooth scrolling for regular anchor links (if any)
   setupSmoothScrolling();
+
+  // Setup navbar navigation
+  setupNavbarNavigation();
+
+  // Initialize fade-in animations
+  setupFadeInAnimations();
+
+  // Setup feature card interactions and modal
+  setupUpdateCardInteractions();
+
+  // Setup modal event listeners
+  setupModalEventListeners();
 
   // Setup grid scroll protection
   setupGridScrollProtection();
 
-  // Button click handlers for CTA buttons - Updated to show waitlist modal
-  setupWaitlistButtons();
+  // Setup mobile menu
+  setupMobileMenu();
 
-  // Enhanced navbar background on scroll - keep consistent dark brown theme
-  // ALWAYS keep navbar visible and fixed
-  const navbar = document.querySelector(".nav-header");
-
-  // Force navbar to always stay visible
-  function ensureNavbarVisible() {
-    if (navbar) {
-      navbar.style.position = "fixed";
-      navbar.style.top = "0";
-      navbar.style.left = "0";
-      navbar.style.right = "0";
-      navbar.style.zIndex = "1000";
-      navbar.style.transform = "translateY(0)";
-      navbar.style.visibility = "visible";
-      navbar.style.opacity = "1";
-    }
+  // Setup mobile footer accordion for mobile devices
+  if (window.innerWidth <= 768) {
+    setupMobileFooterAccordion();
   }
 
-  // Call immediately and on scroll
+  // Handle window resize to toggle footer accordion
+  window.addEventListener("resize", function () {
+    if (window.innerWidth <= 768) {
+      setupMobileFooterAccordion();
+    } else {
+      // Remove accordion functionality when not on mobile
+      removeFooterAccordion();
+    }
+  });
+
+  // Setup mobile landscape protection
+  setupMobileLandscapeProtection();
+
+  // Prevent zooming on mobile devices
+  preventZooming();
+
+  // Check for cross-page navigation (coming from docs page)
+  checkCrossPageNavigation();
+
+  // Setup contact sales modal
+  setupContactSalesModal();
+
+  console.log("Logity TikTok-style landing page loaded successfully! 🚀");
+});
+
+// Enhanced navbar background on scroll - keep consistent dark brown theme
+// ALWAYS keep navbar visible and fixed
+function ensureNavbarVisible() {
+  const navbar = document.querySelector(".nav-header");
+
+  if (navbar) {
+    navbar.style.position = "fixed";
+    navbar.style.top = "0";
+    navbar.style.left = "0";
+    navbar.style.right = "0";
+    navbar.style.zIndex = "1000";
+    navbar.style.transform = "translateY(0)";
+    navbar.style.visibility = "visible";
+    navbar.style.opacity = "1";
+  }
+}
+
+// Also ensure navbar stays visible on resize (orientation change, etc.)
+window.addEventListener("resize", ensureNavbarVisible);
+window.addEventListener("orientationchange", ensureNavbarVisible);
+
+window.addEventListener("scroll", function () {
+  // Always ensure navbar stays visible
   ensureNavbarVisible();
 
-  // Also ensure navbar stays visible on resize (orientation change, etc.)
-  window.addEventListener("resize", ensureNavbarVisible);
-  window.addEventListener("orientationchange", ensureNavbarVisible);
-
-  window.addEventListener("scroll", function () {
-    // Always ensure navbar stays visible
-    ensureNavbarVisible();
-
-    // Update background based on scroll position
+  // Update background based on scroll position
+  const navbar = document.querySelector(".nav-header");
+  if (navbar) {
     if (window.scrollY > 50) {
       navbar.style.background =
         "linear-gradient(135deg, #2d1b0e 0%, #1f0f08 100%)";
@@ -69,55 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "linear-gradient(135deg, #2d1b0e 0%, #1f0f08 100%)";
       navbar.style.boxShadow = "none";
     }
-  });
-
-  // Animate statistics on scroll (intersection observer)
-  const stats = document.querySelectorAll(".stat-number");
-  const observerOptions = {
-    threshold: 0.5,
-    once: true,
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const stat = entry.target;
-        // Simple animation placeholder
-        stat.style.opacity = "0";
-        setTimeout(() => {
-          stat.style.transition = "opacity 0.6s ease";
-          stat.style.opacity = "1";
-        }, 100);
-      }
-    });
-  }, observerOptions);
-
-  stats.forEach((stat) => {
-    observer.observe(stat);
-  });
-
-  // Setup fade-in animations for cards
-  setupFadeInAnimations();
-
-  // Setup smooth card interactions with modal
-  setupUpdateCardInteractions();
-
-  // Setup modal event listeners
-  setupModalEventListeners();
-
-  // Setup mobile hamburger menu
-  setupMobileMenu();
-
-  // Mobile footer accordion functionality - Collapsible sections for small screens
-  setupMobileFooterAccordion();
-
-  // Mobile landscape orientation prevention - JavaScript solution for real devices
-  setupMobileLandscapeProtection();
-
-  // Setup navbar navigation with TikTok-style section scrolling
-  setupNavbarNavigation();
-
-  console.log("Logity TikTok-style landing page loaded successfully! 🚀");
+  }
 });
 
 /**
@@ -1360,3 +1355,95 @@ window.logityScrolling = {
     return currentIndex;
   },
 };
+
+// Check for cross-page navigation (coming from docs page)
+function checkCrossPageNavigation() {
+  // Check if there's a stored section to scroll to (from docs page navigation)
+  const targetSection = sessionStorage.getItem("scrollToSection");
+
+  if (targetSection !== null) {
+    // Remove the stored value to prevent future unintended scrolling
+    sessionStorage.removeItem("scrollToSection");
+
+    // Convert to number
+    const sectionIndex = parseInt(targetSection);
+
+    // Wait for the page to fully load, then scroll to the target section
+    setTimeout(() => {
+      scrollToSectionByIndex(sectionIndex);
+      // Also update the scroll indicators
+      updateTikTokScrollIndicators(sectionIndex);
+    }, 100); // Small delay to ensure everything is loaded
+  }
+}
+
+// Setup contact sales modal
+function setupContactSalesModal() {
+  const modal = document.getElementById("contact-sales-modal");
+  const contactBtn = document.getElementById("contact-sales-btn");
+  const contactPricingBtn = document.getElementById(
+    "contact-sales-pricing-btn"
+  );
+  const closeBtn = document.getElementById("close-contact-modal");
+  const closeActionBtn = document.getElementById("contact-close-btn");
+  const emailBtn = document.getElementById("contact-email-btn");
+
+  function openContactModal() {
+    if (modal) {
+      modal.style.display = "flex";
+      setTimeout(() => {
+        modal.classList.add("active");
+      }, 10);
+      document.body.style.overflow = "hidden";
+    }
+  }
+
+  function closeContactModalFunc() {
+    if (modal) {
+      modal.classList.remove("active");
+      setTimeout(() => {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto";
+      }, 300);
+    }
+  }
+
+  // Setup event listeners for both buttons
+  if (contactBtn) {
+    contactBtn.addEventListener("click", openContactModal);
+  }
+
+  if (contactPricingBtn) {
+    contactPricingBtn.addEventListener("click", openContactModal);
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeContactModalFunc);
+  }
+
+  if (closeActionBtn) {
+    closeActionBtn.addEventListener("click", closeContactModalFunc);
+  }
+
+  if (emailBtn) {
+    emailBtn.addEventListener("click", () => {
+      window.location.href = "mailto:silvio.dacol@outlook.com";
+    });
+  }
+
+  // Close modal when clicking outside
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeContactModalFunc();
+      }
+    });
+  }
+
+  // Close modal with Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal && modal.classList.contains("active")) {
+      closeContactModalFunc();
+    }
+  });
+}
