@@ -70,6 +70,28 @@
   user-select: auto !important;
 }
 
+/* Fix overlap issue between banner text and close button on desktop/tablet */
+#waitlist-modal .modal-title-section {
+  /* Add padding to the right to prevent text from overlapping with close button */
+  padding-right: 60px !important; /* 40px close button width + 20px buffer */
+}
+
+/* Mobile adjustment - reduce padding on smaller screens */
+@media (max-width: 768px) {
+  #waitlist-modal .modal-title-section {
+    /* Reduce padding on mobile since close button is smaller or positioned differently */
+    padding-right: 50px !important; /* 40px close button width + 10px buffer */
+  }
+}
+
+/* Very small mobile adjustment */
+@media (max-width: 480px) {
+  #waitlist-modal .modal-title-section {
+    /* Further reduce padding on very small screens */
+    padding-right: 45px !important; /* Minimal padding for very small screens */
+  }
+}
+
 /* Form styling */
 .waitlist-form {
   padding: 1rem 0;

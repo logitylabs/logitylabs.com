@@ -30,6 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // Setup navbar navigation
   setupNavbarNavigation();
 
+  // Setup footer navigation
+  setupFooterNavigation();
+
+  // Setup cross-page navigation for secondary pages
+  setupCrossPageNavigation();
+
   // Initialize fade-in animations
   setupFadeInAnimations();
 
@@ -441,6 +447,79 @@ function setupNavbarNavigation() {
   console.log(
     `✅ Setup navbar navigation for ${navLinks.length} nav links + logo`
   );
+}
+
+// Setup footer navigation
+function setupFooterNavigation() {
+  // Get the footer pricing link with data-section attribute
+  const footerPricingLink = document.querySelector(
+    '.footer-links a[data-section="3"]'
+  );
+
+  if (footerPricingLink) {
+    footerPricingLink.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const sectionIndex = parseInt(this.getAttribute("data-section"));
+
+      // Navigate to the pricing section using existing TikTok scrolling function
+      scrollToSectionByIndex(sectionIndex);
+
+      // Update scroll indicators immediately for better visual feedback
+      updateTikTokScrollIndicators(sectionIndex);
+
+      console.log(
+        `Footer Navigation: Scrolling to section ${sectionIndex} (Pricing)`
+      );
+    });
+  }
+
+  console.log("✅ Setup footer navigation for pricing link");
+}
+
+// Setup cross-page navigation for secondary pages
+function setupCrossPageNavigation() {
+  // Get all navigation links with data-section and data-page attributes
+  const navLinks = document.querySelectorAll(
+    ".nav-link[data-section][data-page], .mobile-nav-link[data-section][data-page]"
+  );
+
+  navLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const sectionIndex = parseInt(this.getAttribute("data-section"));
+      const targetPage = this.getAttribute("data-page");
+
+      if (targetPage === "index") {
+        // Store the target section in sessionStorage so the main page can scroll to it
+        sessionStorage.setItem("scrollToSection", sectionIndex.toString());
+
+        // Navigate to the main page
+        window.location.href = "index.html";
+      }
+    });
+  });
+
+  console.log(`✅ Setup cross-page navigation for ${navLinks.length} links`);
+
+  // Check if there's a stored section to scroll to (from other pages navigation)
+  const targetSection = sessionStorage.getItem("scrollToSection");
+
+  if (targetSection !== null) {
+    // Remove the stored value to prevent future unintended scrolling
+    sessionStorage.removeItem("scrollToSection");
+
+    // Convert to number
+    const sectionIndex = parseInt(targetSection);
+
+    // Wait for the page to fully load, then scroll to the target section
+    setTimeout(() => {
+      scrollToSectionByIndex(sectionIndex);
+      // Also update the scroll indicators
+      updateTikTokScrollIndicators(sectionIndex);
+    }, 100); // Small delay to ensure everything is loaded
+  }
 }
 
 // Setup fade-in animations for elements
@@ -1355,27 +1434,6 @@ window.logityScrolling = {
     return currentIndex;
   },
 };
-
-// Check for cross-page navigation (coming from docs page)
-function checkCrossPageNavigation() {
-  // Check if there's a stored section to scroll to (from docs page navigation)
-  const targetSection = sessionStorage.getItem("scrollToSection");
-
-  if (targetSection !== null) {
-    // Remove the stored value to prevent future unintended scrolling
-    sessionStorage.removeItem("scrollToSection");
-
-    // Convert to number
-    const sectionIndex = parseInt(targetSection);
-
-    // Wait for the page to fully load, then scroll to the target section
-    setTimeout(() => {
-      scrollToSectionByIndex(sectionIndex);
-      // Also update the scroll indicators
-      updateTikTokScrollIndicators(sectionIndex);
-    }, 100); // Small delay to ensure everything is loaded
-  }
-}
 
 // Setup contact sales modal
 function setupContactSalesModal() {
