@@ -4239,7 +4239,7 @@ section {
 
   .pricing-card {
     min-height: 400px;
-    padding: 24px 20px;
+    padding: 32px 24px; /* MOBILE FIX: Match desktop generous padding for clean look */
   }
 
   .price-amount {
@@ -4320,7 +4320,12 @@ section {
 
   .pricing-card {
     min-height: 380px;
-    padding: 20px 16px;
+    padding: 28px 20px; /* MOBILE FIX: Generous padding for clean look on very small screens */
+  }
+
+  .pricing-cta {
+    padding: 12px 20px;
+    font-size: 15px;
   }
 
   .price-amount {
@@ -4339,11 +4344,6 @@ section {
   .feature-icon {
     width: 16px;
     height: 16px;
-  }
-
-  .pricing-cta {
-    padding: 12px 20px;
-    font-size: 15px;
   }
 }
 
