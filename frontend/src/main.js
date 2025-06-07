@@ -560,11 +560,10 @@ function setupUpdateCardInteractions() {
       description:
         "Advanced machine learning algorithms detect patterns and anomalies automatically in your automotive logs.",
       features: [
-        "Pattern recognition in CAN bus data",
+        "Pattern recognition for the log files",
         "Anomaly detection using neural networks",
         "Automated fault classification",
-        "Real-time analysis capabilities",
-        "Custom model training for specific use cases",
+        "Choose your favourite model for the analysis",
       ],
     },
     "Protocol Support": {
@@ -643,6 +642,19 @@ function setupUpdateCardInteractions() {
         "Role-based access control",
         "Audit logging and compliance",
         "Secure cloud deployment options",
+      ],
+    },
+    "Fine-Tuned Proprietary Model": {
+      icon: "🔧",
+      category: "Upcoming",
+      description:
+        "Our proprietary AI model, specifically fine-tuned on millions of automotive log entries, delivers unparalleled accuracy in fault detection and root cause analysis.",
+      features: [
+        "Automotive-specific language model trained on the most common protocols",
+        "Accuracy in fault classification across major vehicle manufacturers",
+        "Deep understanding of automotive system relationships and dependencies",
+        "Specialized knowledge of OEM-specific diagnostic codes and patterns",
+        "Continuous learning from anonymized industry log data",
       ],
     },
   };
