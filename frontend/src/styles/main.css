@@ -527,7 +527,7 @@ section {
 }
 
 .floating-mascot {
-  font-size: 36px;
+  font-size: 48px;
   animation: gentle-bounce 2s ease-in-out infinite;
 }
 
@@ -903,13 +903,18 @@ section {
   font-size: 14px;
 }
 
-/* Logo image styles */
+/* ========================================
+   MASCOT & LOGO SIZING SYSTEM
+   ======================================== */
+
+/* Navigation logo - 28px for header */
 .logo-image {
   width: 28px;
   height: 28px;
   object-fit: contain;
 }
 
+/* Main mascot logos - standardized to 100px for consistency */
 .mascot-character-logo {
   width: 120px;
   height: 120px;
@@ -924,30 +929,31 @@ section {
   animation: gentle-bounce 2s ease-in-out infinite;
 }
 
-.celebration-mascot-logo {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
 .mascot-waving-logo {
-  width: 96px;
-  height: 96px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
   animation: wave 2s ease-in-out infinite;
+}
+
+.contact-sales-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+/* Small mascot logos - standardized to 20px for consistency */
+.celebration-mascot-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .footer-mascot-logo {
   width: 20px;
   height: 20px;
   object-fit: contain;
-}
-
-.contact-sales-logo {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  animation: gentle-bounce 2s ease-in-out infinite;
 }
 
 /* Pricing Section - Simple layout without TikTok features */
@@ -1876,19 +1882,13 @@ body:not(.modal-open) {
     font-size: 16px;
   }
 
-  .mascot-character-logo {
+  /* Mobile mascot sizes - standardized to 80px for main mascots */
+  .mascot-character-logo,
+  .floating-mascot-logo,
+  .mascot-waving-logo,
+  .contact-sales-logo {
     width: 80px;
     height: 80px;
-  }
-
-  .floating-mascot-logo {
-    width: 70px;
-    height: 70px;
-  }
-
-  .contact-sales-logo {
-    width: 70px;
-    height: 70px;
   }
 
   .stats-grid {
