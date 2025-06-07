@@ -1,27 +1,23 @@
 // Main JavaScript for Logity Landing Page - Standard Web Scrolling
 // Handles essential functionality without TikTok-style features
 
-// Import waitlist functionality
-import { WaitlistModal } from "./components/WaitlistModal.js";
-import { testConnection } from "./config/supabase.js";
-
-// Global waitlist modal instance
-let waitlistModal = null;
+// Import shared components and functionality
+import { initializeSharedComponents } from "./shared.js";
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize waitlist functionality
-  initializeWaitlist();
-
-  // Setup waitlist buttons
-  setupWaitlistButtons();
+  // Initialize shared components first (navbar, footer, waitlist)
+  initializeSharedComponents().then(() => {
+    // Setup homepage-specific waitlist buttons after shared components are loaded
+    setupHomepageWaitlistButtons();
+  });
 
   // Setup smooth scrolling for navigation links
   setupSmoothScrolling();
 
-  // Setup navbar navigation
+  // Setup navbar navigation (additional homepage-specific logic)
   setupNavbarNavigation();
 
-  // Setup footer navigation
+  // Setup footer navigation (additional homepage-specific logic)
   setupFooterNavigation();
 
   // Initialize fade-in animations
@@ -33,25 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Setup modal event listeners
   setupModalEventListeners();
 
-  // Setup mobile menu
-  setupMobileMenu();
-
-  // Setup mobile footer accordion for mobile devices
-  if (window.innerWidth <= 768) {
-    setupMobileFooterAccordion();
-  }
-
-  // Handle window resize to toggle footer accordion
-  window.addEventListener("resize", function () {
-    if (window.innerWidth <= 768) {
-      setupMobileFooterAccordion();
-    } else {
-      removeFooterAccordion();
-    }
-  });
-
-  // Setup contact sales modal
-  setupContactSalesModal();
+  // Contact sales modal is now handled by SharedFooter component
 
   console.log("Logity landing page loaded successfully! 🚀");
 });
@@ -73,74 +51,29 @@ window.addEventListener("scroll", function () {
 });
 
 /**
- * Initialize waitlist functionality
+ * Setup additional waitlist buttons specific to homepage
  */
-async function initializeWaitlist() {
-  try {
-    // Test Supabase connection
-    console.log("Testing Supabase connection...");
-    const connectionTest = await testConnection();
+function setupHomepageWaitlistButtons() {
+  // Handle homepage-specific waitlist buttons (hero section, etc.)
+  const heroButtons = document.querySelectorAll(".hero .btn-primary");
 
-    if (connectionTest) {
-      console.log("✅ Supabase connected successfully");
-    } else {
-      console.warn(
-        "⚠️ Supabase connection test failed - check your configuration"
-      );
-    }
-  } catch (error) {
-    console.error("❌ Error testing Supabase connection:", error);
-    console.warn("Please check your Supabase configuration in .env.local");
-  }
-
-  try {
-    // Always initialize waitlist modal, even if Supabase connection fails
-    waitlistModal = new WaitlistModal();
-    console.log("✅ Waitlist modal initialized");
-  } catch (error) {
-    console.error("❌ Error initializing waitlist modal:", error);
-  }
-}
-
-/**
- * Setup waitlist button click handlers
- */
-function setupWaitlistButtons() {
-  // Select all "Try logity" buttons
-  const waitlistButtons = document.querySelectorAll(".btn-primary");
-
-  waitlistButtons.forEach((button, index) => {
-    // Determine button source for analytics
-    let source = "unknown";
-
-    // Check button location to set appropriate source
-    if (button.closest(".nav-header")) {
-      source = "nav-button";
-    } else if (button.closest(".hero")) {
-      source = "hero-button";
-    } else if (button.closest(".cta-section")) {
-      source = "cta-button";
-    } else if (button.classList.contains("mobile-cta")) {
-      source = "mobile-nav-button";
-    }
-
+  heroButtons.forEach((button) => {
     button.addEventListener("click", function (e) {
       e.preventDefault();
 
-      console.log(`Opening waitlist modal from: ${source}`);
+      console.log("Opening waitlist modal from hero section");
 
-      // Show waitlist modal
-      if (waitlistModal) {
-        waitlistModal.show(source);
+      // Access the global waitlist modal set by shared components
+      if (window.waitlistModal) {
+        window.waitlistModal.show("hero-button");
       } else {
         console.error("Waitlist modal not initialized");
-        // Fallback behavior
         alert("Please check back soon! We're setting up the waitlist.");
       }
     });
   });
 
-  console.log(`✅ Setup ${waitlistButtons.length} waitlist buttons`);
+  console.log("✅ Setup homepage-specific waitlist buttons");
 }
 
 // Setup smooth scrolling for navigation links
@@ -508,377 +441,8 @@ function setupModalEventListeners() {
   }
 }
 
-// Mobile hamburger menu functionality
-function setupMobileMenu() {
-  const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
-  const mobileNav = document.querySelector(".mobile-nav");
-  let isMenuOpen = false;
+// Mobile menu functionality is now handled by SharedNavbar component
 
-  // Close mobile menu
-  function closeMobileMenu() {
-    if (isMenuOpen) {
-      toggleMobileMenu();
-    }
-  }
+// Mobile footer accordion functionality is now handled by SharedFooter component
 
-  // Toggle mobile menu
-  function toggleMobileMenu() {
-    isMenuOpen = !isMenuOpen;
-
-    // Toggle classes for animation
-    mobileMenuToggle.classList.toggle("active", isMenuOpen);
-    mobileNav.classList.toggle("active", isMenuOpen);
-
-    // Prevent body scroll when menu is open
-    document.body.style.overflow = isMenuOpen ? "hidden" : "";
-
-    // Update aria attributes for accessibility
-    mobileMenuToggle.setAttribute("aria-expanded", isMenuOpen);
-    mobileNav.setAttribute("aria-hidden", !isMenuOpen);
-  }
-
-  // Event listeners
-  if (mobileMenuToggle) {
-    mobileMenuToggle.addEventListener("click", toggleMobileMenu);
-  }
-
-  // Close menu when clicking outside
-  document.addEventListener("click", (e) => {
-    if (
-      isMenuOpen &&
-      mobileNav &&
-      !mobileNav.contains(e.target) &&
-      mobileMenuToggle &&
-      !mobileMenuToggle.contains(e.target)
-    ) {
-      closeMobileMenu();
-    }
-  });
-
-  // Close menu on escape key
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isMenuOpen) {
-      closeMobileMenu();
-    }
-  });
-
-  // Close menu on window resize to desktop size
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 768 && isMenuOpen) {
-      closeMobileMenu();
-    }
-  });
-
-  // Make closeMobileMenu available globally
-  window.closeMobileMenu = closeMobileMenu;
-
-  console.log("Mobile hamburger menu initialized! 📱");
-}
-
-// Mobile footer accordion functionality
-function setupMobileFooterAccordion() {
-  // Create overlay element for dimmed background effect
-  function createFooterOverlay() {
-    let overlay = document.querySelector(".footer-accordion-overlay");
-    if (!overlay) {
-      overlay = document.createElement("div");
-      overlay.className = "footer-accordion-overlay";
-      document.body.appendChild(overlay);
-
-      // Add click listener to close accordion when clicking overlay
-      overlay.addEventListener("click", function (e) {
-        // Make sure we're clicking on the overlay itself, not on the footer menu
-        const footerMain = document.querySelector(".footer-main");
-        if (footerMain && !footerMain.contains(e.target)) {
-          closeAllFooterSections();
-        }
-      });
-    }
-    return overlay;
-  }
-
-  // Function to close all open footer sections
-  function closeAllFooterSections() {
-    const footerSections = document.querySelectorAll(".footer-section");
-    const overlay = document.querySelector(".footer-accordion-overlay");
-
-    footerSections.forEach((section) => {
-      const title = section.querySelector(".footer-title");
-      const content = section.querySelector(".footer-links");
-
-      if (title?.getAttribute("aria-expanded") === "true") {
-        // Close the section
-        section.classList.remove("open");
-        title.setAttribute("aria-expanded", "false");
-        content.setAttribute("aria-hidden", "true");
-        content.style.maxHeight = "0";
-        content.style.opacity = "0";
-      }
-    });
-
-    // Hide overlay and remove body blocking
-    if (overlay) {
-      overlay.classList.remove("active");
-    }
-    document.body.classList.remove("footer-accordion-open");
-  }
-
-  // Only initialize on mobile screens (768px and below)
-  function initializeFooterAccordion() {
-    if (window.innerWidth > 768) {
-      // Remove accordion functionality on larger screens
-      removeFooterAccordion();
-      return;
-    }
-
-    // Create overlay element
-    const overlay = createFooterOverlay();
-
-    const footerSections = document.querySelectorAll(".footer-section");
-
-    footerSections.forEach((section, index) => {
-      const title = section.querySelector(".footer-title");
-      const links = section.querySelector(".footer-links");
-
-      if (!title || !links) return;
-
-      // Add accordion classes and attributes
-      section.classList.add("footer-accordion-section");
-      title.classList.add("footer-accordion-toggle");
-      links.classList.add("footer-accordion-content");
-
-      // Add ARIA attributes for accessibility
-      title.setAttribute("role", "button");
-      title.setAttribute("aria-expanded", "false");
-      title.setAttribute("aria-controls", `footer-content-${index}`);
-      title.setAttribute("tabindex", "0");
-
-      links.setAttribute("id", `footer-content-${index}`);
-      links.setAttribute("aria-hidden", "true");
-
-      // Remove any existing arrows (clean slate)
-      const existingArrow = title.querySelector(".footer-arrow");
-      if (existingArrow) {
-        existingArrow.remove();
-      }
-
-      // Set initial state (all closed)
-      links.style.maxHeight = "0";
-      links.style.overflow = "hidden";
-      links.style.transition = "max-height 0.3s ease, opacity 0.3s ease";
-      links.style.opacity = "0";
-
-      // Click event listener
-      title.addEventListener("click", function () {
-        toggleFooterSection(section, index);
-      });
-
-      // Keyboard accessibility
-      title.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          toggleFooterSection(section, index);
-        }
-      });
-    });
-
-    console.log("Mobile footer accordion initialized! 📱");
-  }
-
-  function toggleFooterSection(clickedSection, clickedIndex) {
-    const footerSections = document.querySelectorAll(".footer-section");
-    const clickedTitle = clickedSection.querySelector(".footer-title");
-    const clickedContent = clickedSection.querySelector(".footer-links");
-    const overlay = document.querySelector(".footer-accordion-overlay");
-
-    const isCurrentlyOpen =
-      clickedTitle.getAttribute("aria-expanded") === "true";
-
-    // Close all other sections first (accordion behavior - only one open at a time)
-    footerSections.forEach((section, index) => {
-      if (index !== clickedIndex) {
-        const title = section.querySelector(".footer-title");
-        const content = section.querySelector(".footer-links");
-
-        // Close other sections
-        section.classList.remove("open");
-        title.setAttribute("aria-expanded", "false");
-        content.setAttribute("aria-hidden", "true");
-        content.style.maxHeight = "0";
-        content.style.opacity = "0";
-      }
-    });
-
-    // Toggle the clicked section
-    if (isCurrentlyOpen) {
-      // Close the clicked section
-      clickedSection.classList.remove("open");
-      clickedTitle.setAttribute("aria-expanded", "false");
-      clickedContent.setAttribute("aria-hidden", "true");
-      clickedContent.style.maxHeight = "0";
-      clickedContent.style.opacity = "0";
-
-      // Hide overlay and remove body blocking
-      if (overlay) {
-        overlay.classList.remove("active");
-      }
-      document.body.classList.remove("footer-accordion-open");
-    } else {
-      // Open the clicked section
-      clickedSection.classList.add("open");
-      clickedTitle.setAttribute("aria-expanded", "true");
-      clickedContent.setAttribute("aria-hidden", "false");
-
-      // Calculate the natural height of the content and apply it
-      const scrollHeight = clickedContent.scrollHeight;
-      clickedContent.style.maxHeight = scrollHeight + "px";
-      clickedContent.style.opacity = "1";
-
-      // Show overlay and add body blocking
-      if (overlay) {
-        overlay.classList.add("active");
-      }
-      document.body.classList.add("footer-accordion-open");
-    }
-  }
-
-  function removeFooterAccordion() {
-    const footerSections = document.querySelectorAll(".footer-section");
-    const overlay = document.querySelector(".footer-accordion-overlay");
-
-    // Remove overlay
-    if (overlay) {
-      overlay.remove();
-    }
-
-    footerSections.forEach((section) => {
-      const title = section.querySelector(".footer-title");
-      const links = section.querySelector(".footer-links");
-      const arrow = title?.querySelector(".footer-arrow");
-
-      // Remove accordion classes and styles
-      section.classList.remove("footer-accordion-section", "open");
-      title?.classList.remove("footer-accordion-toggle");
-      links?.classList.remove("footer-accordion-content");
-
-      // Remove ARIA attributes
-      title?.removeAttribute("role");
-      title?.removeAttribute("aria-expanded");
-      title?.removeAttribute("aria-controls");
-      title?.removeAttribute("tabindex");
-      links?.removeAttribute("aria-hidden");
-
-      // Reset styles
-      if (links) {
-        links.style.maxHeight = "";
-        links.style.overflow = "";
-        links.style.transition = "";
-        links.style.opacity = "";
-      }
-
-      // Remove arrow if it exists
-      if (arrow) {
-        arrow.remove();
-      }
-
-      // Remove event listeners by cloning and replacing elements
-      if (title) {
-        const newTitle = title.cloneNode(true);
-        title.parentNode.replaceChild(newTitle, title);
-      }
-    });
-  }
-
-  // Initialize on page load
-  initializeFooterAccordion();
-
-  // Re-initialize on window resize
-  window.addEventListener("resize", () => {
-    // Debounce resize events
-    clearTimeout(window.footerResizeTimeout);
-    window.footerResizeTimeout = setTimeout(() => {
-      initializeFooterAccordion();
-    }, 250);
-  });
-
-  // Close accordion when pressing Escape key
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closeAllFooterSections();
-    }
-  });
-
-  // Make removeFooterAccordion available globally
-  window.removeFooterAccordion = removeFooterAccordion;
-}
-
-// Setup contact sales modal
-function setupContactSalesModal() {
-  const modal = document.getElementById("contact-sales-modal");
-  const contactBtn = document.getElementById("contact-sales-btn");
-  const contactPricingBtn = document.getElementById(
-    "contact-sales-pricing-btn"
-  );
-  const closeBtn = document.getElementById("close-contact-modal");
-  const closeActionBtn = document.getElementById("contact-close-btn");
-  const emailBtn = document.getElementById("contact-email-btn");
-
-  function openContactModal() {
-    if (modal) {
-      modal.style.display = "flex";
-      setTimeout(() => {
-        modal.classList.add("active");
-      }, 10);
-      document.body.style.overflow = "hidden";
-    }
-  }
-
-  function closeContactModalFunc() {
-    if (modal) {
-      modal.classList.remove("active");
-      setTimeout(() => {
-        modal.style.display = "none";
-        document.body.style.overflow = "auto";
-      }, 300);
-    }
-  }
-
-  // Setup event listeners for both buttons
-  if (contactBtn) {
-    contactBtn.addEventListener("click", openContactModal);
-  }
-
-  if (contactPricingBtn) {
-    contactPricingBtn.addEventListener("click", openContactModal);
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener("click", closeContactModalFunc);
-  }
-
-  if (closeActionBtn) {
-    closeActionBtn.addEventListener("click", closeContactModalFunc);
-  }
-
-  if (emailBtn) {
-    emailBtn.addEventListener("click", () => {
-      window.location.href = "mailto:silvio.dacol@outlook.com";
-    });
-  }
-
-  // Close modal when clicking outside
-  if (modal) {
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        closeContactModalFunc();
-      }
-    });
-  }
-
-  // Close modal with Escape key
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal && modal.classList.contains("active")) {
-      closeContactModalFunc();
-    }
-  });
-}
+// Contact sales modal functionality is now handled by SharedFooter component

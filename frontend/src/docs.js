@@ -3,9 +3,18 @@
  * Handles mobile menu, search functionality, and waitlist integration
  */
 
+// Import shared components
+import { initializeSharedComponents } from "./shared.js";
+
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize mobile menu functionality
-  setupMobileMenu();
+  // Initialize shared components first (navbar, footer, waitlist)
+  initializeSharedComponents().then(() => {
+    // Initialize docs-specific functionality after shared components are loaded
+    setupDocsSpecificFunctionality();
+  });
+
+  // Initialize mobile menu functionality (handled by shared components now)
+  // setupMobileMenu(); // This is now handled by SharedNavbar
 
   // Initialize search functionality
   setupDocumentationSearch();
@@ -19,6 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize cross-page navigation
   setupCrossPageNavigation();
 });
+
+/**
+ * Setup docs-specific functionality after shared components are loaded
+ */
+function setupDocsSpecificFunctionality() {
+  // Any docs-specific setup that needs to happen after shared components
+  console.log("✅ Docs-specific functionality initialized");
+}
 
 /**
  * Mobile menu functionality for docs page
