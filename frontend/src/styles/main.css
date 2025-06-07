@@ -617,23 +617,6 @@ section {
   overflow: hidden; /* Prevent any content from overflowing the section */
 }
 
-.featured-updates .container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.updates-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
-  padding: 20px 8px; /* Add horizontal padding to prevent overflow */
-  perspective: 1000px; /* For 3D hover effects */
-  /* REMOVED: Fixed max-height and overflow-y to prevent scrollbars */
-  /* Cards will adapt their size based on screen height instead */
-}
-
 /* Visual indicator when grid is in focus for scrolling */
 /* Note: Visual feedback animations removed - no section-wide effects needed */
 
@@ -1128,7 +1111,7 @@ section {
   font-weight: 500;
 }
 
-/* Featured Content Section - TikTok scroll optimized */
+/* Featured Content Section - Desktop with proper scrollbars, optimized for mobile */
 .featured-content {
   background: var(--bg-secondary);
 }
@@ -1137,12 +1120,14 @@ section {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* START from top to show title */
+  padding-top: 20px; /* Add padding to ensure title is visible */
 }
 
 .section-title {
   margin-bottom: 32px;
   text-align: left;
+  flex-shrink: 0; /* Prevent title from shrinking */
 }
 
 .featured-grid {
@@ -1150,8 +1135,109 @@ section {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   padding: 20px 0;
-  /* REMOVED: Fixed max-height and overflow-y to prevent scrollbars */
-  /* Content will adapt size based on screen dimensions instead */
+  /* SCROLLBARS ON ALL SCREENS: When feature cards don't fit in viewport */
+  max-height: calc(100vh - 200px); /* Height limit for all screen sizes */
+  overflow-y: auto; /* Enable scrolling when content overflows */
+
+  /* Enhanced scrollbar styling for features section - ALL SCREENS */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-accent);
+}
+
+/* Custom reddish scrollbar styling for desktop features grid - RESTORED */
+.featured-grid::-webkit-scrollbar {
+  width: 12px;
+}
+
+.featured-grid::-webkit-scrollbar-track {
+  background: var(--bg-accent); /* Warm beige background */
+  border-radius: 6px;
+}
+
+.featured-grid::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--accent-primary) 0%,
+    var(--accent-hover) 100%
+  );
+  border-radius: 6px;
+  border: 2px solid var(--bg-accent);
+  transition: all 0.3s ease;
+}
+
+.featured-grid::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--accent-hover) 0%,
+    #8b4513 100%
+  ); /* More reddish-brown on hover */
+  border: 2px solid var(--bg-secondary);
+  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.4); /* Enhanced shadow */
+}
+
+.featured-grid::-webkit-scrollbar-thumb:active {
+  background: var(--accent-primary);
+  box-shadow: 0 2px 4px rgba(139, 69, 19, 0.5);
+}
+
+/* Also fix the featured-updates section for consistency */
+.featured-updates .container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* START from top to show any titles */
+  padding-top: 20px; /* Add padding to ensure content is visible */
+}
+
+.updates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 20px 8px; /* Add horizontal padding to prevent overflow */
+  perspective: 1000px; /* For 3D hover effects */
+  /* SCROLLBARS ON ALL SCREENS: When update cards don't fit in viewport */
+  max-height: calc(100vh - 200px); /* Height limit for all screen sizes */
+  overflow-y: auto; /* Enable scrolling when content overflows */
+
+  /* Enhanced scrollbar styling for updates section - ALL SCREENS */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-accent);
+}
+
+/* Custom reddish scrollbar styling for desktop updates grid - RESTORED */
+.updates-grid::-webkit-scrollbar {
+  width: 12px;
+}
+
+.updates-grid::-webkit-scrollbar-track {
+  background: var(--bg-accent); /* Warm beige background */
+  border-radius: 6px;
+}
+
+.updates-grid::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--accent-primary) 0%,
+    var(--accent-hover) 100%
+  );
+  border-radius: 6px;
+  border: 2px solid var(--bg-accent);
+  transition: all 0.3s ease;
+}
+
+.updates-grid::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--accent-hover) 0%,
+    #8b4513 100%
+  ); /* More reddish-brown on hover */
+  border: 2px solid var(--bg-secondary);
+  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.4); /* Enhanced shadow */
+}
+
+.updates-grid::-webkit-scrollbar-thumb:active {
+  background: var(--accent-primary);
+  box-shadow: 0 2px 4px rgba(139, 69, 19, 0.5);
 }
 
 .featured-article {
@@ -1653,8 +1739,33 @@ section {
   .featured-grid {
     grid-template-columns: 1fr;
     gap: 16px; /* Reduced gap for mobile */
-    padding-right: 8px; /* Extra padding to avoid scroll dots */
-    /* REMOVED: max-height to prevent scrollbars - cards will be sized appropriately instead */
+    padding-right: 12px; /* Extra padding for scrollbar space */
+    /* MOBILE: Keep scrollbars when content overflows */
+    max-height: calc(100vh - 180px); /* Adjusted for mobile headers */
+    overflow-y: auto; /* Show scrollbars when needed on mobile too */
+  }
+
+  /* Keep reddish scrollbars on mobile but make them thinner */
+  .updates-grid::-webkit-scrollbar,
+  .featured-grid::-webkit-scrollbar {
+    width: 8px; /* Thinner for mobile */
+  }
+
+  .updates-grid::-webkit-scrollbar-track,
+  .featured-grid::-webkit-scrollbar-track {
+    background: var(--bg-accent);
+    border-radius: 4px; /* Smaller radius for mobile */
+  }
+
+  .updates-grid::-webkit-scrollbar-thumb,
+  .featured-grid::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      var(--accent-primary) 0%,
+      var(--accent-hover) 100%
+    );
+    border-radius: 4px;
+    border: 1px solid var(--bg-accent);
   }
 
   .update-card {
@@ -3317,20 +3428,22 @@ section {
 /* Pricing Section - Classic 3-tier layout with logity styling */
 .pricing-section {
   background: var(--bg-secondary);
-  overflow: hidden; /* Prevent any content from overflowing the section */
+  /* FIXED: Follow the same pattern as features panel */
+  overflow: hidden; /* Section itself doesn't scroll */
 }
 
 .pricing-section .container {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  padding-top: 40px;
+  justify-content: flex-start; /* START from top to show header */
+  padding-top: 20px; /* Add padding to ensure header is visible */
 }
 
 .pricing-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
+  flex-shrink: 0; /* Prevent header from shrinking - like features section title */
 }
 
 .pricing-subtitle {
@@ -3378,7 +3491,7 @@ section {
   letter-spacing: 0.5px;
 }
 
-/* Pricing Grid - Flexible responsive design that avoids scrollbars */
+/* Pricing Grid - Scrollable middle section like features panel */
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -3387,8 +3500,49 @@ section {
   margin: 0 auto;
   padding: 20px 8px;
   perspective: 1000px;
-  /* REMOVED: Fixed max-height and overflow-y to prevent scrollbars */
-  /* Instead, we'll use height-based media queries to make cards smaller */
+  /* SCROLLBARS ON ALL SCREENS: When pricing cards don't fit in viewport - like features */
+  max-height: calc(100vh - 200px); /* Height limit for all screen sizes */
+  overflow-y: auto; /* Enable scrolling when content overflows */
+
+  /* Enhanced scrollbar styling for pricing section - ALL SCREENS */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-primary) var(--bg-accent);
+}
+
+/* Custom reddish scrollbar styling for pricing grid - same as features */
+.pricing-grid::-webkit-scrollbar {
+  width: 12px;
+}
+
+.pricing-grid::-webkit-scrollbar-track {
+  background: var(--bg-accent); /* Warm beige background */
+  border-radius: 6px;
+}
+
+.pricing-grid::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--accent-primary) 0%,
+    var(--accent-hover) 100%
+  );
+  border-radius: 6px;
+  border: 2px solid var(--bg-accent);
+  transition: all 0.3s ease;
+}
+
+.pricing-grid::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    var(--accent-hover) 0%,
+    #8b4513 100%
+  ); /* More reddish-brown on hover */
+  border: 2px solid var(--bg-secondary);
+  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.4); /* Enhanced shadow */
+}
+
+.pricing-grid::-webkit-scrollbar-thumb:active {
+  background: var(--accent-primary);
+  box-shadow: 0 2px 4px rgba(139, 69, 19, 0.5);
 }
 
 /* Pricing Cards - Adaptive height based on viewport */
@@ -3576,12 +3730,13 @@ section {
   box-shadow: 0 4px 16px var(--shadow-medium);
 }
 
-/* Pricing Footer */
+/* Pricing Footer - Fixed at bottom like features pattern */
 .pricing-footer {
-  margin-top: 48px;
+  margin-top: 32px;
   text-align: center;
-  padding-top: 32px;
+  padding-top: 24px;
   border-top: 1px solid var(--border-light);
+  flex-shrink: 0; /* Prevent footer from shrinking - keep it fixed at bottom */
 }
 
 .pricing-mascot {
@@ -3626,8 +3781,154 @@ section {
  * 6. Content should always fit viewport without scrollbars when possible
  */
 
-/* Height-based optimizations - Make cards smaller on shorter screens FIRST */
-@media (max-height: 800px) {
+/* Asus Zenbook Fold specific optimizations (1280x853) - Landscape wide format */
+@media (min-width: 1200px) and (max-width: 1300px) and (min-height: 840px) and (max-height: 870px) {
+  /* Features section optimizations - Make cards smaller to fit all in viewport - NO SCROLLBARS */
+  .featured-updates .container,
+  .featured-content .container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Start from top instead of center */
+    padding-top: 15px; /* Reduce top padding */
+  }
+
+  /* Make feature cards much smaller to fit all in viewport - NO SCROLLBARS */
+  .update-card {
+    min-height: 190px; /* Much smaller cards for Zenbook Fold */
+    padding: 14px 12px; /* Tighter padding */
+  }
+
+  .update-card h3 {
+    font-size: 1.1rem; /* Smaller titles */
+    margin-bottom: 6px;
+  }
+
+  .update-card p {
+    font-size: 13px; /* Smaller text */
+    margin-bottom: 10px;
+  }
+
+  .update-icon {
+    font-size: 28px; /* Smaller icons */
+    margin-bottom: 10px;
+  }
+
+  /* Featured articles also smaller */
+  .featured-article {
+    padding: 16px; /* Smaller padding */
+  }
+
+  .article-title {
+    font-size: 1rem; /* Smaller title */
+    margin-bottom: 8px;
+  }
+
+  /* Optimize grids for Zenbook Fold - ensure scrollbars show when needed */
+  .updates-grid,
+  .featured-grid {
+    gap: 12px; /* Smaller gap for tighter layout */
+    max-height: calc(100vh - 160px); /* Adjusted for Zenbook Fold height */
+    overflow-y: auto; /* Ensure scrollbars are available */
+  }
+
+  /* Ensure reddish scrollbars are visible on Zenbook Fold */
+  .updates-grid::-webkit-scrollbar,
+  .featured-grid::-webkit-scrollbar {
+    width: 10px; /* Medium width for Zenbook Fold */
+  }
+  /* CTA section optimizations for Zenbook Fold horizontal layout */
+  .cta-section .container {
+    padding-top: 25px; /* Reduced top padding for better footer visibility */
+    padding-bottom: 15px; /* Maintain bottom padding */
+    justify-content: space-between; /* Spread content properly */
+    height: calc(100vh - 70px); /* More space for footer - account for navbar */
+  }
+
+  .cta-content {
+    margin-top: 30px; /* Push CTA content down to make room for footer */
+    margin-bottom: 15px; /* Space before footer */
+    flex: 0 0 auto; /* Prevent CTA from expanding */
+  }
+
+  .cta-title {
+    font-size: 1.8rem; /* Smaller for this resolution to save space */
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .cta-mascot {
+    margin-bottom: 12px; /* Reduce mascot spacing */
+  }
+
+  .mascot-waving-logo {
+    width: 60px; /* Smaller mascot */
+    height: 60px;
+  }
+
+  .cta-actions {
+    gap: 12px; /* Tighter button spacing */
+  }
+
+  .footer-content {
+    margin-top: 15px; /* Reduce footer margin */
+    flex: 0 0 auto; /* Prevent footer from shrinking */
+  }
+
+  .footer-main {
+    grid-template-columns: repeat(
+      5,
+      minmax(140px, 1fr)
+    ); /* Single row, all 5 columns for wide layout */
+    gap: 14px; /* Tighter gap for horizontal layout */
+    margin-bottom: 12px; /* Reduce bottom margin */
+  }
+
+  .footer-title {
+    font-size: 13px; /* Smaller titles to fit better */
+    margin-bottom: 6px;
+  }
+
+  .footer-links {
+    margin: 0; /* Remove any extra margins */
+  }
+
+  .footer-links li {
+    margin-bottom: 4px; /* Tighter link spacing */
+  }
+
+  .footer-links a {
+    font-size: 11px; /* Smaller links for compact layout */
+    line-height: 1.3;
+  }
+
+  .footer-bottom {
+    padding-top: 8px; /* Reduce spacing */
+    margin-top: 8px;
+    /* Make footer bottom more compact */
+  }
+
+  .footer-logo-text {
+    font-size: 14px; /* Smaller logo text */
+  }
+
+  .footer-links-inline a {
+    font-size: 11px; /* Smaller inline links */
+  }
+
+  .footer-copyright {
+    font-size: 11px; /* Smaller copyright text */
+  }
+}
+
+/* 
+ * Height-based optimizations - Make cards smaller on shorter screens FIRST 
+ * UPDATED THRESHOLDS: 
+ * - Changed from 800px to 750px to exclude Asus Zenbook Fold (853px height)
+ * - Changed from 700px to 650px to better accommodate various device heights
+ * - Added specific Zenbook Fold optimization above for 1280x853 resolution
+ */
+@media (max-height: 750px) {
   .pricing-card {
     min-height: 420px; /* Smaller cards for shorter screens */
     padding: 24px 20px; /* Less padding */
@@ -3648,7 +3949,8 @@ section {
   }
 }
 
-@media (max-height: 700px) {
+/* UPDATED THRESHOLD: Changed from 700px to 650px for better device compatibility */
+@media (max-height: 650px) {
   /* Pricing optimizations for moderately short screens */
   .pricing-card {
     min-height: 360px; /* Even smaller for very short screens */
@@ -3808,10 +4110,20 @@ section {
   /* Featured grid optimizations for short screens */
   .featured-grid {
     gap: 16px;
+    max-height: calc(
+      100vh - 140px
+    ); /* Ensure scrollbars on very short screens */
+    overflow-y: auto; /* Always allow scrolling when needed */
   }
 
   .featured-article {
     padding: 16px;
+  }
+
+  /* Ensure scrollbars are visible on very short screens */
+  .updates-grid::-webkit-scrollbar,
+  .featured-grid::-webkit-scrollbar {
+    width: 10px; /* Visible scrollbar for short screens */
   }
 
   .article-title {
@@ -3897,7 +4209,32 @@ section {
     grid-template-columns: 1fr;
     gap: 20px;
     max-width: 400px;
-    padding-right: 8px; /* Extra padding to avoid scroll dots */
+    padding: 20px 8px;
+    /* Mobile scrolling - smaller height adjustment for mobile */
+    max-height: calc(100vh - 180px);
+    /* Enhanced scrollbar styling for mobile pricing grid */
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-primary) var(--bg-accent);
+  }
+
+  /* Mobile pricing grid scrollbars */
+  .pricing-grid::-webkit-scrollbar {
+    width: 8px; /* Thinner scrollbar for mobile */
+  }
+
+  .pricing-grid::-webkit-scrollbar-track {
+    background: var(--bg-accent);
+    border-radius: 4px;
+  }
+
+  .pricing-grid::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      var(--accent-primary) 0%,
+      var(--accent-hover) 100%
+    );
+    border-radius: 4px;
+    border: 1px solid var(--bg-accent);
   }
 
   .pricing-card {
@@ -3971,6 +4308,16 @@ section {
 
 /* Very small mobile screens */
 @media (max-width: 480px) {
+  .pricing-grid {
+    /* Very small mobile scrolling - even smaller height adjustment */
+    max-height: calc(100vh - 160px);
+  }
+
+  /* Very small mobile pricing grid scrollbars */
+  .pricing-grid::-webkit-scrollbar {
+    width: 6px; /* Even thinner scrollbar for very small screens */
+  }
+
   .pricing-card {
     min-height: 380px;
     padding: 20px 16px;
@@ -4161,11 +4508,12 @@ section {
   padding-left: 0;
 }
 
-/* Contact Sales Section in Pricing */
+/* Contact Sales Section in Pricing - Fixed at bottom */
 .pricing-contact-sales {
   text-align: center;
-  margin-top: 48px;
-  padding: 32px 24px;
+  margin-top: 32px;
+  padding: 24px;
+  flex-shrink: 0; /* Prevent contact sales from shrinking - keep it fixed at bottom */
 }
 
 .contact-sales-button-container {
