@@ -18,17 +18,13 @@
   -webkit-touch-callout: none; /* Disable iOS callout */
 }
 
-/* Universal scrollbar hiding - target everything by default except grids and modals */
-*:not(.updates-grid):not(.featured-grid):not(.pricing-grid):not(
-    .modal-container
-  ) {
+/* Universal scrollbar hiding - target everything by default except modals */
+*:not(.modal-container) {
   scrollbar-width: none !important; /* Firefox */
   -ms-overflow-style: none !important; /* Internet Explorer 10+ */
 }
 
-*:not(.updates-grid):not(.featured-grid):not(.pricing-grid):not(
-    .modal-container
-  )::-webkit-scrollbar {
+*:not(.modal-container)::-webkit-scrollbar {
   display: none !important;
   width: 0px !important;
   background: transparent !important;
@@ -104,25 +100,16 @@ main::-webkit-scrollbar-thumb {
   display: none !important;
 }
 
-/* Custom scrollbar styling ONLY for internal grids and specific elements */
-.updates-grid::-webkit-scrollbar,
-.featured-grid::-webkit-scrollbar,
-.pricing-grid::-webkit-scrollbar,
+/* Custom scrollbar styling ONLY for modal containers (grids no longer use scrollbars) */
 .modal-container::-webkit-scrollbar {
   width: 12px;
 }
 
-.updates-grid::-webkit-scrollbar-track,
-.featured-grid::-webkit-scrollbar-track,
-.pricing-grid::-webkit-scrollbar-track,
 .modal-container::-webkit-scrollbar-track {
   background: var(--bg-accent); /* Warm beige background */
   border-radius: 6px;
 }
 
-.updates-grid::-webkit-scrollbar-thumb,
-.featured-grid::-webkit-scrollbar-thumb,
-.pricing-grid::-webkit-scrollbar-thumb,
 .modal-container::-webkit-scrollbar-thumb {
   background: linear-gradient(
     180deg,
@@ -134,9 +121,6 @@ main::-webkit-scrollbar-thumb {
   transition: all 0.3s ease;
 }
 
-.updates-grid::-webkit-scrollbar-thumb:hover,
-.featured-grid::-webkit-scrollbar-thumb:hover,
-.pricing-grid::-webkit-scrollbar-thumb:hover,
 .modal-container::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(
     180deg,
@@ -146,17 +130,11 @@ main::-webkit-scrollbar-thumb {
   border: 2px solid var(--bg-secondary);
 }
 
-.updates-grid::-webkit-scrollbar-thumb:active,
-.featured-grid::-webkit-scrollbar-thumb:active,
-.pricing-grid::-webkit-scrollbar-thumb:active,
 .modal-container::-webkit-scrollbar-thumb:active {
   background: var(--accent-primary);
 }
 
-/* Firefox scrollbar for specific elements only */
-.updates-grid,
-.featured-grid,
-.pricing-grid,
+/* Firefox scrollbar for modal containers only */
 .modal-container {
   scrollbar-width: thin;
   scrollbar-color: var(--accent-primary) var(--bg-accent);
@@ -648,20 +626,12 @@ section {
 
 .updates-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
   padding: 20px 8px; /* Add horizontal padding to prevent overflow */
   perspective: 1000px; /* For 3D hover effects */
-  /* Add better scroll behavior for nested scrolling */
-  scroll-behavior: smooth;
-  /* Add visual feedback that this area is scrollable */
-  border-radius: 8px;
-  /* Improve scroll performance */
-  will-change: scroll-position;
-  /* RESTORED: Proper containment for feature cards */
-  max-height: 70vh; /* Contain cards within viewport */
-  overflow-y: auto; /* Allow internal scrolling when needed */
+  /* REMOVED: Fixed max-height and overflow-y to prevent scrollbars */
+  /* Cards will adapt their size based on screen height instead */
 }
 
 /* Visual indicator when grid is in focus for scrolling */
@@ -1180,9 +1150,8 @@ section {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   padding: 20px 0;
-  /* RESTORED: Proper containment for featured content */
-  max-height: 70vh; /* Contain cards within viewport */
-  overflow-y: auto; /* Allow internal scrolling when needed */
+  /* REMOVED: Fixed max-height and overflow-y to prevent scrollbars */
+  /* Content will adapt size based on screen dimensions instead */
 }
 
 .featured-article {
@@ -1684,8 +1653,8 @@ section {
   .featured-grid {
     grid-template-columns: 1fr;
     gap: 16px; /* Reduced gap for mobile */
-    max-height: 60vh; /* Ensure grid doesn't overflow section */
     padding-right: 8px; /* Extra padding to avoid scroll dots */
+    /* REMOVED: max-height to prevent scrollbars - cards will be sized appropriately instead */
   }
 
   .update-card {
@@ -2425,6 +2394,14 @@ section {
 
   .footer-copyright {
     font-size: 13px; /* Appropriate size for tablets */
+  }
+
+  /* Enhanced pricing section centering for tablets */
+  .pricing-section .container {
+    justify-content: center; /* Center content vertically instead of flex-start */
+    align-items: center; /* Center horizontally as well */
+    padding-top: 20px; /* Optimal top padding for tablets */
+    padding-bottom: 20px; /* Add bottom padding */
   }
 }
 
@@ -3401,7 +3378,7 @@ section {
   letter-spacing: 0.5px;
 }
 
-/* Pricing Grid */
+/* Pricing Grid - Flexible responsive design that avoids scrollbars */
 .pricing-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -3410,15 +3387,11 @@ section {
   margin: 0 auto;
   padding: 20px 8px;
   perspective: 1000px;
-  scroll-behavior: smooth;
-  border-radius: 8px;
-  will-change: scroll-position;
-  /* Add scrollable behavior like updates-grid */
-  max-height: 70vh; /* Contain cards within viewport */
-  overflow-y: auto; /* Allow internal scrolling when needed */
+  /* REMOVED: Fixed max-height and overflow-y to prevent scrollbars */
+  /* Instead, we'll use height-based media queries to make cards smaller */
 }
 
-/* Pricing Cards */
+/* Pricing Cards - Adaptive height based on viewport */
 .pricing-card {
   background: var(--card-bg);
   border: 2px solid var(--border-light);
@@ -3428,7 +3401,7 @@ section {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 16px var(--shadow-soft);
   position: relative;
-  min-height: 500px;
+  min-height: 500px; /* Default for large screens */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -3641,11 +3614,289 @@ section {
   text-decoration: underline;
 }
 
-/* Responsive Design for Pricing */
-@media (max-width: 768px) {
+/* 
+ * RESPONSIVE DESIGN PHILOSOPHY - Screen Size-First Approach
+ * 
+ * Key Principles:
+ * 1. NEVER use fixed max-height + overflow scrollbars on grids
+ * 2. Height-based media queries FIRST - make cards smaller for short screens  
+ * 3. Width-based media queries SECOND - optimize column layout for horizontal space
+ * 4. iPad Pro portrait (1024x1366) should show 3 columns horizontally
+ * 5. Zenbook Fold style (short height) should show smaller cards, no scrollbars
+ * 6. Content should always fit viewport without scrollbars when possible
+ */
+
+/* Height-based optimizations - Make cards smaller on shorter screens FIRST */
+@media (max-height: 800px) {
+  .pricing-card {
+    min-height: 420px; /* Smaller cards for shorter screens */
+    padding: 24px 20px; /* Less padding */
+  }
+
+  .price-amount {
+    font-size: 42px; /* Smaller price */
+  }
+
+  .pricing-features li {
+    font-size: 14px; /* Smaller feature text */
+    margin-bottom: 8px; /* Tighter spacing */
+  }
+
+  .pricing-description h3 {
+    font-size: 16px; /* Smaller titles */
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-height: 700px) {
+  /* Pricing optimizations for moderately short screens */
+  .pricing-card {
+    min-height: 360px; /* Even smaller for very short screens */
+    padding: 20px 16px;
+  }
+
+  .price-amount {
+    font-size: 36px;
+  }
+
+  .pricing-features li {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .pricing-tier-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .pricing-description {
+    margin-bottom: 16px;
+  }
+
+  .pricing-description h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  /* Update cards optimizations for moderately short screens */
+  .update-card {
+    min-height: 240px;
+    padding: 22px 18px;
+  }
+
+  .update-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .update-card p {
+    font-size: 14px;
+  }
+
+  .update-icon {
+    font-size: 30px;
+    margin-bottom: 14px;
+  }
+}
+
+/* Very short screens (Asus Zenbook Fold style) - Ultra compact */
+@media (max-height: 600px) {
+  /* Apply to all sections with grids - pricing, updates, etc. */
+  section .container {
+    padding-top: 20px; /* Reduce top padding for all sections */
+  }
+
+  /* Pricing section optimizations */
+  .pricing-header {
+    margin-bottom: 16px; /* Reduce header spacing */
+  }
+
+  .pricing-subtitle {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .pricing-grid {
+    gap: 16px; /* Smaller gap between cards */
+  }
+
+  .pricing-card {
+    min-height: 300px; /* Much smaller cards for very short screens */
+    padding: 16px 12px;
+    border-radius: 12px; /* Smaller border radius */
+  }
+
+  .pricing-tier-label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .pricing-price {
+    margin-bottom: 16px; /* Reduce spacing */
+  }
+
+  .price-amount {
+    font-size: 32px;
+  }
+
+  .price-period {
+    font-size: 14px;
+  }
+
+  .pricing-description {
+    margin-bottom: 12px;
+  }
+
+  .pricing-description h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .pricing-features {
+    margin-bottom: 20px; /* Reduce bottom margin */
+  }
+
+  .pricing-features li {
+    font-size: 12px;
+    margin-bottom: 4px; /* Very tight spacing */
+    line-height: 1.3;
+  }
+
+  .feature-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .pricing-cta {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .pricing-footer {
+    margin-top: 20px; /* Reduce footer spacing */
+    padding-top: 16px;
+  }
+
+  .pricing-footer-text {
+    font-size: 13px;
+  }
+
+  /* Updates grid optimizations for short screens */
+  .updates-grid {
+    gap: 16px;
+  }
+
+  .update-card {
+    min-height: 220px; /* Much smaller update cards */
+    padding: 20px 16px;
+  }
+
+  .update-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .update-card p {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .update-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  /* Featured grid optimizations for short screens */
+  .featured-grid {
+    gap: 16px;
+  }
+
+  .featured-article {
+    padding: 16px;
+  }
+
+  .article-title {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Width-based responsive breakpoints - Prioritize horizontal space usage */
+
+/* Large tablets and small desktops - Keep 3 columns if there's horizontal space */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for 900px+ screens */
+    max-width: 1000px;
+  }
+
+  /* Enhanced centering for large tablets (but not full desktop) */
+  .pricing-section .container {
+    justify-content: center; /* Center content vertically instead of flex-start */
+    align-items: center; /* Center horizontally as well */
+    padding-top: 30px; /* Optimal top padding for large tablets */
+    padding-bottom: 30px; /* Add bottom padding */
+  }
+}
+
+/* Medium tablets (iPad Pro portrait: 1024x1366) - 3 columns should work fine */
+@media (min-width: 800px) and (max-width: 899px) {
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr); /* Still 3 columns, just smaller */
+    max-width: 780px;
+    gap: 20px; /* Slightly smaller gap */
+  }
+
+  .pricing-card {
+    min-height: 450px; /* Slightly smaller cards */
+    padding: 28px 20px;
+  }
+
+  /* Enhanced centering for medium tablets */
+  .pricing-section .container {
+    justify-content: center; /* Center content vertically instead of flex-start */
+    align-items: center; /* Center horizontally as well */
+    padding-top: 20px; /* Reduce top padding for better centering */
+    padding-bottom: 20px; /* Add bottom padding */
+  }
+}
+
+/* Smaller tablets - 2 columns when horizontal space gets tight */
+@media (min-width: 600px) and (max-width: 799px) {
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 600px;
+    gap: 20px;
+  }
+
+  /* Stack enterprise tier below on smaller tablets */
+  .pricing-card.enterprise-tier {
+    grid-column: 1 / -1;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .pricing-card {
+    min-height: 420px;
+    padding: 26px 20px;
+  }
+}
+
+/* Mobile screens - Single column */
+@media (max-width: 599px) {
   .pricing-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+    max-width: 400px;
     padding-right: 8px; /* Extra padding to avoid scroll dots */
   }
 
@@ -3718,6 +3969,7 @@ section {
   }
 }
 
+/* Very small mobile screens */
 @media (max-width: 480px) {
   .pricing-card {
     min-height: 380px;
@@ -3745,21 +3997,6 @@ section {
   .pricing-cta {
     padding: 12px 20px;
     font-size: 15px;
-  }
-}
-
-/* Tablet responsive - 2 column layout */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .pricing-grid {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: 800px;
-  }
-
-  /* Stack enterprise tier below on tablets */
-  .pricing-card.enterprise-tier {
-    grid-column: 1 / -1;
-    max-width: 400px;
-    margin: 0 auto;
   }
 }
 
