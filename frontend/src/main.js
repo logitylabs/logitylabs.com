@@ -1,5 +1,5 @@
-// Main JavaScript for Logity Landing Page - TikTok-Style Full-Screen Scrolling
-// Handles TikTok-like section snapping, scroll indicators, and smooth navigation
+// Main JavaScript for Logity Landing Page - Standard Web Scrolling
+// Handles essential functionality without TikTok-style features
 
 // Import waitlist functionality
 import { WaitlistModal } from "./components/WaitlistModal.js";
@@ -9,22 +9,13 @@ import { testConnection } from "./config/supabase.js";
 let waitlistModal = null;
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Ensure navbar is always visible on page load
-  ensureNavbarVisible();
-
   // Initialize waitlist functionality
   initializeWaitlist();
 
   // Setup waitlist buttons
   setupWaitlistButtons();
 
-  // Initialize TikTok-style scrolling
-  initializeTikTokScrolling();
-
-  // Setup scroll indicators with click functionality
-  setupTikTokScrollIndicators();
-
-  // Setup smooth scrolling for regular anchor links (if any)
+  // Setup smooth scrolling for navigation links
   setupSmoothScrolling();
 
   // Setup navbar navigation
@@ -32,9 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Setup footer navigation
   setupFooterNavigation();
-
-  // Setup cross-page navigation for secondary pages
-  setupCrossPageNavigation();
 
   // Initialize fade-in animations
   setupFadeInAnimations();
@@ -44,9 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Setup modal event listeners
   setupModalEventListeners();
-
-  // Setup grid scroll protection
-  setupGridScrollProtection();
 
   // Setup mobile menu
   setupMobileMenu();
@@ -61,52 +46,18 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.innerWidth <= 768) {
       setupMobileFooterAccordion();
     } else {
-      // Remove accordion functionality when not on mobile
       removeFooterAccordion();
     }
   });
 
-  // Setup mobile landscape protection
-  setupMobileLandscapeProtection();
-
-  // Prevent zooming on mobile devices
-  preventZooming();
-
-  // Check for cross-page navigation (coming from docs page)
-  checkCrossPageNavigation();
-
   // Setup contact sales modal
   setupContactSalesModal();
 
-  console.log("Logity TikTok-style landing page loaded successfully! 🚀");
+  console.log("Logity landing page loaded successfully! 🚀");
 });
 
-// Enhanced navbar background on scroll - keep consistent dark brown theme
-// ALWAYS keep navbar visible and fixed
-function ensureNavbarVisible() {
-  const navbar = document.querySelector(".nav-header");
-
-  if (navbar) {
-    navbar.style.position = "fixed";
-    navbar.style.top = "0";
-    navbar.style.left = "0";
-    navbar.style.right = "0";
-    navbar.style.zIndex = "1000";
-    navbar.style.transform = "translateY(0)";
-    navbar.style.visibility = "visible";
-    navbar.style.opacity = "1";
-  }
-}
-
-// Also ensure navbar stays visible on resize (orientation change, etc.)
-window.addEventListener("resize", ensureNavbarVisible);
-window.addEventListener("orientationchange", ensureNavbarVisible);
-
+// Enhanced navbar background on scroll
 window.addEventListener("scroll", function () {
-  // Always ensure navbar stays visible
-  ensureNavbarVisible();
-
-  // Update background based on scroll position
   const navbar = document.querySelector(".nav-header");
   if (navbar) {
     if (window.scrollY > 50) {
@@ -192,188 +143,11 @@ function setupWaitlistButtons() {
   console.log(`✅ Setup ${waitlistButtons.length} waitlist buttons`);
 }
 
-// Initialize TikTok-style scrolling experience
-function initializeTikTokScrolling() {
-  const main = document.querySelector("main");
-  const sections = document.querySelectorAll("section");
-  let currentSection = 0;
-  let isScrolling = false;
-
-  // Track current section based on scroll position
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const sectionIndex = Array.from(sections).indexOf(entry.target);
-          if (sectionIndex !== currentSection) {
-            currentSection = sectionIndex;
-            updateTikTokScrollIndicators(currentSection);
-          }
-        }
-      });
-    },
-    {
-      threshold: 0.5,
-    }
-  );
-
-  sections.forEach((section) => sectionObserver.observe(section));
-
-  // Enhanced scroll handling for TikTok-like experience on both mobile and desktop
-  let scrollTimer = null;
-  let lastScrollY = 0;
-
-  window.addEventListener(
-    "scroll",
-    (e) => {
-      // Clear any existing timer
-      if (scrollTimer) {
-        clearTimeout(scrollTimer);
-      }
-
-      const currentScrollY = window.scrollY;
-
-      // Add slight delay to prevent excessive snapping during user scrolling
-      scrollTimer = setTimeout(
-        () => {
-          // TikTok-style section snapping logic for both mobile and desktop
-          let closestSection = 0;
-          let closestDistance = Infinity;
-
-          sections.forEach((section, index) => {
-            const rect = section.getBoundingClientRect();
-            const distance = Math.abs(rect.top);
-
-            if (distance < closestDistance) {
-              closestDistance = distance;
-              closestSection = index;
-            }
-          });
-
-          // Snap to the closest section if we're not already there
-          // Use different thresholds for mobile vs desktop
-          const threshold = window.innerWidth <= 768 ? 100 : 150;
-          if (
-            closestSection !== currentSection &&
-            closestDistance > threshold
-          ) {
-            scrollToSection(closestSection);
-          }
-        },
-        window.innerWidth <= 768 ? 100 : 200
-      ); // Longer delay for desktop
-
-      lastScrollY = currentScrollY;
-    },
-    { passive: true }
-  );
-
-  // Allow keyboard navigation (arrow keys)
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowDown" && currentSection < sections.length - 1) {
-      e.preventDefault();
-      scrollToSection(currentSection + 1);
-    } else if (e.key === "ArrowUp" && currentSection > 0) {
-      e.preventDefault();
-      scrollToSection(currentSection - 1);
-    }
-  });
-
-  // Desktop wheel navigation - ensure page navigation works even over grids
-  let wheelAccumulator = 0;
-  let wheelTimeout = null;
-
-  window.addEventListener(
-    "wheel",
-    function (e) {
-      // Only apply this logic for desktop
-      if (window.innerWidth > 768) {
-        wheelAccumulator += e.deltaY;
-
-        // Clear existing timeout
-        if (wheelTimeout) {
-          clearTimeout(wheelTimeout);
-        }
-
-        // Set a timeout to process accumulated wheel delta
-        wheelTimeout = setTimeout(() => {
-          const threshold = 100; // Minimum scroll amount to trigger navigation
-
-          if (Math.abs(wheelAccumulator) > threshold) {
-            if (wheelAccumulator > 0 && currentSection < sections.length - 1) {
-              // Scrolling down - go to next section
-              scrollToSection(currentSection + 1);
-            } else if (wheelAccumulator < 0 && currentSection > 0) {
-              // Scrolling up - go to previous section
-              scrollToSection(currentSection - 1);
-            }
-          }
-
-          // Reset accumulator
-          wheelAccumulator = 0;
-        }, 100);
-      }
-    },
-    { passive: true }
-  );
-
-  // Helper function to scroll to a specific section
-  function scrollToSection(index) {
-    if (index >= 0 && index < sections.length) {
-      sections[index].scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-      currentSection = index;
-      updateTikTokScrollIndicators(currentSection);
-    }
-  }
-}
-
-// Setup TikTok-style scroll indicators
-function setupTikTokScrollIndicators() {
-  const sections = document.querySelectorAll("section");
-  const indicators = document.querySelector(".scroll-indicators");
-
-  if (!indicators) return; // Indicators already exist in HTML
-
-  const dots = indicators.querySelectorAll(".scroll-dot");
-
-  // Add click handlers to existing dots
-  dots.forEach((dot, index) => {
-    dot.addEventListener("click", () => {
-      scrollToSectionByIndex(index);
-    });
-  });
-}
-
-// Update TikTok-style scroll indicators
-function updateTikTokScrollIndicators(activeIndex) {
-  const dots = document.querySelectorAll(".scroll-dot");
-
-  dots.forEach((dot, index) => {
-    if (index === activeIndex) {
-      dot.classList.add("active");
-    } else {
-      dot.classList.remove("active");
-    }
-  });
-}
-
-// Helper function to scroll to section by index
-function scrollToSectionByIndex(index) {
-  const sections = document.querySelectorAll("section");
-  if (index >= 0 && index < sections.length) {
-    sections[index].scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  }
-}
-
 // Setup smooth scrolling for navigation links
 function setupSmoothScrolling() {
-  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+  const navLinks = document.querySelectorAll(
+    '.nav-link[href^="#"], .mobile-nav-link[href^="#"]'
+  );
 
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
@@ -388,138 +162,80 @@ function setupSmoothScrolling() {
           block: "start",
         });
       }
+
+      // Close mobile menu if it's open
+      if (this.classList.contains("mobile-nav-link")) {
+        closeMobileMenu();
+      }
     });
   });
 }
 
 /**
- * Setup navbar navigation with TikTok-style section scrolling
- * Maps navigation links to specific section indices for smooth scrolling
+ * Setup navbar navigation with smooth scrolling
  */
 function setupNavbarNavigation() {
   // Get all navigation links (both desktop and mobile) and the logo
-  const navLinks = document.querySelectorAll(
-    ".nav-link[data-section], .mobile-nav-link[data-section]"
-  );
-  const logoLink = document.querySelector(".logo-link[data-section]");
+  const navLinks = document.querySelectorAll(".nav-link, .mobile-nav-link");
+  const logoLink = document.querySelector(".logo-link");
 
   // Set up navigation link click handlers
   navLinks.forEach((link) => {
+    // Skip if it's already handled by setupSmoothScrolling
+    if (
+      link.getAttribute("href") &&
+      link.getAttribute("href").startsWith("#")
+    ) {
+      return;
+    }
+
     link.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      const sectionIndex = parseInt(this.getAttribute("data-section"));
-
-      // Navigate to the section using existing TikTok scrolling function
-      scrollToSectionByIndex(sectionIndex);
-
-      // Update scroll indicators immediately for better visual feedback
-      updateTikTokScrollIndicators(sectionIndex);
+      // Only handle special navigation, let normal links work normally
+      const href = this.getAttribute("href");
 
       // Close mobile menu if it's open (for mobile navigation)
       if (this.classList.contains("mobile-nav-link")) {
         closeMobileMenu();
       }
-
-      console.log(
-        `Navigation: Scrolling to section ${sectionIndex} (${this.textContent})`
-      );
     });
   });
 
-  // Set up logo click handler to go to home/hero section
+  // Set up logo click handler
   if (logoLink) {
     logoLink.addEventListener("click", function (e) {
       e.preventDefault();
-
-      const sectionIndex = parseInt(this.getAttribute("data-section"));
-
-      // Navigate to the hero section (index 0)
-      scrollToSectionByIndex(sectionIndex);
-
-      // Update scroll indicators immediately for better visual feedback
-      updateTikTokScrollIndicators(sectionIndex);
-
-      console.log(`Logo clicked: Scrolling to section ${sectionIndex} (Hero)`);
+      // Scroll to top of page
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     });
   }
 
-  console.log(
-    `✅ Setup navbar navigation for ${navLinks.length} nav links + logo`
-  );
+  console.log("✅ Setup navbar navigation");
 }
 
 // Setup footer navigation
 function setupFooterNavigation() {
-  // Get the footer pricing link with data-section attribute
-  const footerPricingLink = document.querySelector(
-    '.footer-links a[data-section="3"]'
-  );
+  const footerLinks = document.querySelectorAll('.footer-links a[href^="#"]');
 
-  if (footerPricingLink) {
-    footerPricingLink.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      const sectionIndex = parseInt(this.getAttribute("data-section"));
-
-      // Navigate to the pricing section using existing TikTok scrolling function
-      scrollToSectionByIndex(sectionIndex);
-
-      // Update scroll indicators immediately for better visual feedback
-      updateTikTokScrollIndicators(sectionIndex);
-
-      console.log(
-        `Footer Navigation: Scrolling to section ${sectionIndex} (Pricing)`
-      );
-    });
-  }
-
-  console.log("✅ Setup footer navigation for pricing link");
-}
-
-// Setup cross-page navigation for secondary pages
-function setupCrossPageNavigation() {
-  // Get all navigation links with data-section and data-page attributes
-  const navLinks = document.querySelectorAll(
-    ".nav-link[data-section][data-page], .mobile-nav-link[data-section][data-page]"
-  );
-
-  navLinks.forEach((link) => {
+  footerLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
 
-      const sectionIndex = parseInt(this.getAttribute("data-section"));
-      const targetPage = this.getAttribute("data-page");
+      const targetId = this.getAttribute("href").substring(1);
+      const targetElement = document.getElementById(targetId);
 
-      if (targetPage === "index") {
-        // Store the target section in sessionStorage so the main page can scroll to it
-        sessionStorage.setItem("scrollToSection", sectionIndex.toString());
-
-        // Navigate to the main page
-        window.location.href = "index.html";
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       }
     });
   });
 
-  console.log(`✅ Setup cross-page navigation for ${navLinks.length} links`);
-
-  // Check if there's a stored section to scroll to (from other pages navigation)
-  const targetSection = sessionStorage.getItem("scrollToSection");
-
-  if (targetSection !== null) {
-    // Remove the stored value to prevent future unintended scrolling
-    sessionStorage.removeItem("scrollToSection");
-
-    // Convert to number
-    const sectionIndex = parseInt(targetSection);
-
-    // Wait for the page to fully load, then scroll to the target section
-    setTimeout(() => {
-      scrollToSectionByIndex(sectionIndex);
-      // Also update the scroll indicators
-      updateTikTokScrollIndicators(sectionIndex);
-    }, 100); // Small delay to ensure everything is loaded
-  }
+  console.log("✅ Setup footer navigation");
 }
 
 // Setup fade-in animations for elements
@@ -741,171 +457,55 @@ function setupModalEventListeners() {
   const modalOverlay = modal;
 
   // Close button
-  closeBtn.addEventListener("click", closeFeatureModal);
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeFeatureModal);
+  }
 
   // Click outside to close
-  modalOverlay.addEventListener("click", function (e) {
-    if (e.target === modalOverlay) {
-      closeFeatureModal();
-    }
-  });
+  if (modalOverlay) {
+    modalOverlay.addEventListener("click", function (e) {
+      if (e.target === modalOverlay) {
+        closeFeatureModal();
+      }
+    });
+  }
 
   // Escape key to close
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && modal.classList.contains("active")) {
+    if (e.key === "Escape" && modal && modal.classList.contains("active")) {
       closeFeatureModal();
     }
   });
 
   // Modal action buttons (placeholder functionality)
-  document
-    .getElementById("modal-learn-more")
-    .addEventListener("click", function () {
+  const learnMoreBtn = document.getElementById("modal-learn-more");
+  const tryFeatureBtn = document.getElementById("modal-try-feature");
+
+  if (learnMoreBtn) {
+    learnMoreBtn.addEventListener("click", function () {
       alert("Learn More functionality will be implemented here!");
     });
-
-  document
-    .getElementById("modal-try-feature")
-    .addEventListener("click", function () {
-      alert("Try Feature functionality will be implemented here!");
-    });
-}
-
-// Simple grid scroll protection - prevents TikTok scrolling when mouse is over scrollable grids
-function setupGridScrollProtection() {
-  const updatesGrid = document.querySelector(".updates-grid");
-  const featuredGrid = document.querySelector(".featured-grid");
-
-  function setupGridProtection(grid) {
-    if (!grid) return;
-
-    let isActuallyScrollingInGrid = false;
-    let gridScrollTimeout = null;
-    let boundaryScrollTimeout = null;
-    let lastWheelDirection = 0;
-    let boundaryHitTime = 0;
-
-    // Check if the grid actually has scrollable content
-    function hasScrollableContent() {
-      return grid.scrollHeight > grid.clientHeight;
-    }
-
-    // Check if we're at the top or bottom of the grid
-    function isAtScrollBoundary() {
-      const atTop = grid.scrollTop <= 1;
-      const atBottom =
-        grid.scrollTop >= grid.scrollHeight - grid.clientHeight - 1;
-      return { atTop, atBottom, isAtBoundary: atTop || atBottom };
-    }
-
-    // Enhanced wheel event handler for better scroll delegation
-    grid.addEventListener(
-      "wheel",
-      function (e) {
-        // On desktop, be less aggressive about capturing scroll events
-        const isDesktop = window.innerWidth > 768;
-
-        // If no scrollable content, always allow main page scroll
-        if (!hasScrollableContent()) {
-          return; // Let the event bubble up for main page navigation
-        }
-
-        // For desktop, implement smart boundary detection with delay
-        if (isDesktop) {
-          const boundary = isAtScrollBoundary();
-          const currentWheelDirection = e.deltaY > 0 ? 1 : -1; // 1 = down, -1 = up
-
-          // If we're not at a boundary, always allow internal scrolling
-          if (!boundary.isAtBoundary) {
-            e.stopPropagation();
-            return;
-          }
-
-          // We're at a boundary - check if user is trying to scroll out of the panel
-          const tryingToScrollUp = currentWheelDirection < 0 && boundary.atTop;
-          const tryingToScrollDown =
-            currentWheelDirection > 0 && boundary.atBottom;
-
-          if (tryingToScrollUp || tryingToScrollDown) {
-            // Check if this is a continuation of the same scroll direction
-            if (currentWheelDirection === lastWheelDirection) {
-              const timeSinceBoundaryHit = Date.now() - boundaryHitTime;
-
-              // If user has been scrolling in same direction for more than 300ms at boundary
-              // then allow page navigation
-              if (timeSinceBoundaryHit > 300) {
-                return; // Let it bubble up for page navigation
-              } else {
-                // Still within delay period - prevent page navigation
-                e.stopPropagation();
-                return;
-              }
-            } else {
-              // New scroll direction at boundary - reset timer
-              boundaryHitTime = Date.now();
-              lastWheelDirection = currentWheelDirection;
-              e.stopPropagation();
-              return;
-            }
-          } else {
-            // Scrolling in direction that would stay within panel
-            e.stopPropagation();
-            return;
-          }
-        }
-
-        // Mobile behavior - more traditional boundary checking
-        const boundary = isAtScrollBoundary();
-        if (boundary.isAtBoundary) {
-          const scrollingUp = e.deltaY < 0;
-          const scrollingDown = e.deltaY > 0;
-
-          // Allow main page scroll if:
-          // - Scrolling up while at top of grid
-          // - Scrolling down while at bottom of grid
-          if (
-            (scrollingUp && boundary.atTop) ||
-            (scrollingDown && boundary.atBottom)
-          ) {
-            return; // Let the event bubble up for main page navigation
-          }
-        }
-
-        // Only prevent default and stop propagation for internal grid scrolling
-        e.stopPropagation();
-      },
-      { passive: true }
-    );
-
-    // Track actual scroll events within the grid
-    grid.addEventListener("scroll", function () {
-      isActuallyScrollingInGrid = true;
-
-      if (gridScrollTimeout) {
-        clearTimeout(gridScrollTimeout);
-      }
-
-      gridScrollTimeout = setTimeout(() => {
-        isActuallyScrollingInGrid = false;
-      }, 150);
-    });
-
-    console.log(`Grid protection setup for: ${grid.className}`);
   }
 
-  // Setup protection for both grids
-  setupGridProtection(updatesGrid);
-  setupGridProtection(featuredGrid);
-
-  console.log("Enhanced grid scroll protection enabled");
+  if (tryFeatureBtn) {
+    tryFeatureBtn.addEventListener("click", function () {
+      alert("Try Feature functionality will be implemented here!");
+    });
+  }
 }
 
 // Mobile hamburger menu functionality
 function setupMobileMenu() {
   const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
   const mobileNav = document.querySelector(".mobile-nav");
-  const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
   let isMenuOpen = false;
+
+  // Close mobile menu
+  function closeMobileMenu() {
+    if (isMenuOpen) {
+      toggleMobileMenu();
+    }
+  }
 
   // Toggle mobile menu
   function toggleMobileMenu() {
@@ -923,24 +523,18 @@ function setupMobileMenu() {
     mobileNav.setAttribute("aria-hidden", !isMenuOpen);
   }
 
-  // Close mobile menu
-  function closeMobileMenu() {
-    if (isMenuOpen) {
-      toggleMobileMenu();
-    }
-  }
-
   // Event listeners
-  mobileMenuToggle.addEventListener("click", toggleMobileMenu);
-
-  // Note: Navigation handling is now managed by setupNavbarNavigation()
-  // No need for separate mobile nav link handlers here
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener("click", toggleMobileMenu);
+  }
 
   // Close menu when clicking outside
   document.addEventListener("click", (e) => {
     if (
       isMenuOpen &&
+      mobileNav &&
       !mobileNav.contains(e.target) &&
+      mobileMenuToggle &&
       !mobileMenuToggle.contains(e.target)
     ) {
       closeMobileMenu();
@@ -961,10 +555,13 @@ function setupMobileMenu() {
     }
   });
 
+  // Make closeMobileMenu available globally
+  window.closeMobileMenu = closeMobileMenu;
+
   console.log("Mobile hamburger menu initialized! 📱");
 }
 
-// Mobile footer accordion functionality - Collapsible sections for small screens
+// Mobile footer accordion functionality
 function setupMobileFooterAccordion() {
   // Create overlay element for dimmed background effect
   function createFooterOverlay() {
@@ -1128,8 +725,6 @@ function setupMobileFooterAccordion() {
         overlay.classList.add("active");
       }
       document.body.classList.add("footer-accordion-open");
-
-      // No transform animations needed - absolute positioning handles the upward expansion
     }
   }
 
@@ -1192,260 +787,16 @@ function setupMobileFooterAccordion() {
     }, 250);
   });
 
-  // Initialize on orientation change (mobile)
-  window.addEventListener("orientationchange", () => {
-    setTimeout(() => {
-      initializeFooterAccordion();
-    }, 500);
-  });
-
   // Close accordion when pressing Escape key
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closeAllFooterSections();
     }
   });
+
+  // Make removeFooterAccordion available globally
+  window.removeFooterAccordion = removeFooterAccordion;
 }
-
-// Prevent zooming on both desktop and mobile devices
-function preventZooming() {
-  // Prevent keyboard zoom shortcuts (Ctrl/Cmd + Plus/Minus/0)
-  document.addEventListener("keydown", function (e) {
-    // Check for zoom keyboard shortcuts
-    if (
-      (e.ctrlKey || e.metaKey) &&
-      (e.key === "+" || e.key === "-" || e.key === "0" || e.key === "=")
-    ) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
-  });
-
-  // Prevent mouse wheel zoom (Ctrl/Cmd + wheel)
-  document.addEventListener(
-    "wheel",
-    function (e) {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }
-    },
-    { passive: false }
-  );
-
-  // Prevent touch zoom gestures on mobile
-  document.addEventListener(
-    "touchstart",
-    function (e) {
-      if (e.touches.length > 1) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }
-    },
-    { passive: false }
-  );
-
-  // Prevent double-tap zoom on mobile
-  let lastTouchEnd = 0;
-  document.addEventListener(
-    "touchend",
-    function (e) {
-      const now = new Date().getTime();
-      if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }
-      lastTouchEnd = now;
-    },
-    { passive: false }
-  );
-
-  // Prevent gesturestart, gesturechange, gestureend events (iOS Safari)
-  document.addEventListener("gesturestart", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  });
-
-  document.addEventListener("gesturechange", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  });
-
-  document.addEventListener("gestureend", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    return false;
-  });
-
-  console.log("Zoom prevention enabled for desktop and mobile! 🔒");
-}
-
-// Mobile landscape orientation prevention - JavaScript solution for real devices
-function setupMobileLandscapeProtection() {
-  // Only apply to mobile devices (not tablets or desktops)
-  function isMobileDevice() {
-    return (
-      window.innerWidth <= 768 &&
-      /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      )
-    );
-  }
-
-  function checkOrientation() {
-    if (!isMobileDevice()) return;
-
-    const isLandscape =
-      window.innerWidth > window.innerHeight ||
-      (screen.orientation && Math.abs(screen.orientation.angle) === 90) ||
-      window.orientation === 90 ||
-      window.orientation === -90;
-
-    if (isLandscape) {
-      // Add class to trigger CSS-based hiding
-      document.body.classList.add("mobile-landscape-blocked");
-
-      // Create overlay if it doesn't exist
-      if (!document.querySelector(".orientation-overlay")) {
-        createOrientationOverlay();
-      }
-    } else {
-      // Remove class to show content
-      document.body.classList.remove("mobile-landscape-blocked");
-
-      // Remove overlay if it exists
-      const overlay = document.querySelector(".orientation-overlay");
-      if (overlay) {
-        overlay.remove();
-      }
-    }
-  }
-
-  function createOrientationOverlay() {
-    const overlay = document.createElement("div");
-    overlay.className = "orientation-overlay";
-    overlay.innerHTML = `
-      <div class="orientation-message">
-        <div class="orientation-icon">📱</div>
-        <h2>Please rotate your device</h2>
-        <p>to portrait mode</p>
-        <p class="orientation-subtitle">for the best experience</p>
-      </div>
-    `;
-
-    // Apply styles directly
-    overlay.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100vw;
-      height: 100vh;
-      background: linear-gradient(135deg, #2d1b0e 0%, #1f0f08 100%);
-      z-index: 999999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    `;
-
-    const message = overlay.querySelector(".orientation-message");
-    message.style.cssText = `
-      text-align: center;
-      color: #f5e6d3;
-      padding: 40px 20px;
-      background: rgba(245, 230, 211, 0.1);
-      border: 2px solid rgba(245, 230, 211, 0.3);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      max-width: 80vw;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-    `;
-
-    const icon = overlay.querySelector(".orientation-icon");
-    icon.style.cssText = `
-      font-size: 48px;
-      margin-bottom: 20px;
-      display: block;
-    `;
-
-    const title = overlay.querySelector("h2");
-    title.style.cssText = `
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0 0 10px 0;
-      line-height: 1.3;
-    `;
-
-    const paragraphs = overlay.querySelectorAll("p");
-    paragraphs.forEach((p) => {
-      p.style.cssText = `
-        font-size: 16px;
-        margin: 0 0 8px 0;
-        line-height: 1.4;
-      `;
-    });
-
-    const subtitle = overlay.querySelector(".orientation-subtitle");
-    subtitle.style.cssText = `
-      font-size: 14px;
-      opacity: 0.8;
-      margin-top: 10px !important;
-    `;
-
-    document.body.appendChild(overlay);
-  }
-
-  // Check orientation on load and orientation changes
-  checkOrientation();
-
-  // Listen for orientation changes
-  window.addEventListener("orientationchange", () => {
-    // Small delay to ensure the orientation change is complete
-    setTimeout(checkOrientation, 100);
-  });
-
-  // Also listen for resize as a fallback
-  window.addEventListener("resize", checkOrientation);
-
-  // Listen for screen orientation API if available
-  if (screen.orientation) {
-    screen.orientation.addEventListener("change", checkOrientation);
-  }
-
-  console.log("📱 Mobile landscape protection enabled for real devices");
-}
-
-// Initialize mobile landscape protection
-setupMobileLandscapeProtection();
-
-// Export functions for potential external use
-window.logityScrolling = {
-  scrollToSection: scrollToSectionByIndex,
-  getCurrentSection: () => {
-    const sections = document.querySelectorAll("section");
-    let currentIndex = 0;
-
-    sections.forEach((section, index) => {
-      const rect = section.getBoundingClientRect();
-      if (
-        rect.top <= window.innerHeight / 2 &&
-        rect.bottom >= window.innerHeight / 2
-      ) {
-        currentIndex = index;
-      }
-    });
-
-    return currentIndex;
-  },
-};
 
 // Setup contact sales modal
 function setupContactSalesModal() {
