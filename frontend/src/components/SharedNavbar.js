@@ -37,7 +37,6 @@ export class SharedNavbar {
             <!-- Desktop Navigation -->
             <div class="nav-links desktop-nav">
               <a href="${this.getLinkHref("features")}" class="nav-link" data-section="1" data-page="index">Features</a>
-              <a href="${this.getLinkHref("mission")}" class="nav-link" data-section="2" data-page="index">Mission</a>
               <a href="${this.getLinkHref("pricing")}" class="nav-link" data-section="3" data-page="index">Pricing</a>
               <a href="overview.html" class="nav-link ${this.currentPage === "overview" ? "active" : ""}">Overview</a>
               <a href="docs.html" class="nav-link ${this.currentPage === "docs" ? "active" : ""}">Docs</a>
@@ -56,7 +55,6 @@ export class SharedNavbar {
           <div class="mobile-nav">
             <div class="mobile-nav-content">
               <a href="${this.getLinkHref("features")}" class="mobile-nav-link" data-section="1" data-page="index">Features</a>
-              <a href="${this.getLinkHref("mission")}" class="mobile-nav-link" data-section="2" data-page="index">Mission</a>
               <a href="${this.getLinkHref("pricing")}" class="mobile-nav-link" data-section="3" data-page="index">Pricing</a>
               <a href="overview.html" class="mobile-nav-link ${this.currentPage === "overview" ? "active" : ""}">Overview</a>
               <a href="docs.html" class="mobile-nav-link ${this.currentPage === "docs" ? "active" : ""}">Docs</a>
@@ -76,7 +74,6 @@ export class SharedNavbar {
       // On homepage, link to sections
       const sectionMap = {
         features: "#featured-updates",
-        mission: "#mission",
         pricing: "#pricing",
       };
       return sectionMap[section] || "#";
@@ -84,7 +81,6 @@ export class SharedNavbar {
       // On other pages, link back to homepage sections
       const sectionMap = {
         features: "index.html#featured-updates",
-        mission: "index.html#mission",
         pricing: "index.html#pricing",
       };
       return sectionMap[section] || "index.html";

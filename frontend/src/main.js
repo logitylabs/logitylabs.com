@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeSharedComponents().then(() => {
     // Setup homepage-specific waitlist buttons after shared components are loaded
     setupHomepageWaitlistButtons();
+
+    // Handle hash navigation after components are loaded
+    handleHashNavigation();
   });
 
   // Setup smooth scrolling for navigation links
@@ -75,6 +78,52 @@ function setupHomepageWaitlistButtons() {
 
   console.log("✅ Setup homepage-specific waitlist buttons");
 }
+
+/**
+ * Handle hash navigation when arriving from other pages
+ * This ensures that when users click Features/Pricing from other pages,
+ * the main page scrolls to the correct section
+ */
+function handleHashNavigation() {
+  // Check if there's a hash in the current URL
+  const hash = window.location.hash;
+
+  if (hash) {
+    // Wait a bit for the page to fully render, then scroll to the target
+    setTimeout(() => {
+      const targetElement = document.querySelector(hash);
+
+      if (targetElement) {
+        console.log(`Scrolling to section: ${hash}`);
+        targetElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      } else {
+        console.warn(`Target element not found for hash: ${hash}`);
+      }
+    }, 500); // Small delay to ensure page is fully loaded
+  }
+
+  console.log("✅ Hash navigation handling initialized");
+}
+
+// Listen for hash changes (browser back/forward buttons)
+window.addEventListener("hashchange", function () {
+  const hash = window.location.hash;
+
+  if (hash) {
+    const targetElement = document.querySelector(hash);
+
+    if (targetElement) {
+      console.log(`Hash changed, scrolling to: ${hash}`);
+      targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }
+});
 
 // Setup smooth scrolling for navigation links
 function setupSmoothScrolling() {
