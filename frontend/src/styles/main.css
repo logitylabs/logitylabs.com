@@ -409,7 +409,7 @@ section {
 
 .section-title {
   margin-bottom: 32px;
-  text-align: center;
+  text-align: left;
 }
 
 .updates-grid {
@@ -558,25 +558,26 @@ section {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-  max-width: 750px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 .stat-card {
   background: var(--card-bg);
   border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 24px 16px;
+  border-radius: 16px;
+  padding: 32px 24px;
   text-align: center;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px var(--shadow-soft);
+  box-shadow: 0 4px 16px var(--shadow-soft);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  height: 140px;
+  justify-content: center;
+  gap: 12px;
+  height: 200px;
 }
 
 .stat-card:hover {
@@ -585,17 +586,22 @@ section {
 }
 
 .stat-number {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .stat-label {
   font-size: 16px;
   color: var(--text-secondary);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.3;
+  margin-top: 4px;
 }
 
 .stat-detail {
@@ -733,8 +739,14 @@ section {
 /* CTA Section with Footer */
 .cta-section {
   background: linear-gradient(
-    135deg,
+    180deg,
     var(--bg-primary) 0%,
+    #e8d7c7 10%,
+    #d4c0a8 20%,
+    #c4a890 30%,
+    #b59680 45%,
+    #a08670 60%,
+    #8b7660 75%,
     var(--text-primary) 100%
   );
   text-align: center;
@@ -747,7 +759,9 @@ section {
 }
 
 .cta-mascot {
-  margin-bottom: 20px;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: center;
 }
 
 .mascot-waving {
@@ -919,6 +933,13 @@ section {
   object-fit: contain;
 }
 
+.contact-sales-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  animation: gentle-bounce 2s ease-in-out infinite;
+}
+
 /* Pricing Section - Simple layout without TikTok features */
 .pricing-section {
   background: var(--bg-primary);
@@ -926,7 +947,7 @@ section {
 }
 
 .pricing-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 48px;
 }
 
@@ -938,9 +959,9 @@ section {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 32px;
-  max-width: 1000px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -948,14 +969,14 @@ section {
   background: var(--card-bg);
   border: 2px solid var(--border-light);
   border-radius: 16px;
-  padding: 40px 32px;
+  padding: 32px 24px;
   text-align: center;
   transition: all 0.3s ease;
   box-shadow: 0 4px 16px var(--shadow-soft);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 500px;
+  min-height: 480px;
 }
 
 .pricing-card:hover {
@@ -1141,6 +1162,7 @@ section {
 
   .pricing-header {
     margin-bottom: 32px;
+    text-align: left;
   }
 
   .pricing-features li {
@@ -1177,6 +1199,29 @@ section {
     width: 12px;
     height: 12px;
   }
+}
+
+/* Contact Sales Button Styling (now in CTA section) */
+.btn-contact-sales-pricing {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1;
+  box-shadow: 0 2px 8px var(--shadow-soft);
+}
+
+.btn-contact-sales-pricing:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--shadow-medium);
 }
 
 /* Feature Details Modal */
@@ -1480,12 +1525,12 @@ section {
   }
 
   .stat-card {
-    height: 120px;
-    padding: 18px 12px;
+    height: 180px;
+    padding: 24px 18px;
   }
 
   .stat-number {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .footer-main {
@@ -1562,17 +1607,22 @@ section {
     height: 70px;
   }
 
+  .contact-sales-logo {
+    width: 70px;
+    height: 70px;
+  }
+
   .stats-grid {
     gap: 12px;
   }
 
   .stat-card {
-    height: 100px;
-    padding: 16px 10px;
+    height: 160px;
+    padding: 20px 16px;
   }
 
   .stat-number {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .stat-label {

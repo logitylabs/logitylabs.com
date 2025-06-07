@@ -373,6 +373,20 @@ function setupUpdateCardInteractions() {
         "Continuous learning from anonymized industry log data",
       ],
     },
+    "Beauty as an Asset": {
+      icon: "💄",
+      category: "User Experience",
+      description:
+        "Enterprise software is usually designed with KPIs in mind. Logity is designed with the user in mind, prioritizing intuitive design and delightful user experiences.",
+      features: [
+        "Clean, intuitive interface that reduces cognitive load",
+        "Thoughtful color palette and typography for extended use",
+        "Responsive design that works beautifully on all devices",
+        "Accessibility-first approach for inclusive user experience",
+        "Smooth animations and micro-interactions that feel natural",
+        "User-centered design process with continuous feedback integration",
+      ],
+    },
   };
 
   updateCards.forEach((card) => {
