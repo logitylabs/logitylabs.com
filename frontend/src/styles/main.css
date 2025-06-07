@@ -1,5 +1,4 @@
-/* Import waitlist modal styles */
-@import "./waitlist.css";
+/* Standardized Modal System for Logity - All modal styles are included below */
 
 /* Reset and Base Styles */
 * {
@@ -1235,15 +1234,19 @@ section {
   box-shadow: 0 4px 16px var(--shadow-medium);
 }
 
-/* Feature Details Modal */
+/* ========================================
+   STANDARDIZED MODAL SYSTEM
+   ======================================== */
+
+/* Modal Overlay - Base for all modals */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(45, 27, 14, 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(45, 27, 14, 0.85);
+  backdrop-filter: blur(12px);
   z-index: 2000;
   display: flex;
   align-items: center;
@@ -1251,7 +1254,14 @@ section {
   padding: 20px;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
+}
+
+/* Waitlist Modal - Higher z-index */
+#waitlist-modal.modal-overlay {
+  z-index: 2100;
+  background: rgba(45, 27, 14, 0.9);
 }
 
 .modal-overlay.active {
@@ -1262,14 +1272,26 @@ section {
 .modal-container {
   background: var(--card-bg);
   border: 2px solid var(--border-medium);
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(45, 27, 14, 0.3);
+  border-radius: 20px;
+  box-shadow:
+    0 25px 50px -12px rgba(45, 27, 14, 0.25),
+    0 0 0 1px rgba(45, 27, 14, 0.05);
   max-width: 600px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   transform: scale(0.9) translateY(20px);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(16px);
+}
+
+/* Waitlist Modal Container */
+#waitlist-modal .modal-container {
+  max-width: 500px;
+  border: 2px solid var(--accent-primary);
+  box-shadow:
+    0 25px 50px -12px rgba(139, 69, 19, 0.3),
+    0 0 0 1px var(--accent-primary);
 }
 
 .modal-overlay.active .modal-container {
@@ -1591,6 +1613,252 @@ section {
   }
 }
 
+/* ========================================
+   CONTACT SALES MODAL STYLES
+   ======================================== */
+
+.contact-info-section {
+  margin: 24px 0;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+}
+
+.contact-info-section h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+}
+
+.contact-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-method {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.contact-method:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 12px var(--shadow-soft);
+}
+
+.contact-method-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-hover)
+  );
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.contact-method-details {
+  flex: 1;
+}
+
+.contact-method-details h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.contact-method-details p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 8px 0;
+}
+
+.contact-link {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.contact-link:hover {
+  color: var(--accent-hover);
+  transform: translateX(4px);
+}
+
+.contact-placeholder {
+  margin: 24px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--bg-accent), var(--bg-secondary));
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+}
+
+.contact-placeholder h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+}
+
+.contact-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-benefits li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  padding-left: 24px;
+  position: relative;
+}
+
+.contact-benefits li::before {
+  content: "✅";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 14px;
+}
+
+/* ========================================
+   WAITLIST MODAL STYLES (Moved from waitlist.css)
+   ======================================== */
+
+/* Waitlist Form */
+.waitlist-form {
+  padding: 1rem 0;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-light);
+  border-radius: 12px;
+  font-size: 1rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.success-message {
+  color: #10b981;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+}
+
+.waitlist-submit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.waitlist-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.waitlist-description {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Modal body scroll prevention - Standardized across all modals */
+body.modal-open {
+  overflow: hidden !important;
+}
+
+/* Prevent layout shift when scrollbar disappears - only on desktop */
+@media (min-width: 769px) {
+  body.modal-open {
+    padding-right: 15px;
+  }
+}
+
+/* Handle case where body already has custom overflow */
+body.modal-open[style*="overflow"] {
+  overflow: hidden !important;
+}
+
+/* Reset any conflicting body styles when modal is closed */
+body:not(.modal-open) {
+  overflow: auto !important;
+  padding-right: 0 !important;
+}
+
 @media (max-width: 480px) {
   h1 {
     font-size: 2rem;
@@ -1659,6 +1927,28 @@ section {
 
   .modal-feature-icon {
     font-size: 24px;
+  }
+
+  /* Contact Sales Modal responsive adjustments */
+  .contact-method {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .contact-method-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    align-self: center;
+  }
+
+  .contact-info-section {
+    padding: 16px;
+  }
+
+  .contact-placeholder {
+    padding: 16px;
   }
 }
 

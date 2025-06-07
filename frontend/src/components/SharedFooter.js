@@ -181,6 +181,9 @@ export class SharedFooter {
       });
     }
 
+    // Setup Contact Sales modal close handlers
+    this.setupContactSalesModal();
+
     // Setup Contact Sales button
     const contactSalesButton = document.getElementById(
       "contact-sales-pricing-btn"
@@ -197,7 +200,12 @@ export class SharedFooter {
           setTimeout(() => {
             contactSalesModal.classList.add("active");
           }, 10);
-          document.body.style.overflow = "hidden";
+          // Use centralized scroll management
+          if (window.preventBodyScroll) {
+            window.preventBodyScroll();
+          } else {
+            document.body.classList.add("modal-open");
+          }
         } else {
           console.log("Contact Sales modal not found");
           // Fallback behavior
@@ -243,6 +251,77 @@ export class SharedFooter {
     });
 
     console.log("✅ Shared footer functionality initialized");
+  }
+
+  /**
+   * Setup Contact Sales modal functionality
+   */
+  setupContactSalesModal() {
+    const contactSalesModal = document.getElementById("contact-sales-modal");
+    if (!contactSalesModal) return;
+
+    // Close button handler
+    const closeBtn = document.getElementById("close-contact-modal");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        this.closeContactSalesModal();
+      });
+    }
+
+    // Alternative close button handler
+    const contactCloseBtn = document.getElementById("contact-close-btn");
+    if (contactCloseBtn) {
+      contactCloseBtn.addEventListener("click", () => {
+        this.closeContactSalesModal();
+      });
+    }
+
+    // Email button handler
+    const emailBtn = document.getElementById("contact-email-btn");
+    if (emailBtn) {
+      emailBtn.addEventListener("click", () => {
+        window.location.href = "mailto:silvio.dacol@outlook.com";
+        this.closeContactSalesModal();
+      });
+    }
+
+    // Click outside to close
+    contactSalesModal.addEventListener("click", (e) => {
+      if (e.target === contactSalesModal) {
+        this.closeContactSalesModal();
+      }
+    });
+
+    // Escape key to close
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.key === "Escape" &&
+        contactSalesModal.classList.contains("active")
+      ) {
+        this.closeContactSalesModal();
+      }
+    });
+
+    console.log("✅ Contact Sales modal handlers setup");
+  }
+
+  /**
+   * Close Contact Sales modal
+   */
+  closeContactSalesModal() {
+    const contactSalesModal = document.getElementById("contact-sales-modal");
+    if (contactSalesModal) {
+      contactSalesModal.classList.remove("active");
+      setTimeout(() => {
+        contactSalesModal.style.display = "none";
+        // Restore body scrolling - use centralized method
+        if (window.restoreBodyScroll) {
+          window.restoreBodyScroll();
+        } else {
+          document.body.classList.remove("modal-open");
+        }
+      }, 300);
+    }
   }
 
   /**

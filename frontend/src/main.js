@@ -60,23 +60,41 @@ function setupHomepageWaitlistButtons() {
   // Handle homepage-specific waitlist buttons (hero section, etc.)
   const heroButtons = document.querySelectorAll(".hero .btn-primary");
 
-  heroButtons.forEach((button) => {
+  console.log(`Found ${heroButtons.length} hero buttons to setup`);
+
+  heroButtons.forEach((button, index) => {
+    console.log(`Setting up hero button ${index + 1}:`, button);
+
     button.addEventListener("click", function (e) {
       e.preventDefault();
 
-      console.log("Opening waitlist modal from hero section");
+      console.log(
+        "🔥 Hero button clicked - Opening waitlist modal from hero section"
+      );
 
       // Access the global waitlist modal set by shared components
       if (window.waitlistModal) {
-        window.waitlistModal.show("hero-button");
+        console.log("✅ Waitlist modal found, showing...");
+        try {
+          window.waitlistModal.show("hero-button");
+          console.log("✅ Waitlist modal show() called successfully");
+        } catch (error) {
+          console.error("❌ Error calling waitlist modal show():", error);
+          alert("Something went wrong opening the waitlist. Please try again.");
+        }
       } else {
-        console.error("Waitlist modal not initialized");
+        console.error(
+          "❌ Waitlist modal not initialized - window.waitlistModal is:",
+          window.waitlistModal
+        );
         alert("Please check back soon! We're setting up the waitlist.");
       }
     });
   });
 
-  console.log("✅ Setup homepage-specific waitlist buttons");
+  console.log(
+    `✅ Setup ${heroButtons.length} homepage-specific waitlist buttons`
+  );
 }
 
 /**
@@ -432,8 +450,12 @@ function openFeatureModal(title, featureInfo) {
     modal.classList.add("active");
   }, 10);
 
-  // Prevent body scroll when modal is open
-  document.body.style.overflow = "hidden";
+  // Prevent body scroll when modal is open - use centralized method
+  if (window.preventBodyScroll) {
+    window.preventBodyScroll();
+  } else {
+    document.body.classList.add("modal-open");
+  }
 }
 
 function closeFeatureModal() {
@@ -442,7 +464,12 @@ function closeFeatureModal() {
   modal.classList.remove("active");
   setTimeout(() => {
     modal.style.display = "none";
-    document.body.style.overflow = "";
+    // Restore body scroll - use centralized method
+    if (window.restoreBodyScroll) {
+      window.restoreBodyScroll();
+    } else {
+      document.body.classList.remove("modal-open");
+    }
   }, 300);
 }
 

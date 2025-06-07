@@ -140,8 +140,11 @@ export class WaitlistModal {
     this.currentSource = source;
     const modal = document.getElementById(this.modalId);
 
-    // Use the existing modal system - add 'active' class instead of setting display
-    modal.classList.add("active");
+    // First set display to flex, then add active class (like other modals)
+    modal.style.display = "flex";
+    setTimeout(() => {
+      modal.classList.add("active");
+    }, 10);
     this.isVisible = true;
 
     // Focus on email input
@@ -149,8 +152,12 @@ export class WaitlistModal {
       document.getElementById("waitlist-email").focus();
     }, 100);
 
-    // Add body class to prevent scrolling
-    document.body.classList.add("modal-open");
+    // Prevent body scrolling - use centralized method
+    if (window.preventBodyScroll) {
+      window.preventBodyScroll();
+    } else {
+      document.body.classList.add("modal-open");
+    }
   }
 
   /**
@@ -159,15 +166,22 @@ export class WaitlistModal {
   hide() {
     const modal = document.getElementById(this.modalId);
 
-    // Use the existing modal system - remove 'active' class instead of setting display
+    // Remove active class, then hide display (like other modals)
     modal.classList.remove("active");
+    setTimeout(() => {
+      modal.style.display = "none";
+    }, 300);
     this.isVisible = false;
 
     // Reset form
     this.resetForm();
 
-    // Remove body class
-    document.body.classList.remove("modal-open");
+    // Restore body scrolling - use centralized method
+    if (window.restoreBodyScroll) {
+      window.restoreBodyScroll();
+    } else {
+      document.body.classList.remove("modal-open");
+    }
   }
 
   /**

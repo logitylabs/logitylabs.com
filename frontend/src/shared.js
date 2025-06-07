@@ -67,14 +67,19 @@ async function initializeWaitlistFunctionality() {
 
   try {
     // Always initialize waitlist modal, even if Supabase connection fails
+    console.log("🔧 Creating WaitlistModal instance...");
     waitlistModal = new WaitlistModal();
 
     // Make waitlist modal available globally for footer and other components
     window.waitlistModal = waitlistModal;
 
-    console.log("✅ Waitlist modal initialized");
+    console.log(
+      "✅ Waitlist modal initialized and set to window.waitlistModal:",
+      window.waitlistModal
+    );
   } catch (error) {
     console.error("❌ Error initializing waitlist modal:", error);
+    console.error("Error details:", error.stack);
   }
 }
 
@@ -162,10 +167,44 @@ function closeFeatureModal() {
     modal.classList.remove("active");
     setTimeout(() => {
       modal.style.display = "none";
-      document.body.style.overflow = "";
+      // Use standardized scroll restoration
+      restoreBodyScroll();
     }, 300);
   }
 }
+
+/**
+ * Centralized modal scroll management
+ */
+function preventBodyScroll() {
+  // Remove any existing inline overflow styles that might conflict
+  document.body.style.overflow = "";
+  // Use CSS class for consistent behavior
+  document.body.classList.add("modal-open");
+  console.log("🔒 Body scroll disabled");
+}
+
+function restoreBodyScroll() {
+  // Remove CSS class
+  document.body.classList.remove("modal-open");
+  // Ensure any inline styles are also cleared
+  document.body.style.overflow = "";
+  document.body.style.paddingRight = "";
+
+  // Additional safety check - force scroll restoration
+  setTimeout(() => {
+    if (!document.body.classList.contains("modal-open")) {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+  }, 100);
+
+  console.log("🔓 Body scroll restored");
+}
+
+// Export scroll management functions for use in other components
+window.preventBodyScroll = preventBodyScroll;
+window.restoreBodyScroll = restoreBodyScroll;
 
 /**
  * Get current page name (utility function)
