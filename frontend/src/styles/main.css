@@ -280,6 +280,14 @@ h4 {
 /* Layout - Standard web layout */
 main {
   padding-top: 64px; /* Account for fixed nav */
+  /* Initially hidden to prevent layout shift while navbar loads */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show main content after navbar is loaded */
+main.loaded {
+  opacity: 1;
 }
 
 section {

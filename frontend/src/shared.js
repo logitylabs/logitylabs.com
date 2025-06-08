@@ -27,6 +27,13 @@ export async function initializeSharedComponents() {
     sharedNavbar.render();
     console.log("✅ Shared navbar loaded");
 
+    // Show main content now that navbar is loaded
+    const mainElement = document.querySelector("main");
+    if (mainElement) {
+      mainElement.classList.add("loaded");
+      console.log("✅ Main content shown after navbar load");
+    }
+
     // Initialize footer
     sharedFooter = new SharedFooter();
     sharedFooter.render();
