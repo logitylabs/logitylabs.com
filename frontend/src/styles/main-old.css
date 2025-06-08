@@ -3573,22 +3573,6 @@ section {
   box-shadow: 0 8px 24px var(--shadow-medium);
 }
 
-.pricing-card.free-tier::before {
-  content: "Recommended";
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--accent-primary);
-  color: white;
-  padding: 6px 16px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
 /* Coming Soon Tiers - Grayed Out */
 .pricing-card.coming-soon {
   opacity: 0.7;
