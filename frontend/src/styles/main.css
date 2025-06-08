@@ -280,14 +280,6 @@ h4 {
 /* Layout - Standard web layout */
 main {
   padding-top: 64px; /* Account for fixed nav */
-  /* Initially hidden to prevent layout shift while navbar loads */
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-/* Show main content after navbar is loaded */
-main.loaded {
-  opacity: 1;
 }
 
 section {
@@ -1012,22 +1004,6 @@ section {
 .pricing-card.free-tier {
   border-color: var(--accent-primary);
   box-shadow: 0 8px 24px var(--shadow-medium);
-}
-
-.pricing-card.free-tier::before {
-  content: "Recommended";
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--accent-primary);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .pricing-card.coming-soon {
