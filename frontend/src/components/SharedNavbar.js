@@ -29,7 +29,7 @@ export class SharedNavbar {
           <div class="nav-content">
             <div class="logo">
               <a href="index.html" class="logo-link" aria-label="Go to home">
-                <img src="/logo.svg" alt="logity logo" class="logo-image" />
+                <img src="./public/logo.svg" alt="logity logo" class="logo-image" />
                 <span class="logo-text">logity</span>
               </a>
             </div>

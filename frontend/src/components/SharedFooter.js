@@ -30,7 +30,7 @@ export class SharedFooter {
             <!-- Mascot above the text -->
             <div class="cta-mascot">
               <img
-                src="/logo-contact-sales-no-background.png"
+                src="./public/logo-contact-sales-no-background.png"
                 alt="logity contact sales"
                 class="contact-sales-logo"
               />
@@ -107,7 +107,7 @@ export class SharedFooter {
             <div class="footer-bottom">
               <div class="footer-legal">
                 <div class="footer-logo">
-                  <img src="/logo.svg" alt="logity logo" class="footer-mascot-logo" />
+                  <img src="./public/logo.svg" alt="logity logo" class="footer-mascot-logo" />
                   <span class="footer-logo-text">logity</span>
                 </div>
                 <div class="footer-links-inline">
