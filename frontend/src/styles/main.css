@@ -1319,6 +1319,7 @@ section {
 .modal-title-section {
   flex: 1;
   min-width: 0;
+  padding-right: 50px; /* Add padding to avoid overlap with close button */
 }
 
 .modal-title {
