@@ -115,7 +115,7 @@ async function initializeWaitlistFunctionality() {
  * Setup waitlist button click handlers for shared buttons
  */
 function setupSharedWaitlistButtons() {
-  // Select all "Try logity" buttons that are in shared components
+  // Select all "Join Waitlist" buttons that are in shared components
   const waitlistButtons = document.querySelectorAll(".btn-primary");
 
   waitlistButtons.forEach((button, index) => {

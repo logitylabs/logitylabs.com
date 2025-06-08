@@ -268,22 +268,7 @@ export class SharedFooter {
       });
     }
 
-    // Alternative close button handler
-    const contactCloseBtn = document.getElementById("contact-close-btn");
-    if (contactCloseBtn) {
-      contactCloseBtn.addEventListener("click", () => {
-        this.closeContactSalesModal();
-      });
-    }
-
-    // Email button handler
-    const emailBtn = document.getElementById("contact-email-btn");
-    if (emailBtn) {
-      emailBtn.addEventListener("click", () => {
-        window.location.href = "mailto:silvio.dacol@outlook.com";
-        this.closeContactSalesModal();
-      });
-    }
+    // Contact modal buttons removed - no longer needed
 
     // Click outside to close
     contactSalesModal.addEventListener("click", (e) => {
