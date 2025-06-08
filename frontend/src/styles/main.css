@@ -1450,7 +1450,7 @@ section {
   border-top: 1px solid var(--border-light);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 16px;
 }
@@ -1459,6 +1459,11 @@ section {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* Center the modal mascot when it has centered class */
+.modal-mascot.centered {
+  justify-content: center;
 }
 
 .modal-mascot-logo {
@@ -1473,6 +1478,8 @@ section {
   font-weight: 500;
 }
 
+/* Modal actions removed - no longer needed */
+/*
 .modal-actions {
   display: flex;
   gap: 12px;
@@ -1484,6 +1491,7 @@ section {
   padding: 10px 20px;
   font-size: 14px;
 }
+*/
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -1589,6 +1597,8 @@ section {
     align-items: stretch;
   }
 
+  /* Modal actions responsive styles removed - no longer needed */
+  /*
   .modal-actions {
     width: 100%;
   }
@@ -1597,6 +1607,7 @@ section {
   .modal-actions .btn-secondary {
     flex: 1;
   }
+  */
 
   .modal-title {
     font-size: 1.3rem;

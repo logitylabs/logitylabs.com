@@ -499,22 +499,6 @@ function setupModalEventListeners() {
       closeFeatureModal();
     }
   });
-
-  // Modal action buttons (placeholder functionality)
-  const learnMoreBtn = document.getElementById("modal-learn-more");
-  const tryFeatureBtn = document.getElementById("modal-try-feature");
-
-  if (learnMoreBtn) {
-    learnMoreBtn.addEventListener("click", function () {
-      alert("Learn More functionality will be implemented here!");
-    });
-  }
-
-  if (tryFeatureBtn) {
-    tryFeatureBtn.addEventListener("click", function () {
-      alert("Try Feature functionality will be implemented here!");
-    });
-  }
 }
 
 // Mobile menu functionality is now handled by SharedNavbar component
