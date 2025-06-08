@@ -2,6 +2,8 @@
  * Supabase Configuration
  * Location: frontend/web/src/config/supabase.js
  * Purpose: Initialize Supabase client for database operations (waitlist signups)
+ *
+ * Note: This is the development version that works with Vite
  */
 
 import { createClient } from "@supabase/supabase-js";

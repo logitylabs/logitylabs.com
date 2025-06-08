@@ -80,7 +80,7 @@ export class WaitlistModal {
 
           <div class="modal-footer">
             <div class="modal-mascot">
-              <img src="/logo.png" alt="logity logo" class="modal-mascot-logo" />
+              <img src="./public/logo.png" alt="logity logo" class="modal-mascot-logo" />
               <span class="modal-mascot-text">We'll keep you updated on our progress!</span>
             </div>
           </div>

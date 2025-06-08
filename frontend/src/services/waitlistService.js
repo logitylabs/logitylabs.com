@@ -4,7 +4,37 @@
  * Purpose: Handle waitlist email submissions to Supabase
  */
 
-import { supabase } from "../config/supabase.js";
+// Supabase client will be loaded dynamically
+let supabase = null;
+
+/**
+ * Load Supabase client dynamically based on environment
+ */
+async function loadSupabase() {
+  if (supabase) return supabase; // Already loaded
+
+  try {
+    // Try to load development config first
+    const { supabase: devSupabase } = await import("../config/supabase.js");
+    supabase = devSupabase;
+    console.log("✅ Loaded development Supabase client");
+    return supabase;
+  } catch (error) {
+    console.log("🔄 Development config failed, trying CDN version...");
+    try {
+      // Fallback to CDN version for production
+      const { supabase: cdnSupabase } = await import(
+        "../config/supabase-cdn.js"
+      );
+      supabase = cdnSupabase;
+      console.log("✅ Loaded CDN Supabase client");
+      return supabase;
+    } catch (cdnError) {
+      console.error("❌ Both Supabase configs failed:", error, cdnError);
+      return null;
+    }
+  }
+}
 
 /**
  * Add an email to the waitlist
@@ -38,8 +68,11 @@ export async function addToWaitlist(email, source = "unknown") {
       timestamp: new Date().toISOString(),
     });
 
+    // Load Supabase client dynamically
+    const supabaseClient = await loadSupabase();
+
     // Check if Supabase is configured
-    if (!supabase) {
+    if (!supabaseClient) {
       console.warn("Supabase not configured - would save:", { email, source });
       return {
         success: false,
@@ -48,7 +81,7 @@ export async function addToWaitlist(email, source = "unknown") {
     }
 
     // Insert email into waitlist table
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("waitlist")
       .insert([
         {
@@ -108,18 +141,21 @@ export async function addToWaitlist(email, source = "unknown") {
  */
 export async function getWaitlistStats() {
   try {
-    if (!supabase) {
+    // Load Supabase client dynamically
+    const supabaseClient = await loadSupabase();
+
+    if (!supabaseClient) {
       console.warn("Supabase not configured");
       return { total: 0, sources: {}, recent: 0 };
     }
 
     // Get total count
-    const { count: total } = await supabase
+    const { count: total } = await supabaseClient
       .from("waitlist")
       .select("*", { count: "exact", head: true });
 
     // Get source breakdown
-    const { data: sourceData } = await supabase
+    const { data: sourceData } = await supabaseClient
       .from("waitlist")
       .select("source")
       .neq("source", null);
@@ -133,7 +169,7 @@ export async function getWaitlistStats() {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const { count: recent } = await supabase
+    const { count: recent } = await supabaseClient
       .from("waitlist")
       .select("*", { count: "exact", head: true })
       .gte("created_at", sevenDaysAgo.toISOString());

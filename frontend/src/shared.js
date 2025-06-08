@@ -7,7 +7,8 @@
 import { SharedFooter } from "./components/SharedFooter.js";
 import { SharedNavbar } from "./components/SharedNavbar.js";
 import { WaitlistModal } from "./components/WaitlistModal.js";
-import { testConnection } from "./config/supabase.js";
+
+// Supabase testConnection will be loaded dynamically
 
 // Global shared components
 let sharedNavbar = null;
@@ -48,7 +49,34 @@ export async function initializeSharedComponents() {
  * Initialize waitlist functionality
  */
 async function initializeWaitlistFunctionality() {
+  let testConnection;
+
   try {
+    // Dynamic import of Supabase configuration based on environment
+    console.log("Loading Supabase configuration...");
+
+    try {
+      // Try to import the main supabase config (works in Vite development)
+      const { testConnection: devTestConnection } = await import(
+        "./config/supabase.js"
+      );
+      testConnection = devTestConnection;
+      console.log("✅ Using development Supabase configuration");
+    } catch (error) {
+      console.log("🔄 Development config failed, trying CDN version...");
+      try {
+        // Fallback to CDN version for production
+        const { testConnection: cdnTestConnection } = await import(
+          "./config/supabase-cdn.js"
+        );
+        testConnection = cdnTestConnection;
+        console.log("✅ Using CDN Supabase configuration");
+      } catch (cdnError) {
+        console.error("❌ Both Supabase configs failed:", error, cdnError);
+        throw new Error("Supabase configuration could not be loaded");
+      }
+    }
+
     // Test Supabase connection
     console.log("Testing Supabase connection...");
     const connectionTest = await testConnection();
