@@ -40,7 +40,7 @@ export class SharedNavbar {
               <a href="${this.getLinkHref("pricing")}" class="nav-link" data-section="3" data-page="index">Pricing</a>
               <a href="overview.html" class="nav-link ${this.currentPage === "overview" ? "active" : ""}">Overview</a>
               <a href="docs.html" class="nav-link ${this.currentPage === "docs" ? "active" : ""}">Docs</a>
-              <button class="btn-primary">Try Logity</button>
+              <button class="btn-primary">Join Waitlist</button>
             </div>
 
             <!-- Mobile Hamburger Button -->
@@ -58,7 +58,7 @@ export class SharedNavbar {
               <a href="${this.getLinkHref("pricing")}" class="mobile-nav-link" data-section="3" data-page="index">Pricing</a>
               <a href="overview.html" class="mobile-nav-link ${this.currentPage === "overview" ? "active" : ""}">Overview</a>
               <a href="docs.html" class="mobile-nav-link ${this.currentPage === "docs" ? "active" : ""}">Docs</a>
-              <button class="btn-primary mobile-cta">Try Logity</button>
+              <button class="btn-primary mobile-cta">Join Waitlist</button>
             </div>
           </div>
         </div>

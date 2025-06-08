@@ -40,7 +40,7 @@ export class SharedFooter {
             </h2>
             <!-- Both buttons below the text -->
             <div class="cta-actions">
-              <button class="btn-primary btn-large">Try Logity</button>
+              <button class="btn-primary btn-large">Join Waitlist</button>
               <button
                 class="btn-contact-sales-pricing"
                 id="contact-sales-pricing-btn"
