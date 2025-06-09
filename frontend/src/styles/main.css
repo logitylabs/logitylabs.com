@@ -799,7 +799,7 @@ section {
 
 .pricing-header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 60px;
 }
 
 .pricing-subtitle {
@@ -810,9 +810,9 @@ section {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  max-width: 900px;
+  grid-template-columns: repeat(3, 1fr); /* Force 3 columns on desktop */
+  gap: 40px; /* Desktop: larger gap between cards */
+  max-width: 1100px; /* Increased to accommodate 3 cards + gaps */
   margin: 0 auto;
 }
 
@@ -827,7 +827,7 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 480px;
+  min-height: 520px; /* Increased from 480px to make cards longer */
 }
 
 .pricing-card:hover {
@@ -979,6 +979,23 @@ section {
 }
 
 /* Responsive Design for Pricing */
+/* Large tablets and small desktops - allow wrapping if needed */
+@media (max-width: 1200px) and (min-width: 1025px) {
+  .pricing-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    max-width: 1000px;
+  }
+}
+
+/* Tablet responsive design - medium gap */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .pricing-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px; /* Tablet: medium gap between cards */
+    max-width: 900px;
+  }
+}
+
 @media (max-width: 768px) {
   .pricing-section {
     padding: 60px 0;
@@ -986,7 +1003,7 @@ section {
 
   .pricing-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 24px; /* Mobile: keep original gap (no changes as requested) */
     max-width: 400px;
   }
 
