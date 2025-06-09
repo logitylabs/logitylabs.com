@@ -4,15 +4,32 @@
 // Import shared components and functionality
 import { initializeSharedComponents } from "./shared.js";
 
+// Show loading screen initially
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize shared components first (navbar, footer, waitlist)
-  initializeSharedComponents().then(() => {
-    // Setup homepage-specific waitlist buttons after shared components are loaded
-    setupHomepageWaitlistButtons();
+  console.log("🔄 Page DOM loaded, starting initialization...");
 
-    // Handle hash navigation after components are loaded
-    handleHashNavigation();
-  });
+  // Initialize shared components first (navbar, footer, waitlist)
+  initializeSharedComponents()
+    .then(() => {
+      console.log("✅ Shared components loaded successfully");
+
+      // Setup homepage-specific waitlist buttons after shared components are loaded
+      setupHomepageWaitlistButtons();
+
+      // Handle hash navigation after components are loaded
+      handleHashNavigation();
+
+      // Setup mobile carousels
+      setupMobileCarousels();
+
+      // Hide loading screen after everything is ready
+      hideLoadingScreen();
+    })
+    .catch((error) => {
+      console.error("❌ Error loading shared components:", error);
+      // Still hide loading screen even if there's an error
+      hideLoadingScreen();
+    });
 
   // Setup smooth scrolling for navigation links
   setupSmoothScrolling();
@@ -34,11 +51,38 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Contact sales modal is now handled by SharedFooter component
 
-  // Setup mobile carousels
-  setupMobileCarousels();
-
   console.log("Logity landing page loaded successfully! 🚀");
 });
+
+/**
+ * Hide the loading screen with smooth animation
+ */
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById("loading-screen");
+
+  if (loadingScreen) {
+    console.log("🎭 Hiding loading screen...");
+
+    // Add minimum loading time for better UX (at least 1.5 seconds)
+    const minLoadingTime = 1500;
+    const loadStartTime = window.loadStartTime || Date.now();
+    const elapsedTime = Date.now() - loadStartTime;
+    const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+
+    setTimeout(() => {
+      loadingScreen.classList.add("fade-out");
+
+      // Remove from DOM after animation completes
+      setTimeout(() => {
+        loadingScreen.remove();
+        console.log("✅ Loading screen hidden and removed");
+      }, 800); // Match the CSS transition duration
+    }, remainingTime);
+  }
+}
+
+// Track when the page starts loading
+window.loadStartTime = Date.now();
 
 // Enhanced navbar background on scroll
 window.addEventListener("scroll", function () {
