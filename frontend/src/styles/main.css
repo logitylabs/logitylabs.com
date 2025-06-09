@@ -1824,3 +1824,122 @@ body:not(.modal-open) {
     max-width: 1100px;
   }
 }
+
+/* Mobile carousel styles for Features and Pricing sections */
+@media (max-width: 768px) {
+  /* Features Mobile Carousel */
+  .featured-updates .container {
+    position: relative;
+  }
+
+  .updates-grid-container {
+    max-height: none; /* Remove desktop height restriction */
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-right: 0;
+    padding-bottom: 16px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Hide scrollbar */
+    -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+  }
+
+  .updates-grid-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for webkit browsers */
+  }
+
+  .updates-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding: 0 24px;
+    width: max-content;
+  }
+
+  .update-card {
+    flex: 0 0 280px; /* Fixed width for consistent card size */
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    margin-bottom: 0;
+  }
+
+  /* Features Carousel Dots */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-medium);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .carousel-dot.active {
+    background: var(--accent-primary);
+    transform: scale(1.2);
+  }
+
+  /* Pricing Mobile Carousel */
+  .pricing-section .container {
+    position: relative;
+  }
+
+  .pricing-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding: 0 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    grid-template-columns: none; /* Override grid layout */
+    max-width: none;
+    margin: 0;
+    padding-bottom: 16px;
+  }
+
+  .pricing-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pricing-card {
+    flex: 0 0 280px; /* Fixed width for consistent card size */
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    min-height: 450px; /* Adjust for mobile */
+    margin-bottom: 0;
+  }
+
+  /* Pricing Carousel Dots */
+  .pricing-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pricing-carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-medium);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .pricing-carousel-dot.active {
+    background: var(--accent-primary);
+    transform: scale(1.2);
+  }
+}
