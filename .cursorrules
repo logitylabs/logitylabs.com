@@ -1,35 +1,85 @@
 {
-  "projectOverview": "An AI-powered tool that analyzes automotive logs (CAN, DoIP, DLT), detects faults, and delivers plain-language explanations and fixes—streamlining debugging for engineers.",
-  "personality": "You are a helpful software engineer who can help with tasks.",
+  "projectOverview": "Logity Labs web frontend landing page - A marketing website for an AI-powered automotive log analysis tool that detects faults in CAN, DoIP, DLT logs and provides plain-language explanations.",
+  "personality": "You are a helpful frontend engineer who specializes in clean, modern web development with a focus on automotive industry tools.",
   "techStack": {
-    "frontend": "Tauri (desktop app), SvelteKit, React Flow (as Web Component), Monaco Editor, TailwindCSS. Monorepo structure with desktop app and web landing page.",
-    "backend": "Python FastAPI + LLMs (OpenAI / Local models), Batch Sync processing",
-    "database": "Apache Arrow (In-Memory), Apache Parquet (batch processing), PostgreSQL (configurations), Vector DB FAISS (similarity searches)",
-    "aiApiHandling": "Python FastAPI integration with LLMs for natural language explanations and fault analysis",
-    "queueAsync": "Batch Sync for lighter data handling and processing",
-    "hosting": "Desktop: Tauri native app, Web: Static hosting (Vercel/Netlify), Backend: Cloud deployment (Render/Railway/Fly.io)",
-    "observability": "Development logging, performance monitoring for large log file processing",
-    "parserEngine": "Rust with socketcan, pcap libraries, custom DoIP parser for high-speed protocol decoding (CAN, LIN, DoIP, PCAP)",
-    "simulation": "Rust or Go + vcan, Docker for topology runner with REST-only communication"
+    "frontend": "Vanilla HTML/CSS/JS with Vite build system, modular CSS architecture, responsive design",
+    "buildTool": "Vite for development server and production builds",
+    "packageManager": "pnpm for dependency management",
+    "styling": "Custom CSS with CSS custom properties (variables), modular CSS files (navbar.css, footer.css, main.css)",
+    "components": "Vanilla JavaScript components (SharedNavbar.js, SharedFooter.js, WaitlistModal.js)",
+    "hosting": "Static hosting ready (Vercel/Netlify compatible)",
+    "colorScheme": "Warm beige and brown tones inspired by company logo"
   },
-  "errorFixingProcess": "1. Read error carefully and identify root cause. 2. Check file paths and dependencies. 3. Clear caches if needed (cargo clean, remove node_modules). 4. Verify environment setup. 5. Test incrementally.",
-  "buildingProcess": "1. Use pnpm for package management in monorepo. 2. Desktop app: pnpm run tauri for development. 3. Web app: pnpm dev for landing page. 4. Backend: Python virtual environment with FastAPI. 5. Test each component independently.",
-  "envVariables": {
-    "backend": "backend/.env",
-    "frontend_desktop": "frontend/desktop/.env",
-    "frontend_web": "frontend/web/.env",
-    "shared": "frontend/shared/ for common configurations"
+  "projectStructure": {
+    "root": "Frontend web landing page",
+    "htmlPages": [
+      "index.html (main)",
+      "about.html",
+      "docs.html",
+      "overview.html"
+    ],
+    "cssArchitecture": "Modular CSS with index.css as entry point, separate navbar.css and footer.css",
+    "jsComponents": "Shared components in src/components/ for reusable UI elements",
+    "assets": "Static assets in public/ directory",
+    "config": "Environment configuration in src/config/"
   },
-  "currentFileStructure": "Monorepo: /backend (FastAPI), /frontend/desktop (Tauri+SvelteKit), /frontend/web (landing page and web app), /frontend/shared (utilities), /docs, /infrastructure. Uses pnpm workspaces.",
-  "terminalInfo": "User runs Windows PowerShell. Use PowerShell syntax for commands (semicolons, Remove-Item, etc.). Be aware of Windows path separators and PowerShell-specific commands.",
-  "githubPushProcess": "Standard git workflow with monorepo structure. Each frontend app can be deployed independently.",
-  "important": "1. Always use PowerShell syntax for terminal commands. 2. Respect monorepo structure with pnpm workspaces. 3. Desktop app uses Tauri+SvelteKit, web uses vanilla HTML/CSS/JS. 4. Shared utilities in frontend/shared/. 5. Clean caches when path issues occur.",
-  "protocolSupport": "CAN bus, DoIP (Diagnostics over IP), DLT (Diagnostic Log and Trace), PCAP, LIN - focus on automotive diagnostics and log analysis",
-  "keyFeatures": "AI-powered fault detection, plain-language explanations, real-time log processing, multi-protocol support, interactive visualizations, secure enterprise deployment",
+  "cssArchitecture": {
+    "entryPoint": "src/styles/index.css - imports all CSS modules",
+    "mainStyles": "src/styles/main.css - variables, base styles, typography, modals, page layouts",
+    "componentStyles": "src/styles/navbar.css and src/styles/footer.css for component isolation",
+    "variables": "CSS custom properties in main.css for consistent design system",
+    "responsive": "Mobile-first responsive design with structured media queries"
+  },
+  "developmentProcess": {
+    "commands": [
+      "pnpm install - install dependencies",
+      "pnpm dev - start Vite development server",
+      "pnpm build - build for production",
+      "pnpm preview - preview production build"
+    ],
+    "workflow": "1. Edit HTML/CSS/JS files. 2. Test in dev server. 3. Build and preview before deploy.",
+    "cssWorkflow": "Use modular CSS files, import through index.css, maintain design system variables"
+  },
+  "codeStyle": {
+    "css": "Use CSS custom properties, semantic class names, component-based organization",
+    "javascript": "Vanilla JS with modern ES6+ features, modular component structure",
+    "html": "Semantic HTML5, accessibility-focused, consistent structure across pages",
+    "comments": "Document complex CSS, explain component behavior, maintain clear code organization"
+  },
+  "designSystem": {
+    "colors": "Warm beige and brown palette defined in CSS custom properties",
+    "typography": "System fonts with careful hierarchy and responsive sizing",
+    "spacing": "Consistent spacing scale using CSS variables",
+    "components": "Reusable button styles, modal system, responsive navigation"
+  },
+  "businessContext": {
+    "industry": "Automotive diagnostics and log analysis",
+    "targetAudience": "Automotive engineers, diagnostics professionals, technical teams",
+    "keyFeatures": "AI-powered fault detection, plain-language explanations, multi-protocol support (CAN, DoIP, DLT, PCAP)",
+    "tone": "Professional, technical, but approachable and user-friendly"
+  },
+  "errorFixingProcess": "1. Check browser console for errors. 2. Verify CSS import paths and syntax. 3. Test responsive design across devices. 4. Validate HTML and check accessibility. 5. Clear browser cache if needed.",
+  "buildingProcess": "1. Use pnpm for all package operations. 2. Test locally with 'pnpm dev'. 3. Build with 'pnpm build'. 4. Preview with 'pnpm preview'. 5. Deploy static files from dist/ folder.",
+  "terminalInfo": "User runs Windows PowerShell. Use PowerShell syntax for commands (semicolons, Remove-Item, etc.). Be aware of Windows path separators.",
+  "important": [
+    "Always use PowerShell syntax for terminal commands",
+    "Maintain modular CSS architecture - don't add styles to main.css if they belong in component files",
+    "Use index.css as the single entry point for all CSS imports",
+    "Keep components reusable and well-documented",
+    "Follow responsive design patterns established in the codebase",
+    "Maintain the warm beige/brown color scheme using CSS custom properties"
+  ],
+  "fileOrganization": {
+    "styles": "src/styles/ - index.css (entry), main.css (base), navbar.css, footer.css",
+    "components": "src/components/ - SharedNavbar.js, SharedFooter.js, WaitlistModal.js",
+    "config": "src/config/ - environment and configuration files",
+    "assets": "public/ - static images, icons, fonts"
+  },
   "comments": [
-    "Make sure to ALWAYS include comments in your code.",
-    "Do not delete comments unless they are no longer needed.",
-    "Document the reasoning behind technical decisions.",
-    "Use clear variable names and explain complex automotive protocol logic."
+    "Always document CSS custom properties and their usage",
+    "Explain component behavior and API in JavaScript files",
+    "Use clear, semantic class names that describe purpose not appearance",
+    "Document responsive breakpoints and design decisions",
+    "Maintain comments explaining automotive industry context where relevant"
   ]
 }

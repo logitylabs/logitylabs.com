@@ -1,0 +1,18 @@
+/* 
+ * Main CSS Index for Logity Labs
+ * Location: frontend/src/styles/index.css
+ * This file imports all CSS modules in the correct order
+ */
+
+/* Import order is important: base styles first, then components */
+@import "./main.css"; /* Base styles, variables, typography, modals */
+@import "./navbar.css"; /* Navigation/header styles */
+@import "./footer.css"; /* Footer styles */
+
+/* 
+ * To use this in your HTML:
+ * <link rel="stylesheet" href="src/styles/index.css">
+ * 
+ * Or import in JavaScript:
+ * import './src/styles/index.css';
+ */

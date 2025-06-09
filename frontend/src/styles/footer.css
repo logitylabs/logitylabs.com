@@ -1,0 +1,342 @@
+/* 
+ * Footer Styles for Logity Labs
+ * Location: frontend/src/styles/footer.css
+ * Contains all footer-related CSS including responsive footer layout and mobile accordion
+ */
+
+/* Footer */
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.footer-title {
+  color: white;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.footer-links a.disabled {
+  color: rgba(255, 255, 255, 0.4);
+  cursor: default;
+  pointer-events: none;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-legal {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-mascot {
+  font-size: 20px;
+}
+
+.footer-logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+}
+
+.footer-copyright {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+/* Footer mascot logo sizing */
+.footer-mascot-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Mobile Footer Accordion Styles - Only active on mobile screens */
+@media (max-width: 768px) {
+  /* Footer accordion dimmed overlay - appears when a section is open */
+  .footer-accordion-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); /* Increased opacity for heavier effect */
+    backdrop-filter: blur(8px); /* Increased blur from 2px to 8px */
+    z-index: 9999; /* Very high z-index to ensure it's above everything */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .footer-accordion-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto; /* This blocks ALL clicks to elements below */
+  }
+
+  /* Additional rule to block all page interactions when overlay is active */
+  body.footer-accordion-open {
+    overflow: hidden; /* Prevent scrolling */
+  }
+
+  body.footer-accordion-open * {
+    pointer-events: none; /* Disable all interactions for ALL elements */
+  }
+
+  /* Re-enable interactions for footer elements */
+  body.footer-accordion-open .footer-content,
+  body.footer-accordion-open .footer-content * {
+    pointer-events: auto;
+  }
+
+  /* Footer accordion specific styles for mobile */
+  .footer-accordion-section {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0; /* Reduced from previous values */
+    position: relative; /* Important for absolute positioning of content */
+    z-index: 10000; /* Above the overlay (9999) */
+    /* Remove flex layout that was causing button movement */
+    display: block;
+  }
+
+  .footer-accordion-section:last-child {
+    border-bottom: none;
+  }
+
+  .footer-accordion-section.open {
+    z-index: 10001; /* Even higher when open - above overlay and other sections */
+    background: rgba(
+      45,
+      27,
+      14,
+      0.95
+    ); /* Slightly different background when open */
+    border-radius: 8px;
+    margin: 4px 0; /* Reduced from 8px to 4px */
+    padding: 6px; /* Reduced from 8px to 6px */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .footer-accordion-toggle {
+    display: flex;
+    justify-content: center; /* Center the content */
+    align-items: center;
+    cursor: pointer;
+    padding: 12px 0; /* Reduced from 16px to 12px */
+    margin-bottom: 0 !important;
+    transition: all 0.2s ease;
+    position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    text-align: center;
+    width: 100%;
+    /* Remove order since we're not using flex layout anymore */
+  }
+
+  .footer-accordion-toggle:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .footer-accordion-toggle:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Updated footer title styling - lighter and centered */
+  .footer-title {
+    color: rgba(
+      255,
+      255,
+      255,
+      0.85
+    ) !important; /* Lighter, less bold appearance */
+    margin-bottom: 12px; /* Reduced from 16px to 12px */
+    font-size: 16px;
+    font-weight: 400 !important; /* Much lighter weight - not bold */
+    text-align: center;
+    letter-spacing: 0.5px; /* Slight letter spacing for elegance */
+  }
+
+  .footer-accordion-section.open .footer-title {
+    color: rgba(255, 255, 255, 0.95) !important; /* Slightly bolder when open */
+    font-weight: 500 !important; /* Slightly bolder when open */
+    margin-bottom: 6px; /* Reduced from 8px to 6px */
+  }
+
+  .footer-accordion-content {
+    /* Absolute positioning for true upward expansion without affecting button */
+    position: absolute;
+    bottom: 100%; /* Position above the button */
+    left: 0;
+    right: 0;
+    background: rgba(45, 27, 14, 0.95);
+    border-radius: 8px 8px 0 0; /* Rounded top corners only */
+    padding: 16px;
+    margin: 0;
+    text-align: left; /* Keep content left-aligned for readability */
+    width: 100%;
+    box-sizing: border-box;
+    /* Remove order since we're using absolute positioning */
+    transform-origin: bottom center;
+    /* Smooth transition styles for upward expansion */
+    transition:
+      max-height 0.3s ease,
+      opacity 0.3s ease,
+      transform 0.3s ease;
+    /* Initial state - hidden */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: scaleY(0);
+    z-index: 10002; /* Above everything else including overlay */
+  }
+
+  /* When content is visible, show content */
+  .footer-accordion-content[aria-hidden="false"] {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  .footer-accordion-content li {
+    margin-bottom: 8px; /* Reduced from 12px to 8px */
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    /* Ensure items don't overflow the container width */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .footer-accordion-content[aria-hidden="false"] li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Improved footer link styles for mobile accordion */
+  .footer-accordion-content a {
+    display: block;
+    padding: 6px 0; /* Reduced from 8px to 6px */
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    /* Ensure links fit within container */
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .footer-accordion-content a:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    padding-left: 8px;
+    transform: translateX(4px);
+  }
+
+  /* Ensure footer main uses vertical layout on mobile with accordion */
+  .footer-main {
+    display: block !important;
+    grid-template-columns: none !important;
+    gap: 0 !important;
+    margin-bottom: 24px !important; /* Reduced from 32px to 24px */
+  }
+
+  .footer-section {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  /* Enhanced mobile footer styling */
+  .footer-content {
+    margin-top: 24px !important; /* Reduced from 32px to 24px */
+  }
+
+  /* Improved footer bottom spacing for mobile accordion */
+  .footer-bottom {
+    padding-top: 20px !important; /* Reduced from 24px to 20px */
+    margin-top: 20px !important; /* Reduced from 24px to 20px */
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* Add subtle animations for better UX */
+  .footer-accordion-section {
+    transition: all 0.3s ease;
+  }
+
+  .footer-accordion-section:hover:not(.open) {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* Focus and accessibility improvements */
+  .footer-accordion-toggle:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Loading state for smoother experience */
+  .footer-accordion-content {
+    will-change: max-height, opacity, transform;
+  }
+}
+
+/* Responsive Footer - Non-accordion desktop styles */
+@media (max-width: 768px) {
+  /* Only apply non-accordion styles when accordion is not being used */
+  .footer-main:not(.footer-accordion) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}

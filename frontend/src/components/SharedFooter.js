@@ -110,11 +110,6 @@ export class SharedFooter {
                   <img src="./public/logo.svg" alt="logity logo" class="footer-mascot-logo" />
                   <span class="footer-logo-text">logity</span>
                 </div>
-                <div class="footer-links-inline">
-                  <a href="#">Privacy policy</a>
-                  <a href="#">Terms of service</a>
-                  <a href="#">Security</a>
-                </div>
               </div>
               <div class="footer-copyright">
                 <p>&copy; 2025 logity. All rights reserved.</p>
@@ -406,6 +401,15 @@ export class SharedFooter {
           e.preventDefault();
           this.toggleFooterSection(section, index);
         }
+      });
+
+      // Add click event listeners to all footer links to close accordion when clicked
+      const footerLinks = links.querySelectorAll("a");
+      footerLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          // Close the accordion when any footer link is clicked
+          closeAllFooterSections();
+        });
       });
     });
 
