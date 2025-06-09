@@ -1131,7 +1131,7 @@ section {
   bottom: 0;
   background: rgba(45, 27, 14, 0.85);
   backdrop-filter: blur(12px);
-  z-index: 2000;
+  z-index: 9998; /* Higher z-index to ensure it overlays everything */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1144,7 +1144,7 @@ section {
 
 /* Waitlist Modal - Higher z-index */
 #waitlist-modal.modal-overlay {
-  z-index: 2100;
+  z-index: 9999;
   background: rgba(45, 27, 14, 0.9);
 }
 
@@ -1452,24 +1452,68 @@ section {
   /* Footer responsive styles moved to footer.css */
 
   /* Modal responsive styles */
+  /* Mobile modal improvements - better overlay and spacing */
   .modal-overlay {
-    padding: 10px;
+    padding: 8px;
+    z-index: 9998; /* Ensure it's above everything on mobile */
+    background: rgba(
+      45,
+      27,
+      14,
+      0.95
+    ); /* Darker background for better contrast */
   }
 
   .modal-container {
     max-height: 95vh;
+    max-width: 95vw;
+    border-radius: 16px; /* Slightly smaller radius for mobile */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   }
 
+  /* Mobile modal header - centered layout */
   .modal-header {
-    padding: 20px 20px 16px;
+    padding: 20px 16px 16px;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .modal-icon-container {
+    width: 50px;
+    height: 50px;
+    order: 1; /* Icon goes first */
+  }
+
+  .modal-feature-icon {
+    font-size: 24px;
+  }
+
+  .modal-title-section {
+    order: 2; /* Title section goes second */
+    padding-right: 0; /* Remove padding since we're centering */
+    text-align: center;
+    width: 100%;
+  }
+
+  .modal-close {
+    width: 36px;
+    height: 36px;
+    top: 12px;
+    right: 12px;
+    order: 3; /* Close button goes last but stays in corner */
+    position: absolute; /* Keep it in top-right corner */
   }
 
   .modal-content {
-    padding: 20px;
+    padding: 16px;
   }
 
   .modal-footer {
-    padding: 16px 20px 20px;
+    padding: 12px 16px 16px;
     flex-direction: column;
     align-items: stretch;
   }
@@ -1488,6 +1532,15 @@ section {
 
   .modal-title {
     font-size: 1.3rem;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Center the modal category badge on mobile */
+  .modal-category {
+    display: block;
+    text-align: center;
+    margin: 8px auto 0;
   }
 }
 
@@ -1803,25 +1856,69 @@ body:not(.modal-open) {
   }
 
   /* Contact Sales Modal responsive adjustments */
+  /* Contact method mobile improvements */
   .contact-method {
-    flex-direction: column;
-    text-align: center;
-    gap: 12px;
+    flex-direction: row; /* Keep horizontal layout but optimize for mobile */
+    text-align: left;
+    gap: 14px;
+    padding: 18px 16px;
+    align-items: center;
   }
 
   .contact-method-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    align-self: center;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .contact-method-details {
+    flex: 1;
+    min-width: 0; /* Allow text to wrap properly */
+  }
+
+  .contact-method-details h4 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .contact-method-details p {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    word-break: break-word; /* Handle long emails */
+  }
+
+  .contact-link {
+    font-size: 13px;
+    display: inline-block;
+    margin-top: 4px;
   }
 
   .contact-info-section {
     padding: 16px;
+    margin: 16px 0;
+  }
+
+  .contact-info-section h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
   }
 
   .contact-placeholder {
     padding: 16px;
+    margin: 16px 0;
+  }
+
+  .contact-placeholder h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  .contact-benefits li {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 10px;
   }
 }
 

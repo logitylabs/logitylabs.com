@@ -105,7 +105,7 @@
     bottom: 0;
     background: rgba(0, 0, 0, 0.6); /* Increased opacity for heavier effect */
     backdrop-filter: blur(8px); /* Increased blur from 2px to 8px */
-    z-index: 9999; /* Very high z-index to ensure it's above everything */
+    z-index: 1000; /* Lower z-index - below modals and loading screen */
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -138,7 +138,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 0; /* Reduced from previous values */
     position: relative; /* Important for absolute positioning of content */
-    z-index: 10000; /* Above the overlay (9999) */
+    z-index: 1001; /* Above the overlay (1000) but below modals */
     /* Remove flex layout that was causing button movement */
     display: block;
   }
@@ -148,7 +148,7 @@
   }
 
   .footer-accordion-section.open {
-    z-index: 10001; /* Even higher when open - above overlay and other sections */
+    z-index: 1002; /* Even higher when open - above overlay and other sections but below modals */
     background: rgba(
       45,
       27,
