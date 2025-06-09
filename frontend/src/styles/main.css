@@ -281,9 +281,9 @@ section {
 /* Scrollable container for feature cards - Desktop and Tablet only */
 @media (min-width: 769px) {
   .updates-grid-container {
-    max-height: 600px; /* Set maximum height for the scrollable area */
+    max-height: 630px; /* Increased from 600px to give more space for cards */
     overflow-y: auto; /* Enable vertical scrolling */
-    padding-right: 8px; /* Add padding to account for scrollbar */
+    padding: 16px 8px 24px 0; /* Added top and bottom padding for hover effects */
     /* Custom scrollbar styling for better integration */
     scrollbar-width: thin;
     scrollbar-color: var(--accent-primary) var(--bg-accent);
