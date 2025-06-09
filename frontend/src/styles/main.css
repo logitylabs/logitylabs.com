@@ -47,12 +47,9 @@ body {
 /* Mobile Safari fix - set body background to navbar color on mobile */
 @media (max-width: 768px) {
   body {
-    background-color: var(--text-primary); /* Match navbar brown color */
-    background-image: linear-gradient(
-      135deg,
-      var(--text-primary) 0%,
-      #1f0f08 100%
-    );
+    background-color: var(
+      --text-primary
+    ); /* Solid brown color to match navbar */
   }
 
   /* Ensure main content has the correct background */
@@ -580,6 +577,28 @@ section {
   font-weight: 400;
   line-height: 1.4;
   text-align: center;
+}
+
+/* Medium screen breakpoint - keep all 4 mission cards on same row */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr); /* Force 4 columns */
+    gap: 20px; /* Slightly reduce gap */
+    max-width: 900px;
+  }
+
+  .stat-card {
+    height: 190px; /* Slightly reduce height */
+    padding: 28px 20px; /* Adjust padding */
+  }
+
+  .stat-number {
+    font-size: 24px; /* Slightly smaller number */
+  }
+
+  .stat-label {
+    font-size: 15px; /* Slightly smaller label */
+  }
 }
 
 .mission-links {
@@ -1916,7 +1935,7 @@ body:not(.modal-open) {
     display: flex;
     flex-direction: row;
     gap: 16px;
-    padding: 0 24px;
+    padding: 16px 24px;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -2179,4 +2198,10 @@ body:not(.modal-open) {
   .loading-bar {
     width: 160px;
   }
+}
+
+/* Section scroll offset for navigation - accounts for fixed navbar + desired spacing */
+#featured-updates,
+#pricing {
+  scroll-margin-top: 64px; /* 64px requested spacing from nav-bar*/
 }
