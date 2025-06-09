@@ -561,73 +561,16 @@ function setupMobileCarousels() {
     return;
   }
 
-  setupFeaturesCarousel();
   setupPricingCarousel();
 
   // Re-setup on window resize
   window.addEventListener("resize", () => {
     if (window.innerWidth < 768) {
-      setupFeaturesCarousel();
       setupPricingCarousel();
     }
   });
 
-  console.log("✅ Mobile carousels initialized");
-}
-
-function setupFeaturesCarousel() {
-  const carousel = document.querySelector(".updates-grid-container");
-  const dots = document.querySelectorAll(".carousel-dot");
-  const cards = document.querySelectorAll(".update-card");
-
-  if (!carousel || !dots.length || !cards.length) {
-    return;
-  }
-
-  // Update dots based on scroll position
-  function updateDots() {
-    const scrollLeft = carousel.scrollLeft;
-    const cardWidth = cards[0].offsetWidth + 16; // card width + gap
-    const currentIndex = Math.round(scrollLeft / cardWidth);
-
-    // Update active dot (limit to 3 dots max)
-    dots.forEach((dot, index) => {
-      dot.classList.remove("active");
-    });
-
-    // Calculate which dot should be active (group cards into 3 sections)
-    const cardsPerSection = Math.ceil(cards.length / 3);
-    const dotIndex = Math.min(Math.floor(currentIndex / cardsPerSection), 2);
-
-    if (dots[dotIndex]) {
-      dots[dotIndex].classList.add("active");
-    }
-  }
-
-  // Add scroll event listener with throttling
-  let scrollTimeout;
-  carousel.addEventListener("scroll", () => {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(updateDots, 50);
-  });
-
-  // Add click handlers for dots
-  dots.forEach((dot, index) => {
-    dot.addEventListener("click", () => {
-      const cardsPerSection = Math.ceil(cards.length / 3);
-      const targetIndex = index * cardsPerSection;
-      const cardWidth = cards[0].offsetWidth + 16;
-      const scrollPosition = targetIndex * cardWidth;
-
-      carousel.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      });
-    });
-  });
-
-  // Initial dot update
-  updateDots();
+  console.log("✅ Mobile pricing carousel initialized");
 }
 
 function setupPricingCarousel() {

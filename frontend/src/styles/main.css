@@ -1422,8 +1422,9 @@ section {
   }
 
   .btn-large {
-    width: 100%;
-    max-width: 280px;
+    width: auto; /* Changed from 100% to auto for better mobile sizing */
+    max-width: 220px; /* Reduced from 280px to 220px for mobile */
+    padding: 14px 24px; /* Slightly reduced padding for mobile */
   }
 
   .updates-grid,
@@ -1997,30 +1998,6 @@ body:not(.modal-open) {
     scroll-snap-align: center;
     scroll-snap-stop: always;
     margin-bottom: 0;
-  }
-
-  /* Features Carousel Dots */
-  .carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 24px;
-    padding: 0;
-    list-style: none;
-  }
-
-  .carousel-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--border-medium);
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .carousel-dot.active {
-    background: var(--accent-primary);
-    transform: scale(1.2);
   }
 
   /* Pricing Mobile Carousel */
