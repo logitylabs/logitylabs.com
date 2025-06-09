@@ -179,4 +179,32 @@
   .mobile-nav {
     display: block;
   }
+
+  /* Mobile status bar fix - extend navbar to cover full top area */
+  .nav-header {
+    /* Extend background to cover status bar area */
+    padding-top: env(
+      safe-area-inset-top,
+      20px
+    ); /* Use safe area if available, fallback to 20px */
+    /* Alternative approach using viewport units */
+    min-height: calc(64px + env(safe-area-inset-top, 20px));
+    /* Create a pseudo-element to fill the status bar area */
+  }
+
+  .nav-header::before {
+    content: "";
+    position: absolute;
+    top: calc(-1 * env(safe-area-inset-top, 20px));
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top, 20px);
+    background: linear-gradient(135deg, var(--text-primary) 0%, #1f0f08 100%);
+    z-index: -1;
+  }
+
+  .nav-content {
+    /* Ensure content stays in the visible area */
+    margin-top: env(safe-area-inset-top, 0px);
+  }
 }

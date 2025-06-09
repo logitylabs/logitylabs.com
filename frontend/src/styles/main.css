@@ -132,6 +132,15 @@ main {
   padding-top: 64px; /* Account for fixed nav */
 }
 
+/* Mobile layout adjustments for extended navbar */
+@media (max-width: 768px) {
+  main {
+    padding-top: calc(
+      64px + env(safe-area-inset-top, 20px)
+    ); /* Account for navbar + status bar */
+  }
+}
+
 section {
   padding: 80px 0;
 }
