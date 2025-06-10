@@ -229,6 +229,13 @@ section {
   margin-bottom: 40px;
 }
 
+/* Ensure hero buttons have equal width */
+.hero-actions .btn-primary,
+.hero-actions .btn-secondary {
+  min-width: 200px; /* Set minimum width for consistent sizing */
+  text-align: center; /* Center text within button */
+}
+
 .hero-mascot {
   margin-top: 60px;
 }
@@ -1515,9 +1522,11 @@ section {
   /* Footer responsive styles moved to footer.css */
 
   /* Modal responsive styles */
-  /* Mobile modal improvements - better overlay and spacing */
+  /* Mobile modal improvements - better overlay and spacing with iPhone safe area support */
   .modal-overlay {
-    padding: 8px;
+    padding: max(8px, env(safe-area-inset-top))
+      max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom))
+      max(8px, env(safe-area-inset-left));
     z-index: 9998; /* Ensure it's above everything on mobile */
     background: rgba(
       45,
@@ -1528,8 +1537,12 @@ section {
   }
 
   .modal-container {
-    max-height: 95vh;
-    max-width: 95vw;
+    max-height: calc(
+      100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px
+    ); /* Account for safe areas + minimal padding */
+    max-width: calc(
+      100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 16px
+    ); /* Account for safe areas + minimal padding */
     border-radius: 16px; /* Slightly smaller radius for mobile */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
@@ -1801,7 +1814,7 @@ section {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem auto; /* Center the button horizontally */
   position: relative;
 }
 
@@ -1829,6 +1842,23 @@ section {
   text-align: center;
   line-height: 1.5;
   margin: 0;
+}
+
+/* Mobile-specific waitlist button centering */
+@media (max-width: 768px) {
+  .waitlist-submit {
+    max-width: 280px; /* Limit button width on mobile */
+    margin: 0 auto 1rem auto; /* Ensure centering */
+    text-align: center;
+  }
+
+  .waitlist-form {
+    text-align: center; /* Center form content */
+  }
+
+  .form-group {
+    text-align: left; /* Keep form labels left-aligned */
+  }
 }
 
 /* Modal body scroll prevention - Standardized across all modals */
