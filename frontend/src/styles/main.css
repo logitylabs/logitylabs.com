@@ -579,12 +579,14 @@ section {
   text-align: center;
 }
 
-/* Medium screen breakpoint - keep all 4 mission cards on same row */
+/* iPad Portrait responsive design - Center the 3 mission cards */
 @media (max-width: 1024px) and (min-width: 769px) {
   .stats-grid {
-    grid-template-columns: repeat(4, 1fr); /* Force 4 columns */
-    gap: 20px; /* Slightly reduce gap */
-    max-width: 900px;
+    /* Center 3 cards with proper spacing instead of forcing 4 columns */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 720px; /* Optimized width for 3 centered cards */
+    justify-items: center; /* Center cards within their grid areas */
   }
 
   .stat-card {
@@ -856,6 +858,11 @@ section {
   margin: 0 auto;
 }
 
+/* Hide carousel dots by default on desktop screens */
+.pricing-carousel-dots {
+  display: none;
+}
+
 .pricing-card {
   background: var(--card-bg);
   border: 2px solid var(--border-light);
@@ -1025,14 +1032,69 @@ section {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     max-width: 1000px;
   }
+
+  /* Hide carousel dots on desktop screens */
+  .pricing-carousel-dots {
+    display: none;
+  }
 }
 
-/* Tablet responsive design - medium gap */
+/* iPad Portrait responsive design - Implement horizontal scrolling slider like mobile */
 @media (max-width: 1024px) and (min-width: 769px) {
+  .pricing-section .container {
+    position: relative;
+  }
+
   .pricing-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 28px; /* Tablet: medium gap between cards */
-    max-width: 900px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 20px calc(50vw - 160px) 20px calc(50vw - 160px); /* Center cards: left/right padding = 50% viewport - half card width */
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    grid-template-columns: none; /* Override grid layout */
+    max-width: none;
+    margin: 0;
+    padding-bottom: 20px;
+  }
+
+  .pricing-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pricing-card {
+    flex: 0 0 320px; /* Fixed width for iPad - slightly larger than mobile */
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    min-height: 500px; /* Adjust height for iPad */
+    margin-bottom: 0;
+  }
+
+  /* Pricing Carousel Dots for iPad */
+  .pricing-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pricing-carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border-medium);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .pricing-carousel-dot.active {
+    background: var(--accent-primary);
+    transform: scale(1.2);
   }
 }
 

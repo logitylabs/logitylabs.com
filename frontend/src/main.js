@@ -554,10 +554,10 @@ function setupModalEventListeners() {
 
 // Contact sales modal functionality is now handled by SharedFooter component
 
-// Setup mobile carousels
+// Setup mobile and iPad carousels
 function setupMobileCarousels() {
-  // Only setup on mobile screens
-  if (window.innerWidth >= 768) {
+  // Setup on mobile screens and iPad vertical (up to 1024px)
+  if (window.innerWidth > 1024) {
     return;
   }
 
@@ -565,12 +565,12 @@ function setupMobileCarousels() {
 
   // Re-setup on window resize
   window.addEventListener("resize", () => {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth <= 1024) {
       setupPricingCarousel();
     }
   });
 
-  console.log("✅ Mobile pricing carousel initialized");
+  console.log("✅ Mobile and iPad pricing carousel initialized");
 }
 
 function setupPricingCarousel() {

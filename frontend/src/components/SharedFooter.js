@@ -66,25 +66,6 @@ export class SharedFooter {
               </div>
 
               <div class="footer-section">
-                <h4 class="footer-title">API Platform</h4>
-                <ul class="footer-links">
-                  <li><a href="#" class="disabled">API overview</a></li>
-                  <li><a href="#" class="disabled">Developer docs</a></li>
-                  <li><a href="#" class="disabled">Pricing</a></li>
-                  <li><a href="#" class="disabled">Console login</a></li>
-                </ul>
-              </div>
-
-              <div class="footer-section">
-                <h4 class="footer-title">Solutions</h4>
-                <ul class="footer-links">
-                  <li><a href="#" class="disabled">Automotive debugging</a></li>
-                  <li><a href="#" class="disabled">Log analysis</a></li>
-                  <li><a href="#" class="disabled">Fault detection</a></li>
-                </ul>
-              </div>
-
-              <div class="footer-section">
                 <h4 class="footer-title">Learn</h4>
                 <ul class="footer-links">
                   <li><a href="docs.html">Documentation</a></li>
