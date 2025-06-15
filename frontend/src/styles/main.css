@@ -2398,3 +2398,35 @@ body:not(.modal-open) {
     min-width: 0; /* Prevent overflow */
   }
 }
+
+@media (max-width: 768px) {
+  /*
+    Make mission section cards horizontally scrollable on mobile (like pricing section).
+    This saves vertical space and provides a modern, swipeable experience.
+  */
+  .mission-section .stats-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Hide scrollbar */
+    -ms-overflow-style: none;
+    padding: 0 12px 16px 12px;
+    margin: 0;
+    width: 100%;
+  }
+  .mission-section .stats-grid::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for webkit browsers */
+  }
+  .mission-section .stat-card {
+    flex: 0 0 80vw; /* Each card takes 80% of viewport width */
+    max-width: 320px;
+    min-width: 220px;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    margin-bottom: 0;
+    height: auto;
+  }
+}
