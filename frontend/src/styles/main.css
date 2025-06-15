@@ -2371,3 +2371,30 @@ body:not(.modal-open) {
 #pricing {
   scroll-margin-top: 64px; /* 64px requested spacing from nav-bar*/
 }
+
+/* ========================================
+   Center mission cards on desktop (3 cards)
+   ======================================== */
+@media (min-width: 1025px) {
+  /*
+    On desktop, center the mission cards (e.g., 3 cards) in the mission section.
+    The grid layout with auto-fit/1fr stretches cards to fill the row, which looks uncentered.
+    Switching to flex centers the cards and keeps them at their natural width.
+    This only applies to .stats-grid in the mission section.
+    
+    Additionally, make all cards the same height and width for a uniform look.
+  */
+  .mission-section .stats-grid {
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* Stretch cards to same height */
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .mission-section .stat-card {
+    flex: 1 1 0; /* Allow cards to grow/shrink equally */
+    height: 100%; /* Ensure card fills height */
+    min-width: 0; /* Prevent overflow */
+  }
+}
